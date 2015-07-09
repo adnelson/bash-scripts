@@ -1,12 +1,3 @@
-export NSROOT=$NARR
-export NSNIX=$NARR/RND-Data/nsnix
-if [ -e ~/.default-nixpkgs ]; then
-    export NIXPKGS=$($SHELL ~/.default-nixpkgs)
-else
-    unset NIXPKGS
-fi
-source $NSNIX/nsnix-init.sh
-
 export MANPATH=~/.nix-profile/share/man/:$MANPATH
 
 # This is where python package libs get dropped
@@ -14,16 +5,11 @@ export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH
 
 alias nsp="nix-shell --pure"
 nixi () {
-    nix-env -f '<nixpkgs>' -iA $1
+    nix-env -f $HOME/.pkgs.nix -iA $1
 }
 pixi () {
-    nix-env -f '<nixpkgs>' -iA pythonPackages.$1
+    nix-env -f $HOME/.pkgs.nix -iA pythonPackages.$1
 }
-nsnixi () {
-    nix-env -f '<nsnix>' --arg nsroot \"$NARR\" -iA $1 --show-trace
-}
-alias nsnix='narr; cd RND-Data/nsnix'
-
 alias ncg='nix-collect-garbage -d'
 pyrm () {
   nix-env -e "python2.7-$1"

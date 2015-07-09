@@ -46,7 +46,7 @@ alias tn='git snake test -n'
 alias prs='cd ~/narr/ns_data/ns_data_parsing'
 alias cliact='source ~/narr/ns_services/quill_development_toolkit/cli/vendor/python/bin/activate'
 alias rmpkg='yaourt -R'
-alias grep='grep --color=always -P -I'
+alias grep='grep --color=auto'
 alias egui='emacs'
 alias emcs='emacs -nw'
 alias sf='cd ~/workspace/software-foundations/coqfiles'
@@ -56,12 +56,10 @@ alias duh='du -h'
 alias music='cd ~/Music'
 alias coq='cd ~/workspace/coq'
 alias onprem='cd ~/narr/ns_systems/on_prem'
-alias em='emacsclient -a "" -t -e \(kill-buffer\)'
 alias cd..='cd ..'
 alias cd..='cd ..'
 alias cd...='cd ../..'
 alias cd....='cd ../../..'
-alias grrp='grep -r'
 alias venv='virtualenv venv; source venv/bin/activate'
 alias onp='lsi -p vpc-onprem'
 alias nsp="nix-shell --pure -I root=$NARR -I /home/anelson/narr/RND-Data"
@@ -135,27 +133,19 @@ function findhere() {
   grep -r $1 .
 }
 
-# LS if it's a directory, else cat.
-function lsc() {
-  if [ "$#" -ne 1 ]
-  then
-    /usr/bin/ls -a --color
-  else
-    [[ -d $1 ]] && /usr/bin/ls -a --color $1 || cat $1
-  fi
-}
-
 # Appends another alias to the `extras` file.
 function add() {
    echo "alias $1='$2'" >> $ZSH_CONFIG/extras.sh && reload
 }
 
-# Add a function to the extras.sh file.
-function addfn() {
-    echo "function $1 {$2}" >> $ZSH_CONFIG/extras.sh
-    reload
-}
-
 alias showpath='echo $PATH | tr ":" "\n"'
 alias copy='xsel -ib'
 alias paste='xsel -ob'
+alias ns='nix-shell'
+alias e_='emacsclient -nw'
+alias psa='ps auxww'
+alias vgr='cd ~/narr/vagrantboxes'
+alias sdev='cd ~/narr/ns_systems/on_prem/dev'
+function findit {
+  readlink -f $(which $1)
+}

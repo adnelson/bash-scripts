@@ -2,11 +2,13 @@ echo 'Loading custom config...'
 
 # Set these as appropriate.
 export EDITOR=emacsclient
-export EDITOR_FLAGS='-c'
+export EDITOR_FLAGS=''
 export WORK_DIRECTORY=$HOME/narr
 
 # Opens a text editor.
-alias e="$EDITOR $EDITOR_FLAGS"
+function e() {
+    $EDITOR $EDITOR_FLAGS $@
+}
 
 # Reloads the zsh config, if you've updated an alias etc.
 alias reload="exec $SHELL"
@@ -49,39 +51,21 @@ alias lst='ls -tr'
 # Lists all of the files with lots of info, sorted by date.
 alias la='ls -lrtha'
 
-# sends a SIGKILL to a suspended process (if only one)
-alias killit='kill -9 %1'
-
 # Activates a python virtualenv, assuming the path below is appropriate.
 alias act='source vendor/python/bin/activate'
 
-# Sources the file, if the file exists.
-function include () {
-    [[ -f "$1" ]] && source "$1"
-}
+_VERBOSE=
 
-# Path for local executables
-export PATH=$PATH:$HOME/.bin
+for file in $(ls $ZSH_CONFIG); do
+  echo $file | command grep -Pq '.sh$' || continue
+  echo $file | command grep -Pq '^config.sh$' && continue
+  [ -z $_VERBOSE ] || echo "Sourcing $ZSH_CONFIG/$file"
+  source "$ZSH_CONFIG/$file"
+done
 
-# Bring in the "extras" file.
-include $ZSH_CONFIG/extras.sh
-
-# Bring in git aliases.
-include $ZSH_CONFIG/git.sh
-
-# Useful python stuff
-include $ZSH_CONFIG/python.sh
-
-# Bring in narrative science-y aliases.
-include $ZSH_CONFIG/narrsci.sh
-
-# Nix path stuff
-include $ZSH_CONFIG/nix.sh
-
-# AWS and other credentials
-include $ZSH_CONFIG/credentials.sh
-
-export BROWSER=firefox
+export BROWSER='firefox'
+export BROWSER_FLAGS='-P'
+alias browse="$BROWSER $BROWSER_FLAGS"
 # export XDG_CONFIG_HOME=$HOME/.fontconfigs
 
 # Use light colors for ls
