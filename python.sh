@@ -1,6 +1,3 @@
-# clears out any inherited python path
-export PYTHONPATH="$HOME/workspace/python/global"
-
 # ipython > python
 alias ipy='ipython'
 

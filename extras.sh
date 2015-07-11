@@ -143,9 +143,16 @@ alias copy='xsel -ib'
 alias paste='xsel -ob'
 alias ns='nix-shell'
 alias e_='emacsclient -nw'
-alias psa='ps auxww'
+psa() {
+  local cmd='ps auxww'
+  for filter in "$@"; do
+    cmd+=" | ag $filter"
+  done
+  bash -c "$cmd"
+}
 alias vgr='cd ~/narr/vagrantboxes'
 alias sdev='cd ~/narr/ns_systems/on_prem/dev'
 function findit {
   readlink -f $(which $1)
 }
+alias vdf='vagrant destroy -f'

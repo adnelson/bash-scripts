@@ -1,8 +1,27 @@
 echo 'Loading custom config...'
 
-# Set these as appropriate.
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  SESSION_TYPE=ssh
+else
+  case $(ps -o comm= -p $PPID) in
+    sshd|*/sshd) SESSION_TYPE=ssh;;
+    *) SESSION_TYPE=terminal;;
+  esac
+fi
+
+echo "Detected session type: $SESSION_TYPE"
+
+if python -c 'import sys; print sys.platform' | grep -q darwin; then
+  echo "Looks like this is OSX..."
+  export IS_DARWIN=yes
+fi
+
 export EDITOR=emacsclient
-export EDITOR_FLAGS=''
+if [ $SESSION_TYPE = 'ssh' ]; then
+  export EDITOR_FLAGS='-nw'
+else
+  export EDITOR_FLAGS=
+fi
 export WORK_DIRECTORY=$HOME/narr
 
 # Opens a text editor.
@@ -54,7 +73,7 @@ alias la='ls -lrtha'
 # Activates a python virtualenv, assuming the path below is appropriate.
 alias act='source vendor/python/bin/activate'
 
-_VERBOSE=
+_VERBOSE=yes
 
 for file in $(ls $ZSH_CONFIG); do
   echo $file | command grep -Pq '.sh$' || continue
@@ -66,7 +85,6 @@ done
 export BROWSER='firefox'
 export BROWSER_FLAGS='-P'
 alias browse="$BROWSER $BROWSER_FLAGS"
-# export XDG_CONFIG_HOME=$HOME/.fontconfigs
 
 # Use light colors for ls
 LS_COLORS=$LS_COLORS:'di=0;36:' ; export LS_COLORS
