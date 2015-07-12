@@ -1,4 +1,17 @@
-echo 'Loading custom config...'
+_VERBOSE=
+
+_echo() {
+  [ -z $_VERBOSE ] || echo $1
+}
+
+_echo 'Loading custom config...'
+
+# Need to load these up first
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
+  source ~/.nix-profile/etc/profile.d/nix.sh
+fi
+
+unalias grep
 
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   SESSION_TYPE=ssh
@@ -9,12 +22,7 @@ else
   esac
 fi
 
-echo "Detected session type: $SESSION_TYPE"
-
-if python -c 'import sys; print sys.platform' | grep -q darwin; then
-  echo "Looks like this is OSX..."
-  export IS_DARWIN=yes
-fi
+_echo "Detected session type: $SESSION_TYPE"
 
 export EDITOR=emacsclient
 if [ $SESSION_TYPE = 'ssh' ]; then
@@ -22,7 +30,6 @@ if [ $SESSION_TYPE = 'ssh' ]; then
 else
   export EDITOR_FLAGS=
 fi
-export WORK_DIRECTORY=$HOME/narr
 
 # Opens a text editor.
 function e() {
@@ -73,12 +80,10 @@ alias la='ls -lrtha'
 # Activates a python virtualenv, assuming the path below is appropriate.
 alias act='source vendor/python/bin/activate'
 
-_VERBOSE=yes
-
 for file in $(ls $ZSH_CONFIG); do
   echo $file | command grep -Pq '.sh$' || continue
   echo $file | command grep -Pq '^config.sh$' && continue
-  [ -z $_VERBOSE ] || echo "Sourcing $ZSH_CONFIG/$file"
+  _echo "Sourcing $ZSH_CONFIG/$file"
   source "$ZSH_CONFIG/$file"
 done
 
@@ -92,4 +97,4 @@ LS_COLORS=$LS_COLORS:'di=0;36:' ; export LS_COLORS
 # Remove a right prompt if there is one
 export RPROMPT=
 
-echo ok
+_echo ok
