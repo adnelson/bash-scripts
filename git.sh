@@ -95,9 +95,6 @@ alias greset='git reset --hard HEAD'
 # Resets the repo to the state of the one before the last commit.
 alias goback='git reset --hard HEAD~1'
 
-# Undoes a commit, but doesn't revert the files.
-alias gundo='git reset --soft HEAD~1'
-
 ############# Other #############
 
 # Adds a file to your gitignore.
@@ -128,5 +125,11 @@ function ninjap() {
 aclone() {
     for repo in "$@"; do
         git clone ssh://git@github-adnelson:/adnelson/$repo || return 1
+    done
+}
+
+mycoolfunction() {
+    for sldkfj in lskdfjlsdk;
+        echo hey hi ho
     done
 }
