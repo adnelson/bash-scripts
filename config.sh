@@ -1,15 +1,15 @@
 echo 'Loading custom config...'
 
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  SESSION_TYPE=ssh
-else
-  case $(ps -o comm= -p $PPID) in
-    sshd|*/sshd) SESSION_TYPE=ssh;;
-    *) SESSION_TYPE=terminal;;
-  esac
-fi
+# if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+#   SESSION_TYPE=ssh
+# else
+#   case $(ps -o comm= -p $PPID) in
+#     sshd|*/sshd) SESSION_TYPE=ssh;;
+#     *) SESSION_TYPE=terminal;;
+#   esac
+# fi
 
-echo "Detected session type: $SESSION_TYPE"
+# echo "Detected session type: $SESSION_TYPE"
 
 if python -c 'import sys; print sys.platform' | grep -q darwin; then
   echo "Looks like this is OSX..."
@@ -17,11 +17,12 @@ if python -c 'import sys; print sys.platform' | grep -q darwin; then
 fi
 
 export EDITOR=emacsclient
-if [ $SESSION_TYPE = 'ssh' ]; then
-  export EDITOR_FLAGS='-nw'
-else
-  export EDITOR_FLAGS=
-fi
+export EDITOR_FLAGS=
+# if [ $SESSION_TYPE = 'ssh' ]; then
+#   export EDITOR_FLAGS='-nw'
+# else
+#   export EDITOR_FLAGS=
+# fi
 export WORK_DIRECTORY=$HOME/narr
 
 # Opens a text editor.

@@ -114,7 +114,7 @@ retempdir() {
 rmtempdirs() {
     for d in $(cat ~/.current_tempdirs); do
         echo "Removing $d"
-	rm -r $d
+	sudo rm -fr $d
     done
     cat /dev/null > ~/.current_tempdirs
 }
@@ -156,3 +156,15 @@ function findit {
   readlink -f $(which $1)
 }
 alias vdf='vagrant destroy -f'
+
+alias time='/usr/bin/env time'
+alias enw='emacsclient -nw'
+alias qosx='cd ~/narr/vagrantboxes/quill-osx && vagrant ssh'
+
+whichl() {
+  ls -l $(which $1)
+}
+export PATH="$PATH:$HOME/.npm/bin"
+alias nnp='cd /home/anelson/workspace/nix/nix-node-packages'
+
+export WS=$HOME/workspace

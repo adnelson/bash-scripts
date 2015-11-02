@@ -5,11 +5,16 @@ export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH
 
 alias nsp="nix-shell --pure"
 nixi () {
-    nix-env -f $HOME/.pkgs.nix -iA $1
+    nix-env -f ~/.nix-defexpr/channels/nixos -iA pkgs.$1
+    rm -f ~/.cache/dmenu_run 2>/dev/null 1>/dev/null
 }
 pixi () {
-    nix-env -f $HOME/.pkgs.nix -iA pythonPackages.$1
+    nixi "pythonPackages.$1"
 }
+hixi () {
+    nixi "haskellPackages.$1"
+}
+
 alias ncg='nix-collect-garbage -d'
 pyrm () {
   nix-env -e "python2.7-$1"
@@ -37,7 +42,7 @@ cupload() {
   pushd ~/workspace/haskell/$1
   local name=$(cabal info . | head -n 1 | awk '{print $2}')
   echo "Building and uploading $name..."
-  nix-shell '<nixpkgs>' -A haskellPackages.$1.env --command \
+  nix-shell $HOME/.pkgs.nix -A haskellPackages.$1.env --command \
     "cabal configure && cabal sdist && cabal upload \
      dist/$name.tar.gz -u thinkpad20" || return 1
   popd
@@ -61,14 +66,14 @@ update_nixos() {
 
 update_channels() {
     nix-channel --update
-    nixlist nixpkgs -r >/dev/null
+    nixlist -r >/dev/null
 }
 
 hshell() {
     local name=$1
     if [ -z $name ]; then
         name=$(basename $PWD)
-        nix-shell '<nixpkgs>' -A haskellPackages.$name.env
+        nix-shell $HOME/.pkgs.nix -A haskellPackages.$name.env
     else
         local dir=~/workspace/haskell/$name
         [ ! -d $dir ] && {
@@ -76,7 +81,22 @@ hshell() {
             return 1
         }
         pushd $dir
-        nix-shell '<nixpkgs>' -A haskellPackages.$name.env
+        nix-shell $HOME/.pkgs.nix -A haskellPackages.$name.env
         popd
     fi
+}
+
+
+export NIX_PATH="$HOME/.nix-defexpr/channels:$NIX_PATH"
+alias nixpkgs="cd $HOME/nixpkgs"
+
+echo "Finished loading nix.sh"
+echo $NIX_PATH
+
+export PKGS_PATH=$HOME/nixpkgs
+
+current_nixpkgs() {
+  local nixpkgs_link=$(readlink -f ~/.nix-defexpr/channels/nixpkgs)
+  local nixpkgs_folder=$(basename $(dirname $nixpkgs_link))
+  echo $nixpkgs_folder | command grep -Po '.*?\K(\w+$)'
 }
