@@ -158,3 +158,12 @@ aclone_() {
         git clone ssh://github-adnelson:/$repo || return 1
     done
 }
+
+# Add an alias to this git file
+addgit() {
+  local aname=$1
+  local acmd=$2
+  echo "alias $aname='$acmd'" >> $ZSH_CONFIG/git.sh
+  reload
+}
+alias grv='git remote -v'

@@ -76,11 +76,9 @@ alias la='ls -lrtha'
 # Activates a python virtualenv, assuming the path below is appropriate.
 alias act='source vendor/python/bin/activate'
 
-for file in $(ls $ZSH_CONFIG); do
-  echo $file | command grep -Pq '.sh$' || continue
-  echo $file | command grep -Pq '^config.sh$' && continue
-  _echo "Sourcing $ZSH_CONFIG/$file"
-  source "$ZSH_CONFIG/$file"
+for file in $(find $ZSH_CONFIG -name '*.sh' -a ! -name 'config.sh'); do
+  echo "Sourcing $file"
+  source $file
 done
 
 export BROWSER='firefox'

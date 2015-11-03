@@ -90,9 +90,6 @@ hshell() {
 export NIX_PATH="$HOME/.nix-defexpr/channels:$NIX_PATH"
 alias nixpkgs="cd $HOME/nixpkgs"
 
-echo "Finished loading nix.sh"
-echo $NIX_PATH
-
 export PKGS_PATH=$HOME/nixpkgs
 
 # Print the hash of the current nixpkgs hash installed to stdout.
