@@ -53,7 +53,7 @@ alias gpf='git push --force'
 alias gpfo='git push --force origin'
 
 # Force a commit to current branch.
-alias gpfoc='git push --force origin $(git rev-parse --abbrev-ref HEAD)'
+alias gpfoc='git push --force origin $(cur)'
 
 ######### Rebasing #########
 
@@ -78,9 +78,8 @@ alias gra='git rebase --abort'
 alias grs='git rebase --skip'
 
 # Interactive rebase of the last `n` files, to collapse multiple commits
-
 # into a single commit.
-function rebi() {
+rebi() {
     git rebase -i "HEAD~$1"
 }
 
@@ -102,12 +101,35 @@ alias gundo='git reset --soft HEAD~1'
 
 # Adds a file to your gitignore.
 function ignore() {
-    echo $1 >> .gitignore
-    git add .gitignore
-    git rm -rf --cached $1 >/dev/null 2>&1 || true
+    for pth in "$@"; do
+        echo $pth >> .gitignore
+        git add .gitignore
+        git rm -rf --cached $pth >/dev/null 2>&1 || true
+    done
 }
 
+# Adds a file to your git excludes file.
+function exclude() {
+    local toplevel=$(git rev-parse --show-toplevel)
+    local pycmd="import os; print(os.path.relpath('$PWD', '$toplevel'))"
+    local rel=$(python -c "$pycmd")
+    for pth in "$@"; do
+        echo $rel/$pth >> $toplevel/.git/info/excludes
+        git rm -rf --cached $pth >/dev/null 2>&1 || true
+    done
+}
+
+
+# Return the name of the current branch.
+cur() {
+  git rev-parse --abbrev-ref HEAD
+}
+
+# Pulling
 alias gl='git pull'
+
+# Push to origin, current branch.
+alias gloc='git pull origin $(cur)'
 
 # Stashes currently staged files.
 alias stash='git stash'
@@ -127,6 +149,12 @@ function ninjap() {
 
 aclone() {
     for repo in "$@"; do
-        git clone ssh://git@github-adnelson:/adnelson/$repo || return 1
+        aclone_ adnelson/$repo || return 1
+    done
+}
+
+aclone_() {
+    for repo in "$@"; do
+        git clone ssh://github-adnelson:/$repo || return 1
     done
 }

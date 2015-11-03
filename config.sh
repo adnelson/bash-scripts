@@ -13,23 +13,19 @@ fi
 
 unalias grep
 
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  SESSION_TYPE=ssh
-else
-  case $(ps -o comm= -p $PPID) in
-    sshd|*/sshd) SESSION_TYPE=ssh;;
-    *) SESSION_TYPE=terminal;;
-  esac
-fi
+# if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+#   SESSION_TYPE=ssh
+# else
+#   case $(ps -o comm= -p $PPID) in
+#     sshd|*/sshd) SESSION_TYPE=ssh;;
+#     *) SESSION_TYPE=terminal;;
+#   esac
+# fi
 
 _echo "Detected session type: $SESSION_TYPE"
 
 export EDITOR=emacsclient
-if [ $SESSION_TYPE = 'ssh' ]; then
-  export EDITOR_FLAGS='-nw'
-else
-  export EDITOR_FLAGS=
-fi
+export EDITOR_FLAGS='-nw'
 
 # Opens a text editor.
 function e() {
