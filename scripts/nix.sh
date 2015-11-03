@@ -86,7 +86,7 @@ hshell() {
     fi
 }
 
-
+export PATH="$HOME/.nix-profile/bin:$PATH"
 export NIX_PATH="$HOME/.nix-defexpr/channels:$NIX_PATH"
 alias nixpkgs="cd $HOME/nixpkgs"
 

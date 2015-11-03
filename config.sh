@@ -76,8 +76,13 @@ alias la='ls -lrtha'
 # Activates a python virtualenv, assuming the path below is appropriate.
 alias act='source vendor/python/bin/activate'
 
-for file in $(find $ZSH_CONFIG -name '*.sh' -a ! -name 'config.sh'); do
+for file in $(find $ZSH_CONFIG/scripts -name '*.sh'); do
   echo "Sourcing $file"
+  source $file
+done
+
+for file in $(find $ZSH_CONFIG/secrets -name '*.sh'); do
+  echo "Sourcing secret $file"
   source $file
 done
 
