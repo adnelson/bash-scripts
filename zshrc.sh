@@ -54,13 +54,14 @@ plugins=(git)
 # User configuration
 
 if [ -z $IN_NIX_SHELL ]; then
-  export PATH="/home/anelson/bin:/var/setuid-wrappers:/home/anelson/.nix-profile/bin:/home/anelson/.nix-profile/sbin:/home/anelson/.nix-profile/lib/kde4/libexec:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/nix/var/nix/profiles/default/lib/kde4/libexec:/run/current-system/sw/bin:/run/current-system/sw/sbin:/run/current-system/sw/lib/kde4/libexec:"
+  export PATH="$HOME/bin:/var/setuid-wrappers:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/run/current-system/sw/lib/kde4/libexec:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 elif [ ! -z $SAVED_PATH ]; then
   export PATH=$SAVED_PATH
 fi
 # export MANPATH="/usr/local/man:$MANPATH"
 
-source $ZSH/oh-my-zsh.sh
+# Source the oh my zsh stuff, if we're using zshell.
+echo $SHELL | grep -q zsh && source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
