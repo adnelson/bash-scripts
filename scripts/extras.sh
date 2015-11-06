@@ -135,7 +135,7 @@ function findhere() {
 
 # Appends another alias to the `extras` file.
 function add() {
-   echo "alias $1='$2'" >> $ZSH_CONFIG/extras.sh && reload
+   echo "alias $1='$2'" >> $ZSH_CONFIG/scripts/extras.sh && reload
 }
 
 alias showpath='echo $PATH | tr ":" "\n"'
@@ -168,3 +168,4 @@ export PATH="$PATH:$HOME/.npm/bin"
 alias nnp='cd /home/anelson/workspace/nix/nix-node-packages'
 
 export WS=$HOME/workspace
+alias osx='nvgr && cd osx'
