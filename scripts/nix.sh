@@ -5,7 +5,7 @@ export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH
 
 alias nsp="nix-shell --pure"
 nixi () {
-    nix-env -f ~/.nix-defexpr/channels/nixos -iA pkgs.$1
+    nix-env -f ~/.nix-defexpr/channels/nixpkgs -iA pkgs.$1
     rm -f ~/.cache/dmenu_run 2>/dev/null 1>/dev/null
 }
 pixi () {
@@ -111,3 +111,16 @@ nix-channel-update() {
     echo "Already up-to-date at $(current_nixpkgs)"
   fi
 }
+
+alias ncg='nix-collect-garbage -d'
+pyrm() {
+  nix-env -e "python2.7-$1"
+}
+alias nb='nix-build'
+alias lsp='PAGER= nix-env -q'
+nixrm() {
+    lsp | egrep $1 | xargs nix-env -e
+}
+alias nse='nix-shell --pure -A env'
+
+
