@@ -63,28 +63,10 @@ alias cd....='cd ../../..'
 alias venv='virtualenv venv; source venv/bin/activate'
 alias onp='lsi -p vpc-onprem'
 alias nsp="nix-shell --pure -I root=$NARR -I /home/anelson/narr/RND-Data"
-nixi() {
-    nix-env -iA "nixpkgs.$1"
-}
-nsnixi() {
-    nix-env -f '<nsnix>' --arg nsroot \"$NARR\" -iA $1 --show-trace
-}
-alias nsnix='narr; cd RND-Data/nsnix'
 
-alias ncg='nix-collect-garbage -d'
-pyrm() {
-  nix-env -e "python2.7-$1"
-}
 alias egit='e ~/.zsh/git.sh'
 alias sys='cd ~/narr/ns_systems'
 alias adf='dapps; cd ns_analytics_default'
-alias nb='nix-build'
-alias lsp='PAGER= nix-env -q'
-nixrm() {
-    lsp | egrep $1 | xargs nix-env -e
-}
-alias rnd='cd $NARR/RND-Data'
-alias nse='nix-shell --pure -A env'
 
 # Show disk space on machines matching filters.
 function dspace() {
