@@ -5,6 +5,7 @@ export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH
 
 alias nsp="nix-shell --pure"
 nixi () {
+    nix-channel-update
     nix-env -f ~/.nix-defexpr/channels/nixpkgs -iA pkgs.$1
     rm -f ~/.cache/dmenu_run 2>/dev/null 1>/dev/null
 }
@@ -124,5 +125,3 @@ nixrm() {
     lsp | egrep $1 | xargs nix-env -e
 }
 alias nse='nix-shell --pure -A env'
-
-
