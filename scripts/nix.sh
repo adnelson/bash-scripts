@@ -91,8 +91,6 @@ export PATH="$HOME/.nix-profile/bin:$PATH"
 export NIX_PATH="$HOME/.nix-defexpr/channels:$NIX_PATH"
 alias nixpkgs="cd $HOME/nixpkgs"
 
-export PKGS_PATH=$HOME/nixpkgs
-
 # Print the hash of the current nixpkgs hash installed to stdout.
 current_nixpkgs() {
   local nixpkgs_link=$(readlink -f ~/.nix-defexpr/channels/nixpkgs)
