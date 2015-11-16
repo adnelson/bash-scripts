@@ -1,4 +1,6 @@
+# Include these manpaths so that installed packages have manpages.
 export MANPATH=~/.nix-profile/share/man/:$MANPATH
+export MANPATH=/run/current-system/sw/share/man:$MANPATH
 
 # This is where python package libs get dropped
 export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH

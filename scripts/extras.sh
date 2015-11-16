@@ -107,7 +107,8 @@ alias ans='cd ~/narr/ns_systems/on_prem/ansible_installer'
 
 # Tells you where an alias is defined
 function where() {
-  grep --exclude='#*' -R "alias ($1)" $ZSH_CONFIG
+  grep --color=auto --exclude='#*' -R $1 $ZSH_CONFIG/scripts
+  grep --color=auto --exclude='#*' -R $1 $ZSH_CONFIG/secrets
 }
 
 # Greps current directory for a pattern
@@ -151,3 +152,12 @@ alias nnp='cd /home/anelson/workspace/nix/nix-node-packages'
 
 export WS=$HOME/workspace
 alias osx='nvgr && cd osx'
+alias band='cd /home/anelson/narr/ns_systems/builders/pypi/bandersnatch-mirror'
+
+linesFrom() {
+  local start=$1 numLines=$2 file=$3
+  # Get the number of lines in the file
+  local nlines=$(wc -l $file | awk '{print $1}')
+  # Output the file starting at that line, and take numLines lines
+  tail -n -$(($nlines - $start + 1)) $file | head -n $numLines
+}
