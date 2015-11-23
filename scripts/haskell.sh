@@ -33,3 +33,6 @@ EOF
 (import ./default.nix { inherit nixpkgs compiler; }).env
 EOF
 }
+
+export HASKELL=$HOME/workspace/haskell
+export NIXFROMNPM=$HASKELL/nixfromnpm

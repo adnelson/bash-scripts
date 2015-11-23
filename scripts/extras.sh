@@ -78,29 +78,6 @@ function whatspace() {
   lsi $@ -c 'sudo du / | sort -nsr | head -n 20' -y
 }
 
-# Makes a tempdir and records it.
-mktempdir() {
-    local tdir=$(mktemp -d /tmp/tempdir-XXXXX)
-    echo $tdir >> ~/.current_tempdirs
-    echo $tdir
-}
-
-tempdir() {
-    cd $(mktempdir)
-}
-
-retempdir() {
-    cd $(tail -n 1 ~/.current_tempdirs)
-}
-
-rmtempdirs() {
-    for d in $(cat ~/.current_tempdirs); do
-        echo "Removing $d"
-	sudo rm -fr $d
-    done
-    cat /dev/null > ~/.current_tempdirs
-}
-
 alias enix='e $ZSH_PROFILE/nix.sh'
 alias enix='e $ZSH_CONFIG/nix.sh'
 alias ans='cd ~/narr/ns_systems/on_prem/ansible_installer'
