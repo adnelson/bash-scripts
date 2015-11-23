@@ -161,3 +161,4 @@ linesFrom() {
   # Output the file starting at that line, and take numLines lines
   tail -n -$(($nlines - $start + 1)) $file | head -n $numLines
 }
+alias nfn='cd $HOME/workspace/haskell/nixfromnpm'
