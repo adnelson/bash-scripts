@@ -11,7 +11,7 @@ if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
   source ~/.nix-profile/etc/profile.d/nix.sh
 fi
 
-unalias grep
+unalias grep || true
 
 # if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 #   SESSION_TYPE=ssh
