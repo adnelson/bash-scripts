@@ -1,7 +1,7 @@
 # Simple git aliases.
 alias gs='git status'
 alias gf='git fetch'
-
+alias gb='git branch'
 
 # Creates a new branch.
 alias gcb='git checkout -b'

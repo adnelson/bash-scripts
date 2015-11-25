@@ -139,3 +139,4 @@ linesFrom() {
   tail -n -$(($nlines - $start + 1)) $file | head -n $numLines
 }
 alias nfn='cd $HOME/workspace/haskell/nixfromnpm'
+alias bs='cd $ZSH_CONFIG'

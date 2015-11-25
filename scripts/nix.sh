@@ -125,3 +125,8 @@ nixrm() {
     lsp | egrep $1 | xargs nix-env -e
 }
 alias nse='nix-shell --pure -A env'
+
+# Print all of the result symlinks that are floating around on the hard drive.
+nix_result_links() {
+  nix-store --gc --print-roots | awk '{print $1}' | grep result
+}

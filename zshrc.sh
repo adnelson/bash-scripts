@@ -61,7 +61,11 @@ fi
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # Source the oh my zsh stuff, if we're using zshell.
-echo $SHELL | grep -q zsh && source $ZSH/oh-my-zsh.sh
+if echo $SHELL | grep -q zsh; then
+  source $ZSH/oh-my-zsh.sh
+else
+  source $HOME/.bash-scripts/style.sh
+fi
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
