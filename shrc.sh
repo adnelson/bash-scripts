@@ -60,6 +60,9 @@ elif [ ! -z $SAVED_PATH ]; then
 fi
 # export MANPATH="/usr/local/man:$MANPATH"
 
+# Turn on special glob patterns
+shopt -s extglob
+
 # Source the oh my zsh stuff, if we're using zshell.
 if echo $SHELL | grep -q zsh; then
   source $ZSH/oh-my-zsh.sh
@@ -92,10 +95,10 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-export ZSH_CONFIG=$HOME/.bash-scripts
+export SH_CONFIG=$HOME/.bash-scripts
 
 if [ -z $IN_NIX_SHELL ]; then
-  source $ZSH_CONFIG/config.sh
+  source $SH_CONFIG/config.sh
 else
   PROMPT="[nix-shell]$PROMPT"
   RPROMPT=

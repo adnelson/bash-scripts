@@ -79,13 +79,13 @@ function whatspace() {
 }
 
 alias enix='e $ZSH_PROFILE/nix.sh'
-alias enix='e $ZSH_CONFIG/nix.sh'
+alias enix='e $SH_CONFIG/nix.sh'
 alias ans='cd ~/narr/ns_systems/on_prem/ansible_installer'
 
 # Tells you where an alias is defined
 function where() {
-  grep --color=auto --exclude='#*' -R $1 $ZSH_CONFIG/scripts
-  grep --color=auto --exclude='#*' -R $1 $ZSH_CONFIG/secrets
+  grep --color=auto --exclude='#*' -R $1 $SH_CONFIG/scripts
+  grep --color=auto --exclude='#*' -R $1 $SH_CONFIG/secrets
 }
 
 # Greps current directory for a pattern
@@ -95,7 +95,7 @@ function findhere() {
 
 # Appends another alias to the `extras` file.
 function add() {
-   echo "alias $1='$2'" >> $ZSH_CONFIG/scripts/extras.sh && reload
+   echo "alias $1='$2'" >> $SH_CONFIG/scripts/extras.sh && reload
 }
 
 alias showpath='echo $PATH | tr ":" "\n"'
@@ -139,4 +139,4 @@ linesFrom() {
   tail -n -$(($nlines - $start + 1)) $file | head -n $numLines
 }
 alias nfn='cd $HOME/workspace/haskell/nixfromnpm'
-alias bs='cd $ZSH_CONFIG'
+alias bs='cd $SH_CONFIG'

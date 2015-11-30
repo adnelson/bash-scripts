@@ -7,7 +7,7 @@ SHOW_GIT="\$(git status >/dev/null 2>&1 && echo \"(git:\$(git rev-parse --abbrev
 # Show the current directory, truncated to two directories. (WIP)
 SHOW_DIR="\$(cur=\$(pwd | sed \"s|\$HOME|~|\"); echo $cur)"
 
-export PS1="${SHOW_STATUS}$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]\h'; else echo '\[\033[01;32m\]\u@\h'; fi)\[\033[01;34m\] \w ${SHOW_GIT} \$\[\033[00m\] "
+export PS1="${SHOW_STATUS}$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]\h'; else echo '\[\033[01;32m\]\u@\h'; fi)\[\033[01;34m\] \$(basename \$PWD) ${SHOW_GIT} \$\[\033[00m\] "
 
 # If we're in the nix shell then show that
 [[ -z $IN_NIX_SHELL ]] || export PS1="[nix-shell] $PS1"

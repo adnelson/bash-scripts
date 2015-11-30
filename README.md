@@ -1,6 +1,6 @@
 Add this to `~/.zshrc`:
 
 ```
-export ZSH_CONFIG=/path/to/this/directory
-source $ZSH_CONFIG/config.sh
+export SH_CONFIG=/path/to/this/directory
+source $SH_CONFIG/config.sh
 ```

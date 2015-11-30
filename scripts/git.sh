@@ -163,7 +163,7 @@ aclone_() {
 addgit() {
   local aname=$1
   local acmd=$2
-  echo "alias $aname='$acmd'" >> $ZSH_CONFIG/git.sh
+  echo "alias $aname='$acmd'" >> $SH_CONFIG/git.sh
   reload
 }
 alias grv='git remote -v'

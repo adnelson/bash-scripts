@@ -36,10 +36,10 @@ function e() {
 alias reload="exec $SHELL"
 
 # For editing this file.
-alias ezsh="e $ZSH_CONFIG/config.sh && reload"
+alias ezsh="e $SH_CONFIG/config.sh && reload"
 
 # For editing the extras file.
-alias eextras="e $ZSH_CONFIG/extras.sh && reload"
+alias eextras="e $SH_CONFIG/extras.sh && reload"
 
 # For editing SSH config.
 alias essh="e ~/.ssh/config"
@@ -76,12 +76,12 @@ alias la='ls -lrtha'
 # Activates a python virtualenv, assuming the path below is appropriate.
 alias act='source vendor/python/bin/activate'
 
-for file in $(find $ZSH_CONFIG/scripts -name '*.sh'); do
+for file in $(find $SH_CONFIG/scripts -name '*.sh'); do
   echo "Sourcing $file"
   source $file
 done
 
-for file in $(find $ZSH_CONFIG/secrets -name '*.sh'); do
+for file in $(find $SH_CONFIG/secrets -name '*.sh'); do
   echo "Sourcing secret $file"
   source $file
 done
