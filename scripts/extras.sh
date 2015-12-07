@@ -140,3 +140,4 @@ linesFrom() {
 }
 alias nfn='cd $HOME/workspace/haskell/nixfromnpm'
 alias bs='cd $SH_CONFIG'
+alias reloadreload='reload'
