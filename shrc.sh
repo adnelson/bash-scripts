@@ -2,8 +2,8 @@
 export SH_CONFIG=$HOME/.bash-scripts
 
 
-case $SHELL in
-*/bash)
+case $0 in
+*bash)
   # Turn on special glob patterns
   shopt -s extglob
   # Set the fancy prompt we're working on
@@ -11,7 +11,7 @@ case $SHELL in
   # Source all of the dotfiles
   source $SH_CONFIG/config.sh
 ;;
-*/zsh)
+*zsh)
   # Path to your oh-my-zsh installation.
   export ZSH=$SH_CONFIG/oh-my-zsh
 
