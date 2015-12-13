@@ -1,6 +1,12 @@
 # Path to folder containing this file.
 export SH_CONFIG=$HOME/.bash-scripts
 
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+if echo $TERMINFO | grep -q emacs; then
+  export TERM=xterm-256color
+fi
 
 case $0 in
 *bash)
@@ -19,7 +25,7 @@ case $0 in
   # Look in ~/.oh-my-zsh/themes/
   # Optionally, if you set this to "random", it'll load a random theme each
   # time that oh-my-zsh is loaded.
-  ZSH_THEME="jnrowe"
+  ZSH_THEME="pygmalion"
 
   # Uncomment the following line to use case-sensitive completion.
   # CASE_SENSITIVE="true"
