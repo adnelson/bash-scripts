@@ -130,3 +130,9 @@ alias nse='nix-shell --pure -A env'
 nix_result_links() {
   nix-store --gc --print-roots | awk '{print $1}' | grep result
 }
+
+rm_nix_result_links() {
+  nix_result_links | xargs rm
+}
+
+export NIX_NODE_PACKAGES=$HOME/workspace/nix/nix-node-packages

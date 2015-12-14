@@ -14,8 +14,10 @@ case $0 in
   shopt -s extglob
   # Set the fancy prompt we're working on
   source $HOME/.bash-scripts/style.sh
-  # Source all of the dotfiles
-  source $SH_CONFIG/config.sh
+  # Source all of the dotfiles, unless we're in a nix shell.
+  if [[ -z $IN_NIX_SHELL ]]; then
+    source $SH_CONFIG/config.sh
+  fi
 ;;
 *zsh)
   setopt extendedglob
