@@ -24,32 +24,6 @@ pyrm () {
 }
 alias nb='nix-build'
 alias lsp='PAGER= nix-env -q'
-function nsshell() {
-    # Enter a nix shell specific to a NS package.
-    nix-shell --pure '<nsnix>' -A "nspackages.$1"
-}
-
-function nsbuild() {
-    # Build an ns package.
-    local pkg_name=$1
-    echo "Building package $pkg_name"
-    nix-build '<nsnix>' -A "nspackages.$pkg_name"
-}
-
-function nsinstall() {
-    # Install an ns package
-    nix-env -f '<nsnix>' -iA "nspackages.$1"
-}
-
-cupload() {
-  pushd ~/workspace/haskell/$1
-  local name=$(cabal info . | head -n 1 | awk '{print $2}')
-  echo "Building and uploading $name..."
-  nix-shell $HOME/.pkgs.nix -A haskellPackages.$1.env --command \
-    "cabal configure && cabal sdist && cabal upload \
-     dist/$name.tar.gz -u thinkpad20" || return 1
-  popd
-}
 
 tmpnix() {
     local chan="$1"
@@ -70,23 +44,6 @@ update_nixos() {
 update_channels() {
     nix-channel --update
     nixlist -r >/dev/null
-}
-
-hshell() {
-    local name=$1
-    if [ -z $name ]; then
-        name=$(basename $PWD)
-        nix-shell $HOME/.pkgs.nix -A haskellPackages.$name.env
-    else
-        local dir=~/workspace/haskell/$name
-        [ ! -d $dir ] && {
-            echo "It appears $name does not exist"
-            return 1
-        }
-        pushd $dir
-        nix-shell $HOME/.pkgs.nix -A haskellPackages.$name.env
-        popd
-    fi
 }
 
 export PATH="$HOME/.nix-profile/bin:$PATH"
