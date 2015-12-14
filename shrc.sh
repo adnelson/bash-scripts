@@ -18,6 +18,7 @@ case $0 in
   source $SH_CONFIG/config.sh
 ;;
 *zsh)
+  setopt extendedglob
   # Path to your oh-my-zsh installation.
   export ZSH=$SH_CONFIG/oh-my-zsh
 
