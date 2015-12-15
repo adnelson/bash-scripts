@@ -1,6 +1,6 @@
 # Makes a tempdir and records it.
 mktempdir() {
-  local tdir=$(mktemp -d /tmp/tempdir-XXXXX)
+  local tdir=$(mktemp -d $HOME/tmp/tempdir-XXXXX)
   echo $tdir >> ~/.current_tempdirs
   echo $tdir
 }
