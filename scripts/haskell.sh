@@ -18,7 +18,7 @@ cabalInit() {
 }
 
 hsInit() {
-  cabalInit
+  [ -z NO_CABAL ] && cabalInit
   cabal2nix . > project.nix
   cat <<EOF > default.nix
 { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc7102" }:
