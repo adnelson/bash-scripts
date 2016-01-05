@@ -41,10 +41,22 @@ alias gamm='git commit --amend'
 alias gpo='git push origin'
 
 # Push to origin, current branch.
-alias gpoc='git push origin $(git rev-parse --abbrev-ref HEAD)'
+gpoc() {
+  if [[ $(cur) == "master" ]]; then
+    echo "Current branch is master; use gpom" >&2
+  else
+    git push origin $(git rev-parse --abbrev-ref HEAD)
+  fi
+}
 
 # Push to origin master. Use with caution! :)
-alias gpom='git push origin master'
+gpom() {
+  if [[ $(cur) != "master" ]]; then
+    echo "Not on master branch" >&2
+  else
+    git push origin master
+  fi
+}
 
 # Forces a commit, when you've done rebases or --ammend commits.
 alias gpf='git push --force'
@@ -167,3 +179,11 @@ addgit() {
   reload
 }
 alias grv='git remote -v'
+
+
+# Remove a tag
+rmtag() {
+  local tag=$1
+  git tag -d $tag
+  git push origin :refs/tags/$tag
+}
