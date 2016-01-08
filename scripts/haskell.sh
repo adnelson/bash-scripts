@@ -63,3 +63,5 @@ hshell() {
         popd
     fi
 }
+
+alias nxe='cd $HASKELL/nix-eval'
