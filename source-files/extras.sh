@@ -88,7 +88,16 @@ alias sdev='cd ~/narr/ns_systems/on_prem/dev'
 function findit {
   readlink -f $(which $1)
 }
-alias vdf='vagrant destroy -f'
+vdf() {
+  name=$(basename $PWD)
+  if [[ $name  == nix-cache ]]; then
+    echo "refusing to destroy nix-cache" >&2
+    return
+  else
+    echo "Destroying $name"
+    vagrant destroy -f
+  fi
+}
 
 alias time='/usr/bin/env time'
 alias enw='emacsclient -nw'
@@ -118,3 +127,5 @@ allen () (
   cd $NARR/vagrantboxes/allen
   vagrant ssh
 )
+
+alias vssh='vagrant ssh'

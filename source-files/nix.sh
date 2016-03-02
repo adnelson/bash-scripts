@@ -6,9 +6,12 @@ export MANPATH=/run/current-system/sw/share/man:$MANPATH
 export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH
 
 alias nsp="nix-shell --pure"
+
+export NIXPKGS=${NIXPKGS:-$HOME/.nix-defexpr/channels/nixpkgs}
+
 nixi () {
     nix-channel-update || true
-    nix-env -f ~/.nix-defexpr/channels/nixpkgs -iA pkgs.$1
+    nix-env -f $NIXPKGS -iA pkgs.$1
     rm -f ~/.cache/dmenu_run 2>/dev/null 1>/dev/null
 }
 pixi () {
@@ -93,3 +96,16 @@ rm_nix_result_links() {
 }
 
 export NIX_NODE_PACKAGES=$HOME/workspace/nix/nix-node-packages
+
+findnix () {
+    if [[ $# < 1 ]]; then
+        echo "Need at least one argument." >&2
+        return 1
+    fi
+    command="grep -r '$1' $NIXPKGS"
+    shift
+    for arg in $@; do
+        command+=" | grep '$arg'"
+    done
+    eval "$command"
+}

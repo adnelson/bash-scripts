@@ -4,8 +4,12 @@ export SH_CONFIG=$HOME/.bash-scripts
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-if echo $TERMINFO | grep -q emacs; then
-  export TERM=xterm-256color
+if [[ ! -z $TERM ]]; then
+  if echo $TERMINFO | grep -q emacs; then
+    export TERM=xterm
+  else
+    export TERM=xterm-256color
+  fi
 fi
 
 case $0 in
