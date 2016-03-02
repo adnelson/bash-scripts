@@ -41,8 +41,13 @@ tmpnix() {
 }
 
 update_nixos() {
-    sudo sh $SH_CONFIG/scripts/update_nixos.sh "$@"
+  sudo sh $SH_CONFIG/scripts/update_nixos.sh "$@"
 }
+
+push_nixos_config() (
+  cd /etc/nixos
+  sudo git push origin master
+)
 
 update_channels() {
     nix-channel --update
