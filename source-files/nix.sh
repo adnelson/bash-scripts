@@ -41,7 +41,7 @@ tmpnix() {
 }
 
 update_nixos() {
-    sudo sh ~/.update_nixos.sh "$@"
+    sudo sh $SH_CONFIG/scripts/update_nixos.sh "$@"
 }
 
 update_channels() {
