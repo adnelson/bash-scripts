@@ -14,7 +14,7 @@ alias venv='virtualenv venv; source venv/bin/activate'
 export PYTHONPATH=$PYTHONPATH:/lib/python2.7/site-packages
 export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/site-packages
 
-if [[ $ENABLE_PYENV ]]; then
+if [[ -n $ENABLE_PYENV ]]; then
   echo "Activating pyenv..."
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH="$PYENV_ROOT/bin:$PATH"
