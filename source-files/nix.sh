@@ -7,7 +7,17 @@ export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH
 
 alias nsp="nix-shell --pure"
 
-export NIXPKGS=${NIXPKGS:-$HOME/.nix-defexpr/channels/nixpkgs}
+if which nixos-version >/dev/null 2>&1 && [[ ! $USE_NIXPKGS ]]; then
+  NIX_CHANNEL_FOLDER=$HOME/.nix-defexpr/channels/nixos
+  NIXPKGS=$NIX_CHANNEL_FOLDER
+  NIX_CHANNEL_URL=https://nixos.org/channels/nixos-15.09
+  NIX_CHANNEL_NAME=nixos
+else
+  NIX_CHANNEL_FOLDER=$HOME/.nix-defexpr/channels/nixpkgs
+  NIXPKGS=${NIXPKGS:-$NIX_CHANNEL_FOLDER}
+  NIX_CHANNEL_URL=https://nixos.org/channels/nixpkgs-unstable
+  NIX_CHANNEL_NAME=nixpkgs
+fi
 
 nixi () {
     nix-channel-update || true
@@ -60,15 +70,14 @@ alias nixpkgs="cd $HOME/nixpkgs"
 
 # Print the hash of the current nixpkgs hash installed to stdout.
 current_nixpkgs() {
-  local nixpkgs_link=$(readlink -f ~/.nix-defexpr/channels/nixpkgs)
+  local nixpkgs_link=$(readlink -f $NIX_CHANNEL_FOLDER)
   local nixpkgs_folder=$(basename $(dirname $nixpkgs_link))
   echo $nixpkgs_folder | command grep -Po '.*?\K(\w+$)'
 }
 
 # Follow the nixpkgs channel url to the latest.
 latest_nixpkgs() {
-  local url=http://nixos.org/channels/nixpkgs-unstable
-  local res=$(curl -Ls -o /dev/null -w %{url_effective} $url)
+  local res=$(curl -Ls -o /dev/null -w %{url_effective} $NIX_CHANNEL_URL)
   python -c "import re; print(re.match(r'.*?(\w+)/$', '$res').group(1))"
 }
 

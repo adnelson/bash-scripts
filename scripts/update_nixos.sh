@@ -7,5 +7,5 @@ msg="${1:-"latest update $(date)"}"
   git add --all .
   git commit -m "$msg"
 )
-nixos-rebuild test -I nixpkgs=/home/anelson/nixpkgs && \
-  nixos-rebuild switch -I nixpkgs=/home/anelson/nixpkgs
+nixos-rebuild test -I nixpkgs=$NIXPKGS && \
+  nixos-rebuild switch -I nixpkgs=$NIXPKGS
