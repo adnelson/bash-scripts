@@ -25,6 +25,7 @@ case $0 in
 ;;
 *zsh)
   setopt extendedglob
+  unalias which # This is aliased in centos; it blows
   # Path to your oh-my-zsh installation.
   export ZSH=$SH_CONFIG/oh-my-zsh
 

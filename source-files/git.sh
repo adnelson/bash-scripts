@@ -161,13 +161,7 @@ function ninjap() {
 
 aclone() {
     for repo in "$@"; do
-        aclone_ adnelson/$repo || return 1
-    done
-}
-
-aclone_() {
-    for repo in "$@"; do
-        git clone ssh://github-adnelson:/$repo || return 1
+        git clone ssh://git@github.com/adnelson/$repo || return 1
     done
 }
 
