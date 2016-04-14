@@ -181,3 +181,8 @@ rmtag() {
   git tag -d $tag
   git push origin :refs/tags/$tag
 }
+
+# Set global gitignore
+if [[ -e $SH_CONFIG/gitignore.global ]]; then
+  git config --global core.excludesfile $SH_CONFIG/gitignore.global
+fi

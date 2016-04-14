@@ -109,8 +109,6 @@ rm_nix_result_links() {
   nix_result_links | xargs rm
 }
 
-export NIX_NODE_PACKAGES=$HOME/workspace/nix/nix-node-packages
-
 findnix () {
     if [[ $# < 1 ]]; then
         echo "Need at least one argument." >&2
