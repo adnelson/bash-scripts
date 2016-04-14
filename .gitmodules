@@ -1,6 +1,6 @@
 [submodule "secrets"]
 	path = secrets
-	url = ssh://bitbucket-adnelson:/thinkpad20/secrets
+	url = https://bitbucket.org/thinkpad20/secrets
 	branch = master
 [submodule "oh-my-zsh"]
 	path = oh-my-zsh

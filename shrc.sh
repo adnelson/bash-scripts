@@ -4,6 +4,8 @@ export SH_CONFIG=$HOME/.bash-scripts
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+unalias which >/dev/null 2>&1 || true
+
 if [[ ! -z $TERM ]]; then
   if echo $TERMINFO | grep -q emacs; then
     export TERM=xterm

@@ -7,7 +7,7 @@ export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH
 
 alias nsp="nix-shell --pure"
 
-if which nixos-version >/dev/null 2>&1 && [[ ! $USE_NIXPKGS ]]; then
+if which nixos-version >/dev/null 2>&1 && [[ ! -n "$USE_NIXPKGS" ]]; then
   NIX_CHANNEL_FOLDER=$HOME/.nix-defexpr/channels/nixos
   NIXPKGS=$NIX_CHANNEL_FOLDER
   NIX_CHANNEL_URL=https://nixos.org/channels/nixos-15.09
@@ -108,8 +108,6 @@ nix_result_links() {
 rm_nix_result_links() {
   nix_result_links | xargs rm
 }
-
-export NIX_NODE_PACKAGES=$HOME/workspace/nix/nix-node-packages
 
 findnix () {
     if [[ $# < 1 ]]; then
