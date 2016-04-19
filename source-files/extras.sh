@@ -57,7 +57,13 @@ alias enix='e $SH_CONFIG/scripts/nix.sh'
 
 # Tells you where an alias is defined
 function where() {
-  grep --color=auto --exclude='#*' -R $1 $SH_CONFIG/scripts
+  str=$1
+  shift
+  if which ag >/dev/null 2>&1; then
+    ag $str $SH_CONFIG $@ -C 10
+  else
+    grep --color=auto --exclude='#*' -Rn -C 10 $str $SH_CONFIG $@
+  fi
 }
 
 # Greps current directory for a pattern
@@ -88,15 +94,17 @@ alias sdev='cd ~/narr/ns_systems/on_prem/dev'
 function findit {
   readlink -f $(which $1)
 }
+PROTECTED_FOLDERS=(quill)
 vdf() {
   name=$(basename $PWD)
-  if [[ $name  == nix-cache ]]; then
-    echo "refusing to destroy nix-cache" >&2
-    return
-  else
-    echo "Destroying $name"
-    vagrant destroy -f
-  fi
+  for protected in ${PROTECTED_FOLDERS[*]}; do
+    if [[ $name == $protected ]]; then
+      echo "refusing to destroy protected virtual machine '$name'" >&2
+      return
+    fi
+  done
+  echo "Destroying $name"
+  vagrant destroy -f
 }
 
 alias time='/usr/bin/env time'
