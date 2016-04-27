@@ -1,3 +1,21 @@
+# Detect the default remote to use. Order of preference is
+# adnelson, narrsci and origin. This is useful for forks.
+default_remote() {
+  local remotes=$(git remote -v)
+  if [[ -n $REMOTE ]]; then
+    echo $REMOTE
+  elif echo "$remotes" | grep -q '^adnelson'; then
+    echo "Using remote adnelson" 1>&2
+    echo adnelson
+  elif echo "$remotes" | grep -q '^narrsci'; then
+    echo "Using remote narrsci" 1>&2
+    echo narrsci
+  else
+    echo "Using remote origin" 1>&2
+    echo origin
+  fi
+}
+
 # Simple git aliases.
 alias gs='git status'
 alias gf='git fetch'
@@ -37,48 +55,50 @@ alias gamm='git commit --amend'
 
 ######## Pushing ########
 
-# Push to origin (provide the branch name).
-alias gpo='git push origin'
+# Push to $(default_remote) (provide the branch name).
+alias gpo='git push $(default_remote)'
 
-# Push to origin, current branch.
+# Push to $(default_remote), current branch.
 gpoc() {
   if [[ $(cur) == "master" ]]; then
     echo "Current branch is master; use gpom" >&2
   else
-    git push origin $(git rev-parse --abbrev-ref HEAD)
+    git push $(default_remote) $(git rev-parse --abbrev-ref HEAD) $@
   fi
 }
 
-# Push to origin master. Use with caution! :)
+# Push to $(default_remote) master. Use with caution! :)
 gpom() {
   if [[ $(cur) != "master" ]]; then
     echo "Not on master branch" >&2
   else
-    git push origin master
+    git push $(default_remote) master $@
   fi
 }
 
 # Forces a commit, when you've done rebases or --ammend commits.
 alias gpf='git push --force'
 
-# Forces a commit to `origin`.
-alias gpfo='git push --force origin'
+# Forces a commit to `$(default_remote)`.
+alias gpfo='gpo --force'
 
 # Force a commit to current branch.
-alias gpfoc='git push --force origin $(cur)'
+alias gpfoc='gpoc --force'
+
+alias gpfom='gpom --force'
 
 ######### Rebasing #########
 
 # Grab the latest from a branch, and then apply the commits in your branch
 
 # on top of those.
-alias rebo='git pull --rebase origin'
+alias rebo='git pull --rebase $(default_remote)'
 
 # Same as above, but for the `master` branch.
-alias reb='git pull --rebase origin master'
+alias reb='git pull --rebase $(default_remote) master'
 
 # Same as above, but uses `develop` branch.
-alias rebd='git pull --rebase origin develop'
+alias rebd='git pull --rebase $(default_remote) develop'
 
 # Continue a rebase, after doing a diff.
 alias grc='git rebase --continue'
@@ -140,8 +160,8 @@ cur() {
 # Pulling
 alias gl='git pull'
 
-# Push to origin, current branch.
-alias gloc='git pull origin $(cur)'
+# Push to $(default_remote), current branch.
+alias gloc='git pull $(default_remote) $(cur)'
 
 # Stashes currently staged files.
 alias stash='git stash'
@@ -179,7 +199,7 @@ alias grv='git remote -v'
 rmtag() {
   local tag=$1
   git tag -d $tag
-  git push origin :refs/tags/$tag
+  git push $(default_remote) :refs/tags/$tag
 }
 
 # Set global gitignore

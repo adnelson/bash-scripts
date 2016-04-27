@@ -8,17 +8,17 @@ export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH
 alias nsp="nix-shell --pure"
 
 get_nixos_version() {
-    nixos-version | python <<EOF
+    local version=$(nixos-version)
+    python <<EOF
 import re, sys
-version = sys.stdin.read()
-print(re.match("^(\d+\.\d+)\.", version).group(1))
+print(re.match("^(\d+\.\d+)\.", "$version").group(1))
 EOF
 }
 
 if which nixos-version >/dev/null 2>&1 && [[ -z $USE_NIXPKGS ]]; then
   NIX_CHANNEL_FOLDER=$HOME/.nix-defexpr/channels/nixos
   NIXPKGS=$NIX_CHANNEL_FOLDER
-  NIX_CHANNEL_URL=https://nixos.org/channels/nixos-15.09
+  NIX_CHANNEL_URL=https://nixos.org/channels/nixos-$(get_nixos_version)
   NIX_CHANNEL_NAME=nixos
 else
   NIX_CHANNEL_FOLDER=$HOME/.nix-defexpr/channels/nixpkgs

@@ -32,8 +32,8 @@ function e() {
     $EDITOR $EDITOR_FLAGS $@
 }
 
-# Reloads the zsh config, if you've updated an alias etc.
-alias reload="exec $SHELL"
+# Reloads the shell, if you've updated an alias etc.
+alias reload='exec $SHELL'
 
 # For editing this file.
 alias ezsh="e $SH_CONFIG/config.sh && reload"
