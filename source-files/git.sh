@@ -1,7 +1,7 @@
 # Detect the default remote to use. Order of preference is
 # adnelson, narrsci and origin. This is useful for forks.
 default_remote() {
-  local remotes=$(git remote -v)
+  local remotes=$(git remote)
   if [[ -n $REMOTE ]]; then
     echo $REMOTE
   elif echo "$remotes" | grep -q '^adnelson'; then
