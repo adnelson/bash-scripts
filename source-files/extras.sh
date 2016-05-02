@@ -109,7 +109,6 @@ vdf() {
 
 alias time='/usr/bin/env time'
 alias enw='emacsclient -nw'
-alias qosx='cd ~/narr/vagrantboxes/quill-osx && vagrant ssh'
 
 whichl() {
   ls -l $(which $1)
@@ -130,10 +129,11 @@ alias bs='cd $SH_CONFIG'
 # Cuz sometimes I type this
 alias reloadreload='reload'
 
-# SSH to my vagrant box
-allen () (
-  cd $NARR/vagrantboxes/allen
-  vagrant ssh
-)
-
 alias vssh='vagrant ssh'
+
+# Remove emacs temp files.
+clean_emacs() {
+  find . -name '.#*' -o -name '*~' -exec rm {} \; -print
+}
+
+alias secrets='cd ~/.secrets'
