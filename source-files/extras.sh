@@ -84,7 +84,7 @@ alias e_='emacsclient -nw'
 psa() {
   local cmd='ps auxww'
   for filter in "$@"; do
-    cmd+=" | grep $filter"
+    cmd+=" | grep --color=always $filter"
   done
   bash -c "$cmd"
 }

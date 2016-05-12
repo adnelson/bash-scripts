@@ -24,6 +24,33 @@ alias gb='git branch'
 # Creates a new branch.
 alias gcb='git checkout -b'
 
+# Delete a branch
+gbd() {
+  local response
+  if [[ -z "$1" ]]; then
+    echo "Please enter a branch name." >&2
+    return 1
+  fi
+  echo -n "Enter to delete branch $1, anything else not to: "
+  read response
+  if [[ -z $response ]]; then
+    git branch -D $1
+  else
+    echo "Not deleting $1."
+  fi
+}
+
+# Delete the current branch
+delete_current_branch() {
+  local branch_name=$(cur)
+  if [[ -z "$1" ]]; then
+    git checkout master
+  else
+    git checkout $1
+  fi
+  gbd $branch_name || git checkout $branch_name
+}
+
 # Checkouts
 alias gco='git checkout'
 alias master='git checkout master'
@@ -155,6 +182,10 @@ function exclude() {
 # Return the name of the current branch.
 cur() {
   git rev-parse --abbrev-ref HEAD
+}
+
+curcommit() {
+  git rev-parse HEAD
 }
 
 # Pulling
