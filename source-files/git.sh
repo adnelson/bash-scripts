@@ -184,6 +184,7 @@ cur() {
   git rev-parse --abbrev-ref HEAD
 }
 
+# Return the commit hash of the head of the current branch.
 curcommit() {
   git rev-parse HEAD
 }
