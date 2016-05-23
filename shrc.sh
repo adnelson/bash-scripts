@@ -14,16 +14,26 @@ if [[ ! -z $TERM ]]; then
   fi
 fi
 
-case $0 in
+if [[ -n "$BASH_VERSION" ]]; then
+  current_shell=bash
+elif [[ -n "$ZSH_VERSION" ]]; then
+  current_shell=zsh
+else
+  current_shell=$SHELL
+fi
+
+if [[ -n $current_shell ]]; then
+  echo "Detected shell: $current_shell"
+fi
+
+case $current_shell in
 *bash)
   # Turn on special glob patterns
   shopt -s extglob
   # Set the fancy prompt we're working on
   source $HOME/.bash-scripts/style.sh
   # Source all of the dotfiles, unless we're in a nix shell.
-  if [[ -z $IN_NIX_SHELL ]]; then
-    source $SH_CONFIG/config.sh
-  fi
+  source $SH_CONFIG/config.sh
 ;;
 *zsh)
   setopt extendedglob
@@ -109,19 +119,24 @@ case $0 in
 
   # If we're *not* in a nix shell, then set up a default PATH here and
   # source the oh-my-zsh startup script.
-  if [ -z $IN_NIX_SHELL ]; then
+  if [[ -z $IN_NIX_SHELL ]]; then
     export PATH="$HOME/bin:/var/setuid-wrappers:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/run/current-system/sw/lib/kde4/libexec:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     source $ZSH/oh-my-zsh.sh
     source $SH_CONFIG/config.sh
 
   else
     PROMPT="[nix-shell]$PROMPT"
+    source $ZSH/oh-my-zsh.sh
+    source $SH_CONFIG/config.sh
 
     # Set PATH to a SAVED_PATH environment variable if we've set
     # one (this is a way to communicate a path to `nix-shell`
-    if [ ! -z $SAVED_PATH ]; then
+    if [ ! -z $SAVED_PATH ]]; then
       export PATH=$SAVED_PATH
     fi
   fi
+;;
+*)
+  echo "Unknown shell: $0"
 ;;
 esac

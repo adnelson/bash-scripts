@@ -1,3 +1,6 @@
+if [[ -n "$IN_NIX_SHELL" ]]; then
+  return
+fi
 # Include these manpaths so that installed packages have manpages.
 export MANPATH=~/.nix-profile/share/man/:$MANPATH
 export MANPATH=/run/current-system/sw/share/man:$MANPATH
