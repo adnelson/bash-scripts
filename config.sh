@@ -25,7 +25,11 @@ unalias grep >/dev/null 2>&1 || true
 _echo "Detected session type: $SESSION_TYPE"
 
 export EDITOR=emacsclient
-export EDITOR_FLAGS='-nw'
+if [[ -n "$INSIDE_EMACS" ]]; then
+  export EDITOR_FLAGS='-n'
+else
+  export EDITOR_FLAGS='-nw'
+fi
 
 # Opens a text editor.
 function e() {
