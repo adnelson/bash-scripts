@@ -22,7 +22,9 @@ alias haddock='cabal haddock --internal --executables --hyperlink-source'
 alias dev='git checkout develop'
 
 shttp() {
-    curl -s icanhazip.com; python -m  SimpleHTTPServer 8000
+  local _PORT=${1:-8000}
+  curl -s icanhazip.com
+  python -m  SimpleHTTPServer $_PORT
 }
 
 alias ei3='e ~/.i3/config'

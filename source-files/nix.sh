@@ -23,11 +23,16 @@ if which nixos-version >/dev/null 2>&1 && [[ -z $USE_NIXPKGS ]]; then
   NIXPKGS=$NIX_CHANNEL_FOLDER
   NIX_CHANNEL_URL=https://nixos.org/channels/nixos-$(get_nixos_version)
   NIX_CHANNEL_NAME=nixos
-else
+elif [[ -e $HOME/.nix-defexpr ]]; then
   NIX_CHANNEL_FOLDER=$HOME/.nix-defexpr/channels/nixpkgs
   NIXPKGS=${NIXPKGS:-$NIX_CHANNEL_FOLDER}
   NIX_CHANNEL_URL=https://nixos.org/channels/nixpkgs-unstable
   NIX_CHANNEL_NAME=nixpkgs
+elif [[ -d $HOME/nixpkgs ]]; then
+  unset NIX_CHANNEL_FOLDER
+  NIX_CHANNEL_URL=https://nixos.org/channels/nixpkgs-unstable
+  NIX_CHANNEL_NAME=nixpkgs
+  NIXPKGS=$HOME/nixpkgs
 fi
 
 nixi () {
@@ -76,14 +81,26 @@ update_channels() {
 }
 
 export PATH="$HOME/.nix-profile/bin:$PATH"
-export NIX_PATH="$HOME/.nix-defexpr/channels:$NIX_PATH"
+if [[ -e $HOME/.nix-defexpr ]]; then
+  export NIX_PATH="$HOME/.nix-defexpr/channels:$NIX_PATH"
+else
+  export NIX_PATH="nixpkgs=$NIXPKGS:$NIX_PATH"
+fi
 alias nixpkgs="cd $HOME/nixpkgs"
 
 # Print the hash of the current nixpkgs hash installed to stdout.
 current_nixpkgs() {
-  local nixpkgs_link=$(readlink -f $NIX_CHANNEL_FOLDER)
-  local nixpkgs_folder=$(basename $(dirname $nixpkgs_link))
-  echo $nixpkgs_folder | command grep -Po '.*?\K(\w+$)'
+  if [[ -n $NIX_CHANNEL_FOLDER ]]; then
+    local nixpkgs_link=$(readlink -f $NIX_CHANNEL_FOLDER)
+    local nixpkgs_folder=$(basename $(dirname $nixpkgs_link))
+    echo $nixpkgs_folder | command grep -Po '.*?\K(\w+$)'
+  else
+    (
+      cd $NIXPKGS
+      commit=$(git rev-parse HEAD)
+      echo "${commit:0:7}"
+    )
+  fi
 }
 
 # Follow the nixpkgs channel url to the latest.
@@ -93,8 +110,16 @@ latest_nixpkgs() {
 }
 
 nix-channel-update() {
-  if [ $(latest_nixpkgs) != $(current_nixpkgs) ]; then
-    nix-channel --update
+  if [[ $(latest_nixpkgs) != $(current_nixpkgs) ]]; then
+    if [[ -z $NIX_CHANNEL_FOLDER ]]; then
+      (
+        cd $NIXPKGS
+        git fetch
+        git checkout $(latest_nixpkgs)
+      )
+    else
+      nix-channel --update
+    fi
   else
     echo "Already up-to-date at $(current_nixpkgs)"
   fi
