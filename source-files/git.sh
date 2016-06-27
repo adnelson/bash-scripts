@@ -55,14 +55,12 @@ delete_current_branch() {
 alias gco='git checkout'
 alias master='git checkout master'
 alias develop='git checkout develop'
+alias gsui='git submodule update --init'
 
 ###### Committing ########
 
 # Commits with a message
 alias gcm='git commit -m'
-
-# Call with a message, after adding everything in the folder.
-alias gcom="git add --all . && git commit -m"
 
 # Adds a file or folder. The --all is for folders.
 alias ga='git add --all'
@@ -193,7 +191,7 @@ curcommit() {
 alias gl='git pull'
 
 # Push to $(default_remote), current branch.
-alias gloc='git pull $(default_remote) $(cur)'
+alias gloc='git pull $(default_remote) $(cur) && git submodule update --init'
 
 # Stashes currently staged files.
 alias stash='git stash'
