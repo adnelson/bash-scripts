@@ -6,7 +6,7 @@ export MANPATH=~/.nix-profile/share/man/:$MANPATH
 export MANPATH=/run/current-system/sw/share/man:$MANPATH
 
 # This is where python package libs get dropped
-export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH
+# export PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages:$PYTHONPATH
 
 alias nsp="nix-shell --pure"
 
