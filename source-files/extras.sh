@@ -43,7 +43,7 @@ alias cd..='cd ..'
 alias cd...='cd ../..'
 alias cd....='cd ../../..'
 
-alias egit='e $SH_CONFIG/scripts/git.sh'
+alias egit='e $SH_CONFIG/source-files/git.sh'
 
 # Show disk space on machines matching filters.
 function dspace() {
@@ -55,7 +55,7 @@ function whatspace() {
   lsi $@ -c 'sudo du / | sort -nsr | head -n 20' -y
 }
 
-alias enix='e $SH_CONFIG/scripts/nix.sh'
+alias enix='e $SH_CONFIG/source-files/nix.sh'
 
 # Tells you where an alias is defined
 function where() {
