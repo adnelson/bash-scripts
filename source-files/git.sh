@@ -20,6 +20,9 @@ default_remote() {
 alias gs='git status'
 alias gf='git fetch'
 alias gb='git branch'
+alias gpt='git push --tags'
+alias gdh='git diff HEAD~1'
+
 
 # Creates a new branch.
 alias gcb='git checkout -b'
