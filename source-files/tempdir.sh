@@ -1,8 +1,7 @@
 # Makes a tempdir and records it.
 mktempdir() {
   mkdir -p $HOME/tmp
-  local tdir=$(mktemp -d $HOME/tmp/tempdir-XXXXX)
-  echo $tdir >> ~/.current_tempdirs
+  local tdir=$(mktemp -d $HOME/tmp/XXXXX)
   echo $tdir
 }
 
@@ -11,18 +10,15 @@ tempdir() {
 }
 
 retempdir() {
-  cd $(latest_tempdir)
+  if [[ ! -d $HOME/tmp ]] || \
+     [[ -z $(ls $HOME/tmp) ]]; then
+    echo "No latest tempdir. Creating one..." >&2
+    tempdir
+  else
+    cd $(latest_tempdir)
+  fi
 }
 
 latest_tempdir() {
-  tail -n 1 ~/.current_tempdirs
-}
-
-rmtempdirs() {
-  for d in $(cat ~/.current_tempdirs); do
-    echo "Removing $d"
-    chmod -R +w $d
-    rm -rf $d
-  done
-  cat /dev/null > ~/.current_tempdirs
+  echo $HOME/tmp/$(ls -t $HOME/tmp | head -n 1)
 }
