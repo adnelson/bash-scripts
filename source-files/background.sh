@@ -1,3 +1,5 @@
+if [[ -z $IN_NIX_SHELL ]]; then
+
 BACKGROUND_IMAGES=$HOME/.background-images
 
 
@@ -6,3 +8,6 @@ if ! env | grep -q SSH_CLIENT; then
     $BACKGROUND_IMAGES/random_background
   fi
 fi
+
+
+fi # if in nix shell

@@ -1,3 +1,5 @@
+if [[ -z $IN_NIX_SHELL ]]; then
+
 # Start up the systemd units (kinda hacky because I feel like this shouldn't be necessary to do here...)
 
 if [[ -d ~/.config/systemd/user ]]; then
@@ -18,3 +20,5 @@ if [[ -d ~/.config/systemd/user ]]; then
     fi
   )
 fi
+
+fi # if in nix shell
