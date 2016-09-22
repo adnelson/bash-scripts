@@ -96,13 +96,13 @@ alias sdev='cd ~/narr/ns_systems/on_prem/dev'
 function findit {
   readlink -f $(which $1)
 }
-PROTECTED_FOLDERS=(quill quill-vagrant-box)
+PROTECTED_FOLDERS=(anelson quill quill-vagrant-box osx-vagrant)
 vdf() {
   name=$(basename $PWD)
   for protected in ${PROTECTED_FOLDERS[*]}; do
     if [[ $name == $protected ]]; then
       echo "refusing to destroy protected virtual machine '$name'" >&2
-      return
+      return 1
     fi
   done
   echo "Destroying $name"
