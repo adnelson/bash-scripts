@@ -96,7 +96,7 @@ alias sdev='cd ~/narr/ns_systems/on_prem/dev'
 function findit {
   readlink -f $(which $1)
 }
-PROTECTED_FOLDERS=(quill quill-vagrant-box)
+PROTECTED_FOLDERS=(anelson quill quill-vagrant-box osx-vagrant)
 vdf() {
   if ! -e Vagrantfile; then
     echo "This must be done in a folder with a vagranfile" >&2
