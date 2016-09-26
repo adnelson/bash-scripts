@@ -98,11 +98,15 @@ function findit {
 }
 PROTECTED_FOLDERS=(quill quill-vagrant-box)
 vdf() {
+  if ! -e Vagrantfile; then
+    echo "This must be done in a folder with a vagranfile" >&2
+    return 1
+  fi
   name=$(basename $PWD)
   for protected in ${PROTECTED_FOLDERS[*]}; do
     if [[ $name == $protected ]]; then
       echo "refusing to destroy protected virtual machine '$name'" >&2
-      return
+      return 1
     fi
   done
   echo "Destroying $name"
