@@ -20,6 +20,9 @@ default_remote() {
 alias gs='git status'
 alias gf='git fetch'
 alias gb='git branch'
+alias gpt='git push --tags'
+alias gdh='git diff HEAD~1'
+
 
 # Creates a new branch.
 alias gcb='git checkout -b'
@@ -87,6 +90,7 @@ alias gpo='git push $(default_remote)'
 gpoc() {
   if [[ $(cur) == "master" ]]; then
     echo "Current branch is master; use gpom" >&2
+    return 1
   else
     git push $(default_remote) $(git rev-parse --abbrev-ref HEAD) $@
   fi
@@ -96,6 +100,7 @@ gpoc() {
 gpom() {
   if [[ $(cur) != "master" ]]; then
     echo "Not on master branch" >&2
+    return 1
   else
     git push $(default_remote) master $@
   fi

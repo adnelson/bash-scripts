@@ -38,11 +38,14 @@ export HASKELL=$HOME/workspace/haskell
 export NIXFROMNPM=$HASKELL/nixfromnpm
 
 cupload() (
+  set -e
+  cd ~/workspace/haskell/$1
   local name=$(cabal info . | head -n 1 | awk '{print $2}')
   echo "Building and uploading $name..."
-  nix-shell --command \
+  nix-shell $NSNIX -A pkgs.haskellPackages.$1.env --command \
     "cabal configure && cabal sdist && cabal upload \
      dist/$name.tar.gz -u thinkpad20" || return 1
+  popd
 )
 
 hshell() {

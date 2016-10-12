@@ -43,7 +43,7 @@ alias cd..='cd ..'
 alias cd...='cd ../..'
 alias cd....='cd ../../..'
 
-alias egit='e $SH_CONFIG/scripts/git.sh'
+alias egit='e $SH_CONFIG/source-files/git.sh'
 
 # Show disk space on machines matching filters.
 function dspace() {
@@ -55,7 +55,7 @@ function whatspace() {
   lsi $@ -c 'sudo du / | sort -nsr | head -n 20' -y
 }
 
-alias enix='e $SH_CONFIG/scripts/nix.sh'
+alias enix='e $SH_CONFIG/source-files/nix.sh'
 
 # Tells you where an alias is defined
 function where() {
@@ -101,13 +101,17 @@ alias sdev='cd ~/narr/ns_systems/on_prem/dev'
 function findit {
   readlink -f $(which $1)
 }
-PROTECTED_FOLDERS=(quill quill-vagrant-box)
+PROTECTED_FOLDERS=(anelson quill quill-vagrant-box osx-vagrant)
 vdf() {
+  if ! -e Vagrantfile; then
+    echo "This must be done in a folder with a vagranfile" >&2
+    return 1
+  fi
   name=$(basename $PWD)
   for protected in ${PROTECTED_FOLDERS[*]}; do
     if [[ $name == $protected ]]; then
       echo "refusing to destroy protected virtual machine '$name'" >&2
-      return
+      return 1
     fi
   done
   echo "Destroying $name"

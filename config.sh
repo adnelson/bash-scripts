@@ -43,7 +43,7 @@ alias reload='exec $SHELL'
 alias ezsh="e $SH_CONFIG/config.sh && reload"
 
 # For editing the extras file.
-alias eextras="e $SH_CONFIG/extras.sh && reload"
+alias eextras="e $SH_CONFIG/source-files/extras.sh && reload"
 
 # For editing SSH config.
 alias essh="e ~/.ssh/config"

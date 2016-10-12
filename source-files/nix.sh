@@ -28,6 +28,9 @@ elif [[ -e $HOME/.nix-defexpr ]]; then
   NIXPKGS=${NIXPKGS:-$NIX_CHANNEL_FOLDER}
   NIX_CHANNEL_URL=https://nixos.org/channels/nixpkgs-unstable
   NIX_CHANNEL_NAME=nixpkgs
+elif [[ -d $NSROOT/quill/ns_nix/nixpkgs ]]; then
+  unset NIX_CHANNEL_FOLDER NIX_CHANNEL_URL NIX_CHANNEL_NAME
+  NIXPKGS=$NSROOT/quill/ns_nix/nixpkgs
 elif [[ -d $HOME/nixpkgs ]]; then
   unset NIX_CHANNEL_FOLDER
   NIX_CHANNEL_URL=https://nixos.org/channels/nixpkgs-unstable
@@ -81,6 +84,7 @@ update_channels() {
 }
 
 export PATH="$HOME/.nix-profile/bin:$PATH"
+export NIX_PATH=
 if [[ -e $HOME/.nix-defexpr ]]; then
   export NIX_PATH="$HOME/.nix-defexpr/channels:$NIX_PATH"
 else
@@ -156,4 +160,16 @@ findnix () {
         command+=" | grep '$arg'"
     done
     eval "$command"
+}
+
+build_random() {
+  contents=$(uuidgen)
+  echo "Building random text $contents"
+  nix_file=$(mktemp --suffix=.nix)
+  cat <<EOF > $nix_file
+with import <nixpkgs> {}; writeText "random" "$contents"
+EOF
+  cat $nix_file
+  nix-build --no-out-link $nix_file
+  rm $nix_file
 }

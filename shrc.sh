@@ -1,10 +1,10 @@
 # Path to folder containing this file.
 export SH_CONFIG=$HOME/.bash-scripts
 
+# Locale settings
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-unalias which >/dev/null 2>&1 || true
 
 if [[ ! -z $TERM ]]; then
   if echo $TERMINFO | grep -q emacs; then
@@ -28,6 +28,8 @@ fi
 
 case $current_shell in
 *bash)
+  # If which is a binary, disable any 'which' alias
+  type -p which >/dev/null 2>&1 && unalias which >/dev/null 2>&1 || true
   # Turn on special glob patterns
   shopt -s extglob
   # Set the fancy prompt we're working on
@@ -36,7 +38,11 @@ case $current_shell in
   source $SH_CONFIG/config.sh
 ;;
 *zsh)
+  # Make sure which isn't an alias
+  unalias which >/dev/null 2>&1 || true
+  # Turn on extended globbing
   setopt extendedglob
+
   # Path to your oh-my-zsh installation.
   export ZSH=$SH_CONFIG/oh-my-zsh
 
@@ -54,7 +60,7 @@ case $current_shell in
   # HYPHEN_INSENSITIVE="true"
 
   # Uncomment the following line to disable bi-weekly auto-update checks.
-  # DISABLE_AUTO_UPDATE="true"
+  DISABLE_AUTO_UPDATE="true"
 
   # Uncomment the following line to change how often to auto-update (in days).
   # export UPDATE_ZSH_DAYS=13
