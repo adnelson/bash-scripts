@@ -98,8 +98,8 @@ function findit {
 }
 PROTECTED_FOLDERS=(anelson quill quill-vagrant-box osx-vagrant)
 vdf() {
-  if ! -e Vagrantfile; then
-    echo "This must be done in a folder with a vagranfile" >&2
+  if [[ ! -e Vagrantfile ]]; then
+    echo "This must be done in a folder with a Vagrantfile" >&2
     return 1
   fi
   name=$(basename $PWD)
