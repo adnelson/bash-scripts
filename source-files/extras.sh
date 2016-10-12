@@ -79,8 +79,13 @@ function add() {
 }
 
 alias showpath='echo $PATH | tr ":" "\n"'
-alias copy='xsel -ib'
-alias paste='xsel -ob'
+if [[ $OSTYPE == darwin* ]]; then
+  alias copy=pbcopy
+  alias paste=pbpaste
+else
+  alias copy='xsel -ib'
+  alias paste='xsel -ob'
+fi
 alias ns='nix-shell'
 alias e_='emacsclient -nw'
 psa() {
