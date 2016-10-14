@@ -79,8 +79,13 @@ function add() {
 }
 
 alias showpath='echo $PATH | tr ":" "\n"'
-alias copy='xsel -ib'
-alias paste='xsel -ob'
+if [[ $OSTYPE == darwin* ]]; then
+  alias copy=pbcopy
+  alias paste=pbpaste
+else
+  alias copy='xsel -ib'
+  alias paste='xsel -ob'
+fi
 alias ns='nix-shell'
 alias e_='emacsclient -nw'
 psa() {
@@ -98,6 +103,10 @@ function findit {
 }
 PROTECTED_FOLDERS=(anelson quill quill-vagrant-box osx-vagrant)
 vdf() {
+  if [[ ! -e Vagrantfile ]]; then
+    echo "This must be done in a folder with a Vagrantfile" >&2
+    return 1
+  fi
   name=$(basename $PWD)
   for protected in ${PROTECTED_FOLDERS[*]}; do
     if [[ $name == $protected ]]; then
