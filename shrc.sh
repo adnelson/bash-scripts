@@ -146,3 +146,4 @@ case $current_shell in
   echo "Unknown shell: $0"
 ;;
 esac
+export PATH=/home/vagrant/.nix-profile/bin:$PATH

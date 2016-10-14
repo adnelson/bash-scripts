@@ -139,3 +139,5 @@ clean_emacs() {
 }
 
 alias secrets='cd ~/.secrets'
+
+alias j='python -m json.tool'
