@@ -2,6 +2,7 @@ alias ki='cd ~/workspace/misc/kirei'
 alias kirei='ki && cd src && ghci'
 alias kirei+='ki && subl . && cd src && ghci'
 alias killz='$HOME/workspace/python/killproc.py'
+alias dri='docker run -it --rm'
 
 # misc configuration items
 export QUIVER2_DB=quiver2_press_stg
@@ -93,7 +94,7 @@ psa() {
   for filter in "$@"; do
     cmd+=" | grep --color=always $filter"
   done
-  bash -c "$cmd"
+  bash -c "$cmd" | grep -v "$cmd" | grep -v grep
 }
 
 alias vgr='cd ~/narr/vagrantboxes'

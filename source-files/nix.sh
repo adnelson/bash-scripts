@@ -50,7 +50,9 @@ hixi () {
     nixi "haskellPackages.$1"
 }
 
-alias ncg='nix-collect-garbage -d'
+ncg() {
+  nix-collect-garbage -d || ncg
+}
 pyrm () {
   nix-env -e "python2.7-$1"
 }
@@ -129,7 +131,6 @@ nix-channel-update() {
   fi
 }
 
-alias ncg='nix-collect-garbage -d'
 pyrm() {
   nix-env -e "python2.7-$1"
 }
@@ -146,7 +147,12 @@ nix_result_links() {
 }
 
 rm_nix_result_links() {
-  nix_result_links | xargs rm
+  links=$(nix_result_links)
+  if [[ -n $links ]]; then
+    rm $links
+  else
+    echo "No symlinks to remove."
+  fi
 }
 
 findnix () {
