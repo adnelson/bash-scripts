@@ -179,3 +179,18 @@ EOF
   nix-build --no-out-link $nix_file
   rm $nix_file
 }
+
+# Interactive uninstall of nix stuff
+nix_uninstall() {
+  for pkg in $(nix-env -q); do
+    echo "Uninstall $pkg? [y/n/q]"
+    read -n RESPONSE
+    if [[ $RESPONSE == y ]]; then
+      nix-env -e $pkg
+    elif [[ $RESPONSE == q ]]; then
+      break
+    else
+      echo "Not uninstalling $pkg"
+    fi
+  done
+}
