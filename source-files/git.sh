@@ -22,6 +22,7 @@ alias gf='git fetch'
 alias gb='git branch'
 alias gpt='git push --tags'
 alias gdh='git diff HEAD~1'
+alias gds='git diff --staged'
 
 
 # Creates a new branch.
