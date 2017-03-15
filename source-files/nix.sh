@@ -112,6 +112,7 @@ current_nixpkgs() {
 # Follow the nixpkgs channel url to the latest.
 latest_nixpkgs() {
   local res=$(curl -Ls -o /dev/null -w %{url_effective} $NIX_CHANNEL_URL)
+  echo $res >&2
   python -c "import re; print(re.match(r'.*?(\w+)/?$', '$res').group(1))"
 }
 
