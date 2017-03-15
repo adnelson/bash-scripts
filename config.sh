@@ -68,7 +68,7 @@ function cdl() {
 }
 
 # Commonly used directories.
-alias ws="cd ~/workspace"
+alias ws="mkd ~/workspace"
 alias dl="cd ~/Downloads"
 
 # Lists sorted by date, latest last.

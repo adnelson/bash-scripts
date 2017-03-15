@@ -110,10 +110,16 @@ current_nixpkgs() {
 }
 
 # Follow the nixpkgs channel url to the latest.
-latest_nixpkgs() {
-  local res=$(curl -Ls -o /dev/null -w %{url_effective} $NIX_CHANNEL_URL)
-  python -c "import re; print(re.match(r'.*?(\w+)/$', '$res').group(1))"
-}
+latest_nixpkgs() (
+  python <<EOF
+import re, sys, subprocess, os
+from subprocess import check_output
+url = "${1:-$NIX_CHANNEL_URL}"
+curl = check_output("which curl", shell=True).strip()
+cmd = [curl, "-Ls", "-o", "/dev/null", "-w", "%{url_effective}", url]
+print(check_output(cmd).split('.')[-1])
+EOF
+)
 
 nix-channel-update() {
   if [[ $(latest_nixpkgs) != $(current_nixpkgs) ]]; then
@@ -179,3 +185,8 @@ EOF
   nix-build --no-out-link $nix_file
   rm $nix_file
 }
+
+# Not sure why this is being set but it's a bitch on nixos
+if [[ -d /etc/nixos ]]; then
+  unset NIX_REPO_HTTP
+fi
