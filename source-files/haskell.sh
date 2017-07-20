@@ -66,3 +66,6 @@ hshell() {
 }
 
 alias nxe='cd $HASKELL/nix-eval'
+
+# Stack wants me to put this in my path
+PATH=$HOME/.local/bin:$PATH
