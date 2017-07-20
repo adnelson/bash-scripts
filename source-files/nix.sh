@@ -86,12 +86,7 @@ update_channels() {
 }
 
 export PATH="$HOME/.nix-profile/bin:$PATH"
-export NIX_PATH=
-if [[ -e $HOME/.nix-defexpr ]]; then
-  export NIX_PATH="$HOME/.nix-defexpr/channels:$NIX_PATH"
-else
-  export NIX_PATH="nixpkgs=$NIXPKGS:$NIX_PATH"
-fi
+export NIX_PATH=$HOME
 alias nixpkgs="cd $HOME/nixpkgs"
 
 # Print the hash of the current nixpkgs hash installed to stdout.
