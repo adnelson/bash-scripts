@@ -20,6 +20,7 @@ default_remote() {
 alias gs='git status'
 alias gf='git fetch'
 alias gb='git branch'
+alias gd='git diff'
 alias gpt='git push --tags'
 alias gdh='git diff HEAD~1'
 alias gds='git diff --staged'
@@ -154,6 +155,9 @@ alias unstage='git reset HEAD'
 # Resets the repo to the state of the last commit.
 alias greset='git reset --hard HEAD'
 
+# Stronger version of greset, also deletes untracked files.
+alias grevert='greset && git clean -xdf'
+
 # Resets the repo to the state of the one before the last commit.
 alias goback='git reset --hard HEAD~1'
 
@@ -242,3 +246,5 @@ rmtag() {
 if [[ -e $SH_CONFIG/gitignore.global ]]; then
   git config --global core.excludesfile $SH_CONFIG/gitignore.global
 fi
+
+alias lura="git log --graph --all --format='%C(auto)%h [%Cblue%an %Creset⧗ %Cgreen%ar%C(reset)%C(auto)] → %s%d' --color"
