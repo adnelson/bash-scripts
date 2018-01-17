@@ -80,13 +80,22 @@ alias la='ls -lrtha'
 # Activates a python virtualenv, assuming the path below is appropriate.
 alias act='source vendor/python/bin/activate'
 
+# Make a shim for the `readlink -f` command because standard OSX doesn't have it
+if uname -a | grep -iq darwin; then
+  function rlink() {
+    python -c "import os; print(os.path.realpath('$1'))"
+  }
+else
+  alias rlink='readlink -f'
+fi
+
 for file in $(find $SH_CONFIG/source-files/ -name '*.sh' -a ! -name '.#*'); do
-  echo "Sourcing $file"
+  echo "Sourcing $(rlink $file)"
   source $file
 done
 
 for file in $(find $SH_CONFIG/secrets/ -name '*.sh' -a ! -name '.#*'); do
-  echo "Sourcing secret $file"
+  echo "Sourcing secret $(rlink $file)"
   source $file
 done
 
@@ -96,6 +105,7 @@ alias browse="$BROWSER $BROWSER_FLAGS"
 
 # Use light colors for ls
 LS_COLORS=$LS_COLORS:'di=0;36:' ; export LS_COLORS
+alias ls='ls --color=tty'
 
 # Remove a right prompt if there is one
 export RPROMPT=
