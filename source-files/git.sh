@@ -7,9 +7,6 @@ default_remote() {
   elif echo "$remotes" | grep -q '^adnelson'; then
     echo "Using remote adnelson" 1>&2
     echo adnelson
-  elif echo "$remotes" | grep -q '^narrsci'; then
-    echo "Using remote narrsci" 1>&2
-    echo narrsci
   else
     echo "Using remote origin" 1>&2
     echo origin
