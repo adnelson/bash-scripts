@@ -94,10 +94,12 @@ for file in $(find $SH_CONFIG/source-files/ -name '*.sh' -a ! -name '.#*'); do
   source $file
 done
 
-for file in $(find $SH_CONFIG/secrets/ -name '*.sh' -a ! -name '.#*'); do
-  echo "Sourcing secret $(rlink $file)"
-  source $file
-done
+if [[ -e $SH_CONFIG/secrets ]]; then
+  for file in $(find $SH_CONFIG/secrets/ -name '*.sh' -a ! -name '.#*'); do
+    echo "Sourcing secret $(rlink $file)"
+    source $file
+  done
+fi
 
 unset BROWSER
 
