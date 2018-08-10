@@ -64,8 +64,10 @@ alias gsui='git submodule update --init'
 # Commits with a message
 alias gcm='git commit -m'
 
-# Adds a file or folder. The --all is for folders.
-alias ga='git add --all'
+# Adds a file or folder. The -u means that it only adds files that are
+# already being tracked. Otherwise use `gaa`
+alias ga='git add -u'
+alias gaa='git add --all'
 
 # Redoes the commit using the same message but the latest files.
 alias gcan='git commit --amend --no-edit'
@@ -108,8 +110,7 @@ gpom() {
 # Forces a commit, when you've done rebases or --ammend commits.
 alias gpf='git push --force'
 
-# Forces a commit to `$(default_remote)`.
-alias gpfo='gpo --force'
+alias gpfo &>/dev/null && unalias gpfo
 
 # Force a commit to current branch.
 alias gpfoc='gpoc --force'
@@ -199,6 +200,7 @@ alias gl='git pull'
 
 # Push to $(default_remote), current branch.
 alias gloc='git pull $(default_remote) $(cur) && git submodule update --init'
+alias groc='git pull --rebase $(default_remote) $(cur) && git submodule update --init'
 
 # Stashes currently staged files.
 alias stash='git stash'
@@ -216,9 +218,14 @@ function ninjap() {
     ninja $1; gpfoc
 }
 
+function setgituser() {
+  git config user.name 'Allen Nelson' && git config user.email 'ithinkican@gmail.com'
+}
+
 aclone() {
     for repo in "$@"; do
         git clone ssh://git@github.com/adnelson/$repo || return 1
+        (cd $repo && setgituser)
     done
 }
 
@@ -245,3 +252,12 @@ if [[ -e $SH_CONFIG/gitignore.global ]]; then
 fi
 
 alias lura="git log --graph --all --format='%C(auto)%h [%Cblue%an %Creset⧗ %Cgreen%ar%C(reset)%C(auto)] → %s%d' --color"
+
+# Delete local branches which have already been merged to master.
+function rm_merged_branches() {
+  for branch in $(git branch --merged master | grep -v '\bmaster\b'); do
+    gbd $branch
+  done
+}
+
+alias gsu='git status --untracked-files=no'

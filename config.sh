@@ -99,9 +99,7 @@ for file in $(find $SH_CONFIG/secrets/ -name '*.sh' -a ! -name '.#*'); do
   source $file
 done
 
-export BROWSER='firefox'
-export BROWSER_FLAGS='-P'
-alias browse="$BROWSER $BROWSER_FLAGS"
+unset BROWSER
 
 # Use light colors for ls
 LS_COLORS=$LS_COLORS:'di=0;36:' ; export LS_COLORS

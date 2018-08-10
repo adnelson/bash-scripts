@@ -1,4 +1,9 @@
 # Rust-related bash shenanigans
-if [[ -e $HOME/.cargo/bin ]]; then
+function setrustpath() {
   export PATH=$HOME/.cargo/bin:$PATH
+}
+
+
+if [[ -e $HOME/.cargo/bin ]]; then
+  setrustpath
 fi

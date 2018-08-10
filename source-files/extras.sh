@@ -1,6 +1,3 @@
-alias ki='cd ~/workspace/misc/kirei'
-alias kirei='ki && cd src && ghci'
-alias kirei+='ki && subl . && cd src && ghci'
 alias killz='$HOME/workspace/python/killproc.py'
 alias dri='docker run -it --rm'
 
@@ -29,7 +26,8 @@ shttp() {
 }
 
 alias ei3='e ~/.i3/config'
-alias grip='grep -i'
+alias gri='grep -ri'
+alias grin='grep -rin'
 alias tn='git snake test -n'
 
 alias grep='grep --color=auto'
@@ -60,7 +58,7 @@ alias enix='e $SH_CONFIG/source-files/nix.sh'
 
 # Tells you where an alias is defined
 function where() {
-  str=$1
+  str="\b$1\b"
   shift
   if which ag >/dev/null 2>&1; then
     ag $str $SH_CONFIG $@ -C 10
@@ -102,7 +100,7 @@ alias sdev='cd ~/narr/ns_systems/on_prem/dev'
 function findit {
   readlink -f $(which $1)
 }
-PROTECTED_FOLDERS=(anelson quill quill-vagrant-box osx-vagrant)
+PROTECTED_FOLDERS=(devops)
 vdf() {
   if [[ ! -e Vagrantfile ]]; then
     echo "This must be done in a folder with a Vagrantfile" >&2
@@ -154,3 +152,15 @@ clean_emacs() {
 alias secrets='cd ~/.secrets'
 
 alias j='python -m json.tool'
+
+# Run a process and check its memory usage
+mem() {
+  ps -eo rss,pid,euser,args:100 --sort %mem | grep -v grep | grep -i $@ | awk '{printf $1/1024 "MB"; $1=""; print }'
+}
+
+if which ag &>/dev/null; then
+  alias pag='ag --python'
+  alias jag='ag --js'
+fi
+
+alias psppshell='cd ~/workspace/other/pspp/pspp-source/pspp-1.0.1 && nix-shell ~/nixpkgs -A pspp'

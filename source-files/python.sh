@@ -8,7 +8,10 @@ alias pyton='python'
 alias py='cd ~/workspace/python'
 
 # Start/activate a virtualenv
-alias venv='virtualenv venv; source venv/bin/activate'
+alias venv='virtualenv ~/.venvs/$(basename $PWD) && source ~/.venvs/$(basename $PWD)/bin/activate'
+
+# Activates a python virtualenv, assuming the path below is appropriate.
+alias act='source ~/.venvs/$(basename $PWD)/bin/activate'
 
 unset PYTHONPATH
 # grumble grumble
