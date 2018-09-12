@@ -17,7 +17,9 @@ alias cbi='cabal sandbox init'
 alias fed='cd ~/workspace/haskell/fedallah'
 alias fed_='cd && subl fedallah rowling && cd fedallah'
 alias haddock='cabal haddock --internal --executables --hyperlink-source'
-alias dev='git checkout develop'
+alias wej='cd ~/workspace/wej'
+alias wejb='cd ~/workspace/wej/hs-backend'
+alias wejf='cd ~/workspace/wej/frontend'
 
 shttp() {
   local _PORT=${1:-8000}

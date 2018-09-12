@@ -261,3 +261,4 @@ function rm_merged_branches() {
 }
 
 alias gsu='git status --untracked-files=no'
+alias cleanbranches='git branch --merged master | grep -v master | xargs git branch -D'
