@@ -261,4 +261,16 @@ function rm_merged_branches() {
 }
 
 alias gsu='git status --untracked-files=no'
-alias cleanbranches='git branch --merged master | grep -v master | xargs git branch -D'
+
+
+function cleanremotebranches() {
+  git fetch origin
+  git branch --remote --merged | grep -v HEAD | grep -v master | grep origin | awk -F/ '{print $2}' | awk '{print $1}' | xargs -I{} git push origin :{}
+}
+
+function cleanbranches() (
+  git branch --merged master | grep -v master | grep -v "\*" | while read branch; do
+    echo "Dangling branch: $branch"
+    git branch -D $branch
+  done
+)
