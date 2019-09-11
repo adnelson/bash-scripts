@@ -3,7 +3,7 @@ export SH_CONFIG=$HOME/.bash-scripts
 
 # Locale settings
 export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+# export LC_ALL=en_US.UTF-8
 
 
 if [[ ! -z $TERM ]]; then

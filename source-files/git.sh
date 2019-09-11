@@ -18,13 +18,32 @@ alias gs='git status'
 alias gf='git fetch'
 alias gb='git branch'
 alias gd='git diff'
+alias gft='git fetch --tags'
+alias grp='git rev-parse'
 alias gpt='git push --tags'
 alias gdh='git diff HEAD~1'
 alias gds='git diff --staged'
+alias gdss='git diff --shortstat'
+alias gdsss='git diff --staged --shortstat'
+# Detach from current branch, without changing the source state
+alias gcod='git checkout --detach'
+
+# See which files differ between branches
+alias gdn='git diff --name-only'
 
 
 # Creates a new branch.
 alias gcb='git checkout -b'
+
+# Create a new branch, or switch to it if it exists.
+# TODO this could be replaced by a native git command...
+function gcbo() {
+  if git rev-parse --quiet --verify $1; then
+    git checkout $1
+  else
+    git checkout -b $1
+  fi
+}
 
 # Delete a branch
 gbd() {
@@ -148,7 +167,14 @@ rebi() {
 ########## Staging files and reverting changes ###########
 
 # Removes a file from the set of files to be committed.
-alias unstage='git reset HEAD'
+function unstage() {
+  # Check if there are commits in the repo
+  if git log -n 1 &>/dev/null; then
+    git reset HEAD "${@}"
+  else
+    git rm --cached "${@}"
+  fi
+}
 
 # Resets the repo to the state of the last commit.
 alias greset='git reset --hard HEAD'
@@ -274,3 +300,11 @@ function cleanbranches() (
     git branch -D $branch
   done
 )
+
+function addMyRemote() {
+  if [[ -z $1 ]]; then
+    echo "single argument required"
+  else
+    git remote add adnelson ssh://git@github.com/adnelson/$1
+  fi
+}

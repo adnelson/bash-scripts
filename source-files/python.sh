@@ -1,3 +1,10 @@
+# Hack because version management sux on osx...
+if [[ -e /Library/Frameworks/Python.framework/Versions/3.6/bin ]]; then
+  VIRTUALENV_BIN=/Library/Frameworks/Python.framework/Versions/3.6/bin/virtualenv
+else
+  VIRTUALENV_BIN=virtualenv
+fi
+
 # ipython > python
 alias ipy='ipython'
 
@@ -8,10 +15,10 @@ alias pyton='python'
 alias py='cd ~/workspace/python'
 
 # Start/activate a virtualenv
-alias venv='virtualenv ~/.venvs/$(basename $PWD) && source ~/.venvs/$(basename $PWD)/bin/activate'
+alias venv='$VIRTUALENV_BIN ~/.venvs/$(basename $PWD) && source ~/.venvs/$(basename $PWD)/bin/activate'
 
 # Activates a python virtualenv, assuming the path below is appropriate.
-alias act='source ~/.venvs/$(basename $PWD)/bin/activate'
+alias act='if [ -e ~/.venvs/$(basename $PWD) ]; then source ~/.venvs/$(basename $PWD)/bin/activate; else venv; fi'
 
 unset PYTHONPATH
 # grumble grumble

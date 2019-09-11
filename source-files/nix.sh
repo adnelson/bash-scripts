@@ -71,6 +71,23 @@ tmpnix() {
     echo $dir
 }
 
+update_nixpkgs() (
+  set -eo pipefail
+  cd ~/nixpkgs
+  if ! git remote -v | grep -q nixpkgs-channels; then
+    echo "No remote for nixpkgs channels, stopping here"
+    exit 1
+  fi
+  cur=$(git rev-parse --abbrev-ref HEAD)
+  if [[ "$cur" != nixpkgs-unstable ]]; then
+    echo "current branch is $cur, must be on nixpkgs-unstable to update"
+    exit 1
+  fi
+
+  remote=$(git remote -v | grep nixpkgs-channels | awk '{print $1}' | sort | uniq)
+  git pull $remote nixpkgs-unstable
+)
+
 update_nixos() {
   sudo sh $SH_CONFIG/scripts/update_nixos.sh "$@"
 }

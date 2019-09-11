@@ -2,14 +2,11 @@ alias killz='$HOME/workspace/python/killproc.py'
 alias dri='docker run -it --rm'
 
 # misc configuration items
-export QUIVER2_DB=quiver2_press_stg
 alias llama='cd ~/workspace/languages/llama/language-llama'
 alias llama_='llama && subl .. && pwd && ls && ghcio -isrc Language.Llama.Types.TypeCheck'
 
 # alias quill='apps && act && python src/quill/server.py'
 alias ghcio='ghci -XOverloadedStrings'
-alias langs='cd ~/workspace/languages'
-alias sargs='cd ~/workspace/python/simpleargs'
 alias cbe='cabal exec'
 alias hs='ws && cd haskell'
 alias s3s='hs && cd s3-streams'
@@ -20,11 +17,22 @@ alias haddock='cabal haddock --internal --executables --hyperlink-source'
 alias wej='cd ~/workspace/wej'
 alias wejb='cd ~/workspace/wej/hs-backend'
 alias wejf='cd ~/workspace/wej/frontend'
+alias psps='cd ~/workspace/purescript/purescript'
+alias pspss='psps && nix-shell ~/nixpkgs -A haskellPackages.purescript.env'
+alias wsjs='mkd ~/workspace/javascript'
+
+function agpstype() (
+  psps && ag "(data|type) $1"
+)
+
+function agps() (
+  psps && ag $1
+)
 
 shttp() {
   local _PORT=${1:-8000}
   curl -s icanhazip.com
-  python -m  SimpleHTTPServer $_PORT
+  python -m http.server $_PORT
 }
 
 alias ei3='e ~/.i3/config'
@@ -153,7 +161,7 @@ clean_emacs() {
 
 alias secrets='cd ~/.secrets'
 
-alias j='python -m json.tool'
+alias j='python -m json.tool --sort-keys'
 
 # Run a process and check its memory usage
 mem() {
@@ -166,3 +174,25 @@ if which ag &>/dev/null; then
 fi
 
 alias psppshell='cd ~/workspace/other/pspp/pspp-source/pspp-1.0.1 && nix-shell ~/nixpkgs -A pspp'
+
+function encuric() {
+    node -p "encodeURIComponent('$1')"
+}
+
+function bag() {
+    local needle=$1
+    shift
+    ag "\b$needle\b" "${@}"
+}
+
+function bagl() {
+    local needle=$1
+    shift
+    ag "\b$needle" "${@}"
+}
+
+function bagr() {
+    local needle=$1
+    shift
+    ag "$needle\b" "${@}"
+}
