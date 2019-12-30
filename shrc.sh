@@ -146,3 +146,5 @@ case $current_shell in
   echo "Unknown shell: $0"
 ;;
 esac
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

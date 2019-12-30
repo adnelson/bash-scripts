@@ -4,7 +4,7 @@ default_remote() {
   local remotes=$(git remote)
   if [[ -n $REMOTE ]]; then
     echo $REMOTE
-  elif echo "$remotes" | grep -q '^adnelson'; then
+  elif echo "$remotes" | grep -q '^adnelson$'; then
     echo "Using remote adnelson" 1>&2
     echo adnelson
   else
@@ -25,6 +25,7 @@ alias gdh='git diff HEAD~1'
 alias gds='git diff --staged'
 alias gdss='git diff --shortstat'
 alias gdsss='git diff --staged --shortstat'
+alias grl='git reflog'
 # Detach from current branch, without changing the source state
 alias gcod='git checkout --detach'
 

@@ -38,6 +38,11 @@ elif [[ -d $HOME/nixpkgs ]]; then
   NIXPKGS=$HOME/nixpkgs
 fi
 
+update_nixpkgs() {
+    cd $NIXPKGS
+    git pull channels $(nixpkgs-unstable)
+}
+
 nixi () {
     nix-channel-update || true
     nix-env -f $NIXPKGS -iA pkgs.$1

@@ -20,6 +20,16 @@ alias wejf='cd ~/workspace/wej/frontend'
 alias psps='cd ~/workspace/purescript/purescript'
 alias pspss='psps && nix-shell ~/nixpkgs -A haskellPackages.purescript.env'
 alias wsjs='mkd ~/workspace/javascript'
+alias re='cd ~/workspace/reasonml'
+alias req='cd ~/workspace/reasonml/requery'
+alias reqa='cd ~/workspace/reasonml/requery/packages/abstract'
+alias reqae='cd ~/workspace/reasonml/requery/packages/abstract/example'
+alias reqp='cd ~/workspace/reasonml/requery/packages/postgres'
+alias reqpe='cd ~/workspace/reasonml/requery/packages/postgres/example'
+alias reqs='cd ~/workspace/reasonml/requery/packages/sqlite'
+alias reqse='cd ~/workspace/reasonml/requery/packages/sqlite/example'
+
+alias subl='/Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text'
 
 function agpstype() (
   psps && ag "(data|type) $1"
@@ -36,33 +46,17 @@ shttp() {
 }
 
 alias ei3='e ~/.i3/config'
-alias gri='grep -ri'
-alias grin='grep -rin'
-alias tn='git snake test -n'
 
-alias grep='grep --color=auto'
 alias egui='emacs'
 alias emcs='emacs -nw'
-alias sf='cd ~/workspace/software-foundations/coqfiles'
 alias sl='ls'
 alias duh='du -h'
-alias coq='cd ~/workspace/coq'
 alias cd..='cd ..'
 alias cd..='cd ..'
 alias cd...='cd ../..'
 alias cd....='cd ../../..'
 
 alias egit='e $SH_CONFIG/source-files/git.sh'
-
-# Show disk space on machines matching filters.
-function dspace() {
-  lsi $@ -c 'df -h | head -n 2 | tail -n 1' -y
-}
-
-# Show what is taking up disk space on machines matching filters.
-function whatspace() {
-  lsi $@ -c 'sudo du / | sort -nsr | head -n 20' -y
-}
 
 alias enix='e $SH_CONFIG/source-files/nix.sh'
 
@@ -179,6 +173,10 @@ function encuric() {
     node -p "encodeURIComponent('$1')"
 }
 
+function encuri() {
+    node -p "encodeURI('$1')"
+}
+
 function bag() {
     local needle=$1
     shift
@@ -195,4 +193,13 @@ function bagr() {
     local needle=$1
     shift
     ag "$needle\b" "${@}"
+}
+
+# Install xml2json with PYTHON=/usr/bin/python npm install -g xml2json
+function xml2json() {
+    NODE_PATH=$HOME/.npm/lib/node_modules node -e "var fs=require('fs');var xml=fs.readFileSync('$1');var j=require('xml2json').toJson(xml,{object:true});console.log(JSON.stringify(j, null, 2))"
+}
+
+function pkgversion() {
+  cat node_modules/$1/package.json | jq .version
 }
