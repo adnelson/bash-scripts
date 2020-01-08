@@ -14,7 +14,8 @@ get_nixos_version() {
     local version=$(nixos-version)
     python <<EOF
 import re, sys
-print(re.match("^(\d+\.\d+)\.", "$version").group(1))
+m = re.match("^(\d+\.\d+).*", "$version")
+print(m.group(1))
 EOF
 }
 
