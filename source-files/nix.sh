@@ -109,7 +109,7 @@ update_channels() {
 }
 
 export PATH="$HOME/.nix-profile/bin:$PATH"
-export NIX_PATH=$HOME
+export NIX_PATH=$HOME:nixpkgs=$HOME/nixpkgs
 alias nixpkgs="cd $HOME/nixpkgs"
 
 # Print the hash of the current nixpkgs hash installed to stdout.
@@ -220,3 +220,28 @@ nix_uninstall() {
     fi
   done
 }
+
+if [[ $(id -u) == 0 ]]; then
+  export NIX_PATH=/root/.nix-defexpr/channels:nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
+
+  commit_nixos_config() (
+    if [[ -z "$1" ]]; then
+      echo "Need a commit message"
+      exit 1
+    fi
+    cd /etc/nixos
+    git add configuration.nix
+    git commit -m "$1"
+  )
+
+  push_nixos_config() (
+    cd /etc/nixos
+    if ! git diff-index --quiet HEAD; then
+      git status
+      echo "Stopping due to uncommitted changes in /etc/nixos."
+      exit 1
+    fi
+
+    git push origin "${1:-master}"
+  )
+fi
