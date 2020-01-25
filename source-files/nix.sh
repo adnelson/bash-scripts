@@ -45,8 +45,8 @@ update_nixpkgs() {
 }
 
 nixi () {
-    nix-channel-update || true
-    nix-env -f $NIXPKGS -iA pkgs.$1
+    update_nixpkgs
+    nix-env -f '<nixpkgs>' -iA "${@}"
     rm -f ~/.cache/dmenu_run 2>/dev/null 1>/dev/null
 }
 pixi () {
