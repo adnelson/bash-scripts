@@ -44,11 +44,20 @@ update_nixpkgs() {
     git pull channels $(nixpkgs-unstable)
 }
 
-nixi () {
+nixi () (
+    set -x
     update_nixpkgs
-    nix-env -f '<nixpkgs>' -iA "${@}"
+    local nixpath=$HOME/.bash-scripts/nix/userPackages.nix
+    if ! rg "pkgs.$1" $nixpath; then
+        echo "Adding pkgs.$1 to $nixpath"
+        sed -i "s|];|  pkgs.$1\\n    ];|" $nixpath
+    else
+        echo "pkgs.$1 is already in $nixpath"
+    fi
+    nix-env -f $nixpath -i
     rm -f ~/.cache/dmenu_run 2>/dev/null 1>/dev/null
-}
+)
+
 pixi () {
     nixi "pythonPackages.$1"
 }
@@ -245,3 +254,24 @@ if [[ $(id -u) == 0 ]]; then
     git push origin "${1:-master}"
   )
 fi
+
+commit_bash_scripts() (
+  if [[ -z "$1" ]]; then
+    echo "Need a commit message"
+    exit 1
+  fi
+  cd ~/.bash-scripts
+  git add .
+  git commit -m "$1"
+)
+
+push_bash_scripts() (
+  cd ~/.bash-scripts
+  if ! git diff-index --quiet HEAD; then
+    git status
+    echo "Stopping due to uncommitted changes in $PWD."
+    exit 1
+  fi
+
+  git push origin "${1:-master}"
+)
