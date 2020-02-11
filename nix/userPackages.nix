@@ -1,4 +1,4 @@
-let pkgs = import <nixpkgs> {}; in
+let pkgs = import <nixpkgs> {config.allowUnfree=true;}; in
 
 {
   env = pkgs.buildEnv {
@@ -6,6 +6,15 @@ let pkgs = import <nixpkgs> {}; in
     paths = [
       pkgs.ripgrep
       pkgs.nodejs-10_x
+      pkgs.python3Packages.virtualenv
+      pkgs.reaper
+      pkgs.docker
+      pkgs.docker-compose
+      pkgs.vagrant
+      pkgs.ruby
+      pkgs.weechat
+      pkgs.brave
+      pkgs.xscreensaver
     ];
   };
 }
