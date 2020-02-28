@@ -126,7 +126,7 @@ case $current_shell in
   # If we're *not* in a nix shell, then set up a default PATH here and
   # source the oh-my-zsh startup script.
   if [[ -z $IN_NIX_SHELL ]]; then
-    export PATH="$HOME/bin:/var/setuid-wrappers:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/run/current-system/sw/lib/kde4/libexec:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    export PATH="$HOME/bin:$HOME/.bash-scripts/scripts:/var/setuid-wrappers:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/run/current-system/sw/lib/kde4/libexec:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     source $ZSH/oh-my-zsh.sh
     source $SH_CONFIG/config.sh
 
@@ -147,4 +147,4 @@ case $current_shell in
 ;;
 esac
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.bash-scripts/scripts:$PATH"
