@@ -15,7 +15,7 @@ if [[ -d ~/.config/systemd/user ]]; then
       fi
     done
     if [[ -n $services ]]; then
-      echo "Enabling service $services[@]"
+      echo "Starting service $services[@]"
       systemctl --user start $services[@]
     fi
   )

@@ -14,7 +14,6 @@ let pkgs = import <nixpkgs> {config.allowUnfree=true;}; in
       pkgs.ruby
       pkgs.weechat
       pkgs.brave
-      pkgs.xscreensaver
       pkgs.gcc
       pkgs.bind
       pkgs.postgresql_11
@@ -24,7 +23,6 @@ let pkgs = import <nixpkgs> {config.allowUnfree=true;}; in
       pkgs.urweb
       pkgs.slack
       pkgs.stalonetray
-      pkgs.xmobar
       pkgs.trayer
       pkgs.cabal-install
       pkgs.redshift

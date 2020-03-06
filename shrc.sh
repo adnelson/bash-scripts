@@ -48,8 +48,6 @@ elif [[ "$CURRENT_SHELL" == "zsh" ]]; then
   if [[ -n "$INSIDE_EMACS" ]]; then
     unset zle_bracketed_paste
     unsetopt zle
-  else
-    echo "TERM: '$TERM'"
   fi
 
   # Make sure which isn't an alias
