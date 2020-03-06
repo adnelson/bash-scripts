@@ -5,18 +5,22 @@ export SH_CONFIG=$HOME/.bash-scripts
 export LANG=en_US.UTF-8
 # export LC_ALL=en_US.UTF-8
 
-
-if [[ ! -z $TERM ]]; then
-  if echo $TERMINFO | grep -q emacs; then
-    export TERM=xterm
-  else
-    export TERM=xterm-256color
-  fi
+if echo $TERMINFO | grep -q emacs; then
+  INSIDE_EMACS=1
+else
+  unset INSIDE_EMACS
 fi
 
-SHELL_ABS_PATH="$(cat /proc/$$/cmdline)"
-CURRENT_SHELL="$(echo $SHELL_ABS_PATH | tr / '\n' | tail -n1)"
-if [[ -z "CURRENT_SHELL" ]]; then
+# if [[ ! -z $TERM ]]; then
+#   if echo $TERMINFO | grep -q emacs; then
+#     export TERM=xterm
+#   else
+#     export TERM=xterm-256color
+#   fi
+# fi
+
+CURRENT_SHELL="$(echo $0 | tr / '\n' | tail -n1)"
+if [[ -z "$CURRENT_SHELL" ]]; then
   if [[ -n "$BASH_VERSION" ]]; then
     CURRENT_SHELL=bash
   elif [[ -n "$ZSH_VERSION" ]]; then
@@ -30,8 +34,7 @@ if [[ -n $CURRENT_SHELL ]]; then
   echo "Detected shell: $CURRENT_SHELL"
 fi
 
-case $CURRENT_SHELL in
-*bash)
+if [[ "$CURRENT_SHELL" == "bash" ]]; then
   # If which is a binary, disable any 'which' alias
   type -p which >/dev/null 2>&1 && unalias which >/dev/null 2>&1 || true
   # Turn on special glob patterns
@@ -40,10 +43,13 @@ case $CURRENT_SHELL in
   source $HOME/.bash-scripts/style.sh
   # Source all of the dotfiles, unless we're in a nix shell.
   source $SH_CONFIG/config.sh
-;;
-*zsh)
-  if [[ $TERM = dumb ]]; then
+
+elif [[ "$CURRENT_SHELL" == "zsh" ]]; then
+  if [[ -n "$INSIDE_EMACS" ]]; then
     unset zle_bracketed_paste
+    unsetopt zle
+  else
+    echo "TERM: '$TERM'"
   fi
 
   # Make sure which isn't an alias
@@ -149,10 +155,8 @@ case $CURRENT_SHELL in
       export PATH=$SAVED_PATH
     fi
   fi
-;;
-*)
-  echo "Unknown shell: $0"
-;;
-esac
+else
+  echo "Unknown shell: '$CURRENT_SHELL'"
+fi
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.bash-scripts/scripts:$PATH"
