@@ -42,6 +42,10 @@ case $CURRENT_SHELL in
   source $SH_CONFIG/config.sh
 ;;
 *zsh)
+  if [[ $TERM = dumb ]]; then
+    unset zle_bracketed_paste
+  fi
+
   # Make sure which isn't an alias
   unalias which >/dev/null 2>&1 || true
   # Turn on extended globbing
@@ -130,7 +134,7 @@ case $CURRENT_SHELL in
   # If we're *not* in a nix shell, then set up a default PATH here and
   # source the oh-my-zsh startup script.
   if [[ -z $IN_NIX_SHELL ]]; then
-    export PATH="$HOME/bin:$HOME/.bash-scripts/scripts:/var/setuid-wrappers:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/run/current-system/sw/lib/kde4/libexec:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    export PATH="$HOME/bin:/run/wrappers/bin:$HOME/.bash-scripts/scripts:$HOME/.nix-profile/bin:/etc/profiles/per-user/$(whoami)/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:"
     source $ZSH/oh-my-zsh.sh
     source $SH_CONFIG/config.sh
 

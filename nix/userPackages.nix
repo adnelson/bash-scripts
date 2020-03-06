@@ -15,6 +15,20 @@ let pkgs = import <nixpkgs> {config.allowUnfree=true;}; in
       pkgs.weechat
       pkgs.brave
       pkgs.xscreensaver
+      pkgs.gcc
+      pkgs.bind
+      pkgs.postgresql_11
+      pkgs.cloc
+      pkgs.rustup
+      pkgs.spotify
+      pkgs.urweb
+      pkgs.slack
+      pkgs.stalonetray
+      pkgs.xmobar
+      pkgs.trayer
+      pkgs.cabal-install
+      pkgs.redshift
+      pkgs.stylish-haskell
     ];
   };
 }

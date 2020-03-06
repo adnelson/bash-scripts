@@ -39,14 +39,12 @@ elif [[ -d $HOME/nixpkgs ]]; then
   NIXPKGS=$HOME/nixpkgs
 fi
 
-update_nixpkgs() {
-    cd $NIXPKGS
-    git pull channels $(nixpkgs-unstable)
-}
-
 nixi () (
     set -x
     update_nixpkgs
+    if ! nix-instantiate --eval '<nixpkgs>' -A "$1" >/dev/null; then
+      return 1
+    fi
     local nixpath=$HOME/.bash-scripts/nix/userPackages.nix
     if ! rg "pkgs.$1" $nixpath; then
         echo "Adding pkgs.$1 to $nixpath"
