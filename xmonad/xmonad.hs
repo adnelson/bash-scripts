@@ -31,7 +31,7 @@ main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ docks $ ewmh def
     { modMask            = mod4Mask
-    , terminal           = "st -f \"DejaVu Sans Mono:pixelsize=20:style=Book\""
+    , terminal           = "terminator"
     , focusedBorderColor = "#6666cc"
     , normalBorderColor  = "#373b41"
     , borderWidth        = 2
@@ -50,7 +50,6 @@ main = do
     `additionalKeys` [
         ((mod4Mask, xK_b), sendMessage ToggleStruts)
       , ((mod4Mask, xK_p), spawn "dmenu_run -fn \"DejaVu Sans Mono:pixelsize=12:style=Book\"")
-      , ((mod4Mask .|. shiftMask, xK_Return ), spawn "terminator")
       , ((mod4Mask .|. shiftMask, xK_l), unsafeSpawn "xscreensaver-command -lock")
       , ((mod4Mask .|. shiftMask, xK_p), spawn (spotifyCmd "PlayPause"))
       , ((mod4Mask .|. shiftMask, xK_m), spawn (spotifyCmd "Next"))
