@@ -14,19 +14,23 @@ if [[ ! -z $TERM ]]; then
   fi
 fi
 
-if [[ -n "$BASH_VERSION" ]]; then
-  current_shell=bash
-elif [[ -n "$ZSH_VERSION" ]]; then
-  current_shell=zsh
-else
-  current_shell=$SHELL
+SHELL_ABS_PATH="$(cat /proc/$$/cmdline)"
+CURRENT_SHELL="$(echo $SHELL_ABS_PATH | tr / '\n' | tail -n1)"
+if [[ -z "CURRENT_SHELL" ]]; then
+  if [[ -n "$BASH_VERSION" ]]; then
+    CURRENT_SHELL=bash
+  elif [[ -n "$ZSH_VERSION" ]]; then
+    CURRENT_SHELL=zsh
+  else
+    CURRENT_SHELL=$SHELL
+  fi
 fi
 
-if [[ -n $current_shell ]]; then
-  echo "Detected shell: $current_shell"
+if [[ -n $CURRENT_SHELL ]]; then
+  echo "Detected shell: $CURRENT_SHELL"
 fi
 
-case $current_shell in
+case $CURRENT_SHELL in
 *bash)
   # If which is a binary, disable any 'which' alias
   type -p which >/dev/null 2>&1 && unalias which >/dev/null 2>&1 || true

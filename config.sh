@@ -37,7 +37,7 @@ function e() {
 }
 
 # Reloads the shell, if you've updated an alias etc.
-alias reload='exec $SHELL'
+alias reload='exec $CURRENT_SHELL'
 
 # For editing this file.
 alias ezsh="e $SH_CONFIG/config.sh && reload"

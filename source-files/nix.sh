@@ -104,7 +104,11 @@ update_nixpkgs() (
 )
 
 update_nixos() {
-  sudo sh $SH_CONFIG/scripts/update_nixos.sh "$@"
+  if [ $(id -u) -eq 0 ]; then
+    $SH_CONFIG/scripts/update_nixos.py "$@"
+  else
+    sudo $SH_CONFIG/scripts/update_nixos.py "$@"
+  fi
 }
 
 push_nixos_config() (
@@ -117,9 +121,14 @@ update_channels() {
     nixlist -r >/dev/null
 }
 
-export PATH="$HOME/.nix-profile/bin:$PATH"
-export NIX_PATH=$HOME:nixpkgs=$HOME/nixpkgs
-alias nixpkgs="cd $HOME/nixpkgs"
+if [[ -d ~/.nix-profile ]]; then
+  export PATH="$HOME/.nix-profile/bin:$PATH"
+fi
+
+if [[ -d ~/nixpkgs ]]; then
+  export NIX_PATH=$HOME:nixpkgs=$HOME/nixpkgs
+  alias nixpkgs="cd $HOME/nixpkgs"
+fi
 
 # Print the hash of the current nixpkgs hash installed to stdout.
 current_nixpkgs() {
@@ -166,10 +175,6 @@ nix-channel-update() {
   fi
 }
 
-pyrm() {
-  nix-env -e "python2.7-$1"
-}
-alias nb='nix-build'
 alias lsp='PAGER= nix-env -q'
 nixrm() {
     lsp | egrep $1 | xargs nix-env -e
