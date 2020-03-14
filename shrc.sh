@@ -1,6 +1,10 @@
 # Path to folder containing this file.
 export SH_CONFIG=$HOME/.bash-scripts
 
+if [[ $(id -u) == 0 ]]; then
+  IS_ROOT=1
+fi
+
 # Locale settings
 export LANG=en_US.UTF-8
 # export LC_ALL=en_US.UTF-8
@@ -62,7 +66,13 @@ elif [[ "$CURRENT_SHELL" == "zsh" ]]; then
   # Look in ~/.oh-my-zsh/themes/
   # Optionally, if you set this to "random", it'll load a random theme each
   # time that oh-my-zsh is loaded.
-  ZSH_THEME="pygmalion"
+  if [[ -z "$ZSH_THEME" ]]; then
+    if [[ -n "$IS_ROOT" ]]; then
+      ZSH_THEME="agnoster"
+    else
+      ZSH_THEME="pygmalion"
+    fi
+  fi
 
   # Uncomment the following line to use case-sensitive completion.
   # CASE_SENSITIVE="true"
