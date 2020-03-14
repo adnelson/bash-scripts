@@ -39,14 +39,25 @@ elif [[ -d $HOME/nixpkgs ]]; then
   NIXPKGS=$HOME/nixpkgs
 fi
 
+is_in_nixpkgs() {
+  local isDeriv=$(nix-instantiate --eval --expr "with import <nixpkgs> {}; lib.isDerivation pkgs.$1")
+  if [[ $? != 0 ]] || [[ $isDeriv != "true" ]]; then
+    return 1
+  elif [[ $2 != "silent" ]]; then
+    echo "yes"
+  fi
+}
+
 nixi () (
-    set -x
-    update_nixpkgs
-    if ! nix-instantiate --eval '<nixpkgs>' -A "$1" >/dev/null; then
+    if [[ -z "$1" ]]; then
+      echo "Requires a single argument"
       return 1
     fi
+    if ! is_in_nixpkgs $1 silent; then return 1; fi
+    set -x
+    update_nixpkgs
     local nixpath=$HOME/.bash-scripts/nix/userPackages.nix
-    if ! rg "pkgs.$1" $nixpath; then
+    if ! ag "pkgs.$1" $nixpath; then
         echo "Adding pkgs.$1 to $nixpath"
         sed -i "s|];|  pkgs.$1\\n    ];|" $nixpath
     else
@@ -278,3 +289,6 @@ push_bash_scripts() (
 
   git push origin "${1:-master}"
 )
+
+alias edit_packages='enw ~/.bash-scripts/nix/userPackages.nix'
+alias install_packages='nix-env -f ~/.bash-scripts/nix/userPackages.nix -i'

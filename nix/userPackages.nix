@@ -1,4 +1,8 @@
-let pkgs = import <nixpkgs> {config.allowUnfree=true;}; in
+let
+  pkgs = import <nixpkgs> {config.allowUnfree=true;};
+  bs-platform = (import ./bs-platform { inherit pkgs; }).bs-platform7;
+in
+
 
 {
   env = pkgs.buildEnv {
@@ -27,6 +31,17 @@ let pkgs = import <nixpkgs> {config.allowUnfree=true;}; in
       pkgs.cabal-install
       pkgs.redshift
       pkgs.stylish-haskell
+      pkgs.llvmPackages.bintools
+      pkgs.vlc
+      pkgs.tdesktop
+      pkgs.frostwire
+      pkgs.mplayer
+      pkgs.vscode
+      pkgs.deluge
+      pkgs.python3Packages.ipython
+      bs-platform
+      pkgs.zsnes
+      pkgs.subsonic
     ];
   };
 }

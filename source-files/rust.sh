@@ -7,3 +7,8 @@ function setrustpath() {
 if [[ -e $HOME/.cargo/bin ]]; then
   setrustpath
 fi
+
+if type -p rustup >/dev/null; then
+  echo "Adding rustup cargo executable directory to PATH"
+  export PATH=$(dirname $(rustup which cargo)):$PATH
+fi

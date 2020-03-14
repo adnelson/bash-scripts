@@ -256,6 +256,17 @@ aclone() {
     done
 }
 
+ghclone() {
+  local repo=$1
+  if [[ -z "$repo" ]]; then
+    echo "Requires at least one argument"
+    exit 1
+  fi
+  local dest=${2:-$(basename $repo)}
+  git clone https://github.com/$repo $dest || return 1
+  (cd $dest && setgituser)
+}
+
 # Add an alias to this git file
 addgit() {
   local aname=$1
