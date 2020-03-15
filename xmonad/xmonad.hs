@@ -31,8 +31,8 @@ myLayout = id
            . mkToggle (NOBORDERS ?? FULL ?? EOT)
            . mkToggle (single MIRROR)
            $  tiled
-           ||| Mirror (TwoPane delta (1/2))
            ||| Spiral L CCW (3/2) (11/10)
+           ||| Mirror (TwoPane delta (1/2))
            ||| noBorders Full
            ||| tab
            ||| latex

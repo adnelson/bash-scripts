@@ -23,7 +23,7 @@ fi
 #   fi
 # fi
 
-CURRENT_SHELL="$(echo $0 | tr / '\n' | tail -n1)"
+CURRENT_SHELL="$(echo $0 | tr / '\n' | tr -d '-' | tail -n1)"
 if [[ -z "$CURRENT_SHELL" ]]; then
   if [[ -n "$BASH_VERSION" ]]; then
     CURRENT_SHELL=bash
