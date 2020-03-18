@@ -5,6 +5,14 @@ if [[ $(id -u) == 0 ]]; then
   IS_ROOT=1
 fi
 
+if [[ $(python -c 'import sys;print(sys.platform)') == darwin ]]; then
+  IS_DARWIN=1
+fi
+
+if [[ -e /etc/nixos ]]; then
+  IS_NIXOS=1
+fi
+
 # Locale settings
 export LANG=en_US.UTF-8
 # export LC_ALL=en_US.UTF-8
@@ -36,6 +44,13 @@ fi
 
 if [[ -n $CURRENT_SHELL ]]; then
   echo "Detected shell: $CURRENT_SHELL"
+fi
+
+if [[ -z $IN_NIX_SHELL ]]; then
+  export PATH="$HOME/bin:/run/wrappers/bin:$HOME/.bash-scripts/scripts:$HOME/.nix-profile/bin:/etc/profiles/per-user/$(whoami)/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
+  if [[ -z "$IS_NIXOS" ]]; then
+    export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+  fi
 fi
 
 if [[ "$CURRENT_SHELL" == "bash" ]]; then
@@ -145,26 +160,19 @@ elif [[ "$CURRENT_SHELL" == "zsh" ]]; then
   # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 
-  # If we're *not* in a nix shell, then set up a default PATH here and
-  # source the oh-my-zsh startup script.
-  if [[ -z $IN_NIX_SHELL ]]; then
-    export PATH="$HOME/bin:/run/wrappers/bin:$HOME/.bash-scripts/scripts:$HOME/.nix-profile/bin:/etc/profiles/per-user/$(whoami)/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:"
-    source $ZSH/oh-my-zsh.sh
-    source $SH_CONFIG/config.sh
-
-  else
+  # If we're *not* in a nix shell, source the oh-my-zsh startup script.
+  if [[ -n $IN_NIX_SHELL ]]; then
     PROMPT="[nix-shell]$PROMPT"
-    source $ZSH/oh-my-zsh.sh
-    source $SH_CONFIG/config.sh
-
     # Set PATH to a SAVED_PATH environment variable if we've set
     # one (this is a way to communicate a path to `nix-shell`
     if [ ! -z $SAVED_PATH ]]; then
       export PATH=$SAVED_PATH
     fi
   fi
+  source $ZSH/oh-my-zsh.sh
+  source $SH_CONFIG/config.sh
 else
   echo "Unknown shell: '$CURRENT_SHELL'"
 fi
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.bash-scripts/scripts:$PATH"
+# export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.bash-scripts/scripts:/usr/bin:/usr/local/bin:$PATH"
