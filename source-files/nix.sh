@@ -74,7 +74,7 @@ if "$1" not in j:
 else:
     print("Already have package $1")
 EOF
-    echo nix-env -f $nixpath -iA $user
+    nix-env -f $nixpath -iA $user
     rm -f ~/.cache/dmenu_run &>/dev/null
 )
 

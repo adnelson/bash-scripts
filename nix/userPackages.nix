@@ -16,7 +16,7 @@ with builtins;
 {
   allen = {
     nixos = pkgs.buildEnv {
-      name = "allen-user-packages-darwin";
+      name = "allen-user-packages-nixos";
       paths = (map (a: getAttr a pkgs) (fromJSON (readFile ./allen.json))) ++ [
         pkgs.python3Packages.ipython
         pkgs.llvmPackages.bintools
