@@ -1,7 +1,6 @@
 [
   "ripgrep",
   "nodejs-10_x",
-  "python3Packages.virtualenv",
   "reaper",
   "docker",
   "docker-compose",

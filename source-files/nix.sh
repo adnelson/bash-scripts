@@ -57,14 +57,25 @@ nixi () (
     set -x
     update_nixpkgs
     local nixpath=$HOME/.bash-scripts/nix/userPackages.nix
-    if ! ag "pkgs.$1" $nixpath; then
-        echo "Adding pkgs.$1 to $nixpath"
-        sed -i "s|];|  pkgs.$1\\n    ];|" $nixpath
+    if [[ $(id -u) == 0 ]]; then
+      local user=root
     else
-        echo "pkgs.$1 is already in $nixpath"
+      local user=allen
     fi
-    nix-env -f $nixpath -i
-    rm -f ~/.cache/dmenu_run 2>/dev/null 1>/dev/null
+    python3 <<EOF
+import json
+with open("$HOME/.bash-scripts/nix/$user.json") as f:
+    j = json.load(f)
+if "$1" not in j:
+    print("New package $1")
+    j.append("$1")
+    with open("$HOME/.bash-scripts/nix/$user.json", "w") as f:
+        f.write(json.dumps(j, indent=2))
+else:
+    print("Already have package $1")
+EOF
+    echo nix-env -f $nixpath -iA $user
+    rm -f ~/.cache/dmenu_run &>/dev/null
 )
 
 pixi () {

@@ -127,9 +127,11 @@ if grep -q emacs <<< $TERMINFO; then
 else
   alias enw='emacsclient -nw'
 fi
+
 whichl() {
-  ls -l $(which $1)
+  readlink -f $(which $1)
 }
+
 alias nnp='cd $HOME/workspace/nix/nix-node-packages'
 
 export WS=$HOME/workspace
