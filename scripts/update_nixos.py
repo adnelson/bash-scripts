@@ -8,12 +8,10 @@ if uid != 0:
     exit("This must be run as root (got {})".format(uid))
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-n", "--no-update-channel",
-                    action="store_false", dest="update_channel",
-                    help="Don't update nixos channel first")
+parser.add_argument("-u", "--update-channel", action="store_true", default=False,
+                    help="Update nixos channel first")
 parser.add_argument("message", help="Commit message")
 parser.add_argument("-s", "--switch", action="store_true", default=False)
-parser.set_defaults(update_channel=True)
 args = parser.parse_args()
 
 os.chdir("/etc/nixos")
