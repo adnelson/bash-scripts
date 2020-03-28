@@ -33,8 +33,10 @@ with builtins;
     };
   };
 
-  root = pkgs.buildEnv {
-    name = "root-user-packages";
-    paths = map (a: getAttr a pkgs) (fromJSON (readFile ./root.json));
+  root = {
+    nixos = pkgs.buildEnv {
+      name = "root-user-packages-nixos";
+      paths = map (a: getAttr a pkgs) (fromJSON (readFile ./root.json));
+    };
   };
 }
