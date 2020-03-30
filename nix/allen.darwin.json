@@ -1,5 +1,6 @@
 [
   "coreutils",
+  "elixir",
   "gnugrep",
   "nix"
 ]
