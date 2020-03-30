@@ -1,0 +1,15 @@
+[
+  "cabal-install",
+  "cacert",
+  "cloc",
+  "docker-compose",
+  "jq",
+  "nix-prefetch-git",
+  "nodejs-10_x",
+  "postgresql_11",
+  "python3",
+  "ripgrep",
+  "rustup",
+  "silver-searcher",
+  "weechat"
+]

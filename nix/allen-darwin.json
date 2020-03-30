@@ -1,8 +1,0 @@
-[
-  "silver-searcher",
-  "nodejs-10_x",
-  "cloc",
-  "cabal-install",
-  "rustup",
-  "cacert"
-]
