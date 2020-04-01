@@ -1,14 +1,19 @@
 let
   pkgs = import <nixpkgs> {config.allowUnfree=true;};
-  emacsCustom = pkgs.emacsWithPackages (
+  emacsCustom = if
+    builtins.pathExists "/etc/nixos"
+  then null # Use the system emacs on nixos
+  else pkgs.emacsWithPackages (
     epkgs: with epkgs; [
-      monokai-theme
-      smex
-      nix-mode
       haskell-mode
+      markdown-mode
+      monokai-theme
+      nix-mode
       reason-mode
       rust-mode
-      markdown-mode
+      smex
+      systemd
+      yaml-mode
     ]
   );
   bs-platform = (import ./bs-platform {inherit pkgs;}).bs-platform7;
