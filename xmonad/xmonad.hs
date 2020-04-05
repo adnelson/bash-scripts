@@ -2,7 +2,7 @@ import System.IO
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks   (ToggleStruts(..), avoidStruts, docks, manageDocks)
-import XMonad.Hooks.ManageHelpers (doFullFloat,isFullscreen)
+import XMonad.Hooks.ManageHelpers (doFullFloat, isFullscreen)
 import XMonad.Hooks.SetWMName     (setWMName)
 import XMonad.Layout.Reflect      (reflectHoriz)
 import XMonad.Layout.NoBorders
@@ -17,13 +17,14 @@ import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Dwindle
 import XMonad.Util.EZConfig       (additionalKeys)
-import XMonad.Hooks.EwmhDesktops  (ewmh,fullscreenEventHook)
+import XMonad.Hooks.EwmhDesktops  (ewmh, fullscreenEventHook)
 import XMonad.Util.Run            (spawnPipe,unsafeSpawn)
 import qualified XMonad.StackSet as SS
 -- import XMonad.Actions.CycleWindows
 import Graphics.X11.ExtraTypes.XF86
 
-myLayout = id
+-- This lists all of the layouts we're using. ModMask + Spacebar cycles through them.
+myLayoutHook = id
            . avoidStruts
            . smartBorders
            . mkToggle (NOBORDERS ?? FULL ?? EOT)
@@ -73,13 +74,12 @@ spotifyCmd cmd = unwords [
   , "org.mpris.MediaPlayer2.Player." ++ cmd
   ]
 
--- | The file path pattern for saving images taken with scrot
-scrotFilePathPattern :: String
-scrotFilePathPattern = "~/Documents/Screenshots/%b-%d-%H:%M:%S.png"
+-- | The file path pattern for saving screenshots taken with maim
+maimFilePathPattern :: String
+maimFilePathPattern = "~/Documents/Screenshots/%b-%d-%H:%M:%S.png"
 
 main :: IO ()
 main = do
-  spawn "xscreensaver -nosplash"
   spawn "trayer --height 28 --widthtype request --edge top --align right --transparent true --tint 0 --alpha 64 --monitor primary"
   xmproc <- spawnPipe "xmobar"
   xmonad $ docks $ ewmh def
@@ -94,28 +94,39 @@ main = do
                            <+> ( isFullscreen --> doFullFloat )
                            <+> manageHook def
                            <+> ( title =? "ediff" --> doFloat)
-    -- , layoutHook         = reflectHoriz $ smartBorders $ avoidStruts $ layoutHook def
-    , layoutHook         = myLayout
+    , layoutHook         = myLayoutHook
     , logHook            = dynamicLogWithPP $ xmobarPP
         { ppOutput       = hPutStrLn xmproc
         , ppTitle        = xmobarColor "#b5bd68" "" . shorten 80
         }
     }
     `additionalKeys` [
+      -- ToggleStruts will hide the xmobar
         ((mod4Mask, xK_b), sendMessage ToggleStruts)
+      -- Fire up dmenu (launches executables in PATH)
       , ((mod4Mask, xK_p), spawn "dmenu_run -fn \"DejaVu Sans Mono:pixelsize=12:style=Book\"")
+      -- Lock the screen
       , ((mod4Mask .|. shiftMask, xK_l), unsafeSpawn "xscreensaver-command -lock")
+      -- Play/pause spotify
       , ((mod4Mask .|. shiftMask, xK_p), spawn (spotifyCmd "PlayPause"))
-      , ((mod4Mask .|. shiftMask, xK_y), spawn "brave")
-      , ((mod4Mask .|. shiftMask, xK_o), spawn "brave --incognito")
+      -- Skip spotify track
       , ((mod4Mask .|. shiftMask, xK_m), spawn (spotifyCmd "Next"))
+      -- Previous spotify track
       , ((mod4Mask .|. shiftMask, xK_n), spawn (spotifyCmd "Previous"))
+      -- Reduce volume 3%
       , ((mod4Mask .|. shiftMask, xK_comma), spawn "amixer sset Master 3%-")
+      -- Increase volume 3%
       , ((mod4Mask .|. shiftMask, xK_period), spawn "amixer sset Master 3%+")
-      , ((mod4Mask .|. shiftMask, xK_3), spawn $ "scrot " ++ scrotFilePathPattern)
-      -- Note: the `sleep 0.2` is a fix for an issue specific to xmonad/scrot.
-      -- See: https://wiki.archlinux.org/index.php/Screen_capture#scrot
-      , ((mod4Mask .|. shiftMask, xK_4), spawn $ "sleep 0.2; scrot -s " ++ scrotFilePathPattern)
+      -- Start up brave browser
+      , ((mod4Mask .|. shiftMask, xK_y), spawn "brave")
+      -- Start up brave browser in incognito mode
+      , ((mod4Mask .|. shiftMask, xK_o), spawn "brave --incognito")
+      -- Capture shot of full screen
+      , ((mod4Mask .|. shiftMask, xK_3), spawn $ "maim " ++ maimFilePathPattern)
+      -- Capture screenshot with mouse selection
+      , ((mod4Mask .|. shiftMask, xK_4), spawn $ "maim -s " ++ maimFilePathPattern)
+      -- Go to previous window within current workspace
       , ((mod4Mask .|. shiftMask, xK_Left), windows SS.focusDown)
+      -- Go to next window within current workspace
       , ((mod4Mask .|. shiftMask, xK_Right), windows SS.focusUp)
       ]
