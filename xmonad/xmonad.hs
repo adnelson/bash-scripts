@@ -76,7 +76,7 @@ spotifyCmd cmd = unwords [
 
 -- | The file path pattern for saving screenshots taken with maim
 maimFilePathPattern :: String
-maimFilePathPattern = "~/Documents/Screenshots/%b-%d-%H:%M:%S.png"
+maimFilePathPattern = "~/Documents/Screenshots/\"Screenshot - $(date +'%Y-%m-%d %H:%M:%S').png\""
 
 main :: IO ()
 main = do
