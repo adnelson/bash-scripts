@@ -123,8 +123,8 @@ main = do
       , ((mod4Mask .|. shiftMask, xK_o), spawn "brave --incognito")
       -- Capture shot of full screen
       , ((mod4Mask .|. shiftMask, xK_3), spawn $ "maim " ++ maimFilePathPattern)
-      -- Capture screenshot with mouse selection
-      , ((mod4Mask .|. shiftMask, xK_4), spawn $ "maim -s " ++ maimFilePathPattern)
+      -- Capture screenshot with mouse selection. `-u` hides the cursor
+      , ((mod4Mask .|. shiftMask, xK_4), spawn $ "maim -s -u " ++ maimFilePathPattern)
       -- Go to previous window within current workspace
       , ((mod4Mask .|. shiftMask, xK_Left), windows SS.focusDown)
       -- Go to next window within current workspace
