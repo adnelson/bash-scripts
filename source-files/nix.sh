@@ -294,6 +294,7 @@ nixi () (
     else
       local user=allen
     fi
+    # TODO add a --shared flag to make the jsonpath the .shared version
     if [[ -n "$IS_DARWIN" ]]; then
       local attr="$user.darwin"
       local jsonpath="$attr.json"

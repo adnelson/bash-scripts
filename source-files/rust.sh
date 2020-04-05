@@ -12,3 +12,8 @@ if type -p rustup >/dev/null; then
   echo "Adding rustup cargo executable directory to PATH"
   export PATH=$(dirname $(rustup which cargo)):$PATH
 fi
+
+alias rs='cd ~/workspace/rust'
+
+# Run a command with the rustup stable build
+alias rrs='rustup run stable --'

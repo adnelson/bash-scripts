@@ -4,7 +4,6 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks   (ToggleStruts(..), avoidStruts, docks, manageDocks)
 import XMonad.Hooks.ManageHelpers (doFullFloat,isFullscreen)
 import XMonad.Hooks.SetWMName     (setWMName)
--- import XMonad.Layout.NoBorders    (smartBorders)
 import XMonad.Layout.Reflect      (reflectHoriz)
 import XMonad.Layout.NoBorders
 import XMonad.Layout.TwoPane
@@ -16,7 +15,6 @@ import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 
 import XMonad.Layout.WindowNavigation
---import XMonad.Layout.Spiral
 import XMonad.Layout.Dwindle
 import XMonad.Util.EZConfig       (additionalKeys)
 import XMonad.Hooks.EwmhDesktops  (ewmh,fullscreenEventHook)
@@ -30,8 +28,8 @@ myLayout = id
            . smartBorders
            . mkToggle (NOBORDERS ?? FULL ?? EOT)
            . mkToggle (single MIRROR)
-           $  tiled
-           ||| Spiral L CCW (3/2) (11/10)
+           $  Spiral L CCW (3/2) (11/10)
+           ||| tiled
            ||| Mirror (TwoPane delta (1/2))
            ||| noBorders Full
            ||| tab
@@ -65,6 +63,7 @@ myLayout = id
       myTabConfig = defaultTheme { inactiveBorderColor = "#BFBFBF"
                                  , activeTextColor = "#FFFFFF"}
 
+-- | Send a message to spotify with dbus-send
 spotifyCmd :: String -> String
 spotifyCmd cmd = unwords [
   "dbus-send"
@@ -74,6 +73,10 @@ spotifyCmd cmd = unwords [
   , "org.mpris.MediaPlayer2.Player." ++ cmd
   ]
 
+-- | The file path pattern for saving images taken with scrot
+scrotFilePathPattern :: String
+scrotFilePathPattern = "~/Documents/Screenshots/%b-%d-%H:%M:%S.png"
+
 main :: IO ()
 main = do
   spawn "xscreensaver -nosplash"
@@ -81,7 +84,7 @@ main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ docks $ ewmh def
     { modMask            = mod4Mask
-    , terminal           = "terminator"
+    , terminal           = "alacritty"
     , focusedBorderColor = "#6666cc"
     , normalBorderColor  = "#373b41"
     , borderWidth        = 2
@@ -109,6 +112,10 @@ main = do
       , ((mod4Mask .|. shiftMask, xK_n), spawn (spotifyCmd "Previous"))
       , ((mod4Mask .|. shiftMask, xK_comma), spawn "amixer sset Master 3%-")
       , ((mod4Mask .|. shiftMask, xK_period), spawn "amixer sset Master 3%+")
+      , ((mod4Mask .|. shiftMask, xK_3), spawn $ "scrot " ++ scrotFilePathPattern)
+      -- Note: the `sleep 0.2` is a fix for an issue specific to xmonad/scrot.
+      -- See: https://wiki.archlinux.org/index.php/Screen_capture#scrot
+      , ((mod4Mask .|. shiftMask, xK_4), spawn $ "sleep 0.2; scrot -s " ++ scrotFilePathPattern)
       , ((mod4Mask .|. shiftMask, xK_Left), windows SS.focusDown)
       , ((mod4Mask .|. shiftMask, xK_Right), windows SS.focusUp)
       ]
