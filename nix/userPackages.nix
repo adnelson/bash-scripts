@@ -30,22 +30,22 @@ with builtins;
       pkgs.cacert
     ];
 
-    nixos = pkgs.buildEnv {
-      name = "allen-user-packages-nixos";
-      paths = shared ++ (map (a: getAttr a pkgs) (fromJSON (readFile ./allen.nixos.json))) ++ [
+    linux = pkgs.buildEnv {
+      name = "allen-user-packages";
+      paths = shared ++ (map (a: getAttr a pkgs) (fromJSON (readFile ./allen.linux.json))) ++ [
         pkgs.llvmPackages.bintools
       ];
     };
 
     darwin = pkgs.buildEnv {
-      name = "allen-user-packages-darwin";
+      name = "allen-user-packages";
       paths = shared ++ (map (a: getAttr a pkgs) (fromJSON (readFile ./allen.darwin.json)));
     };
   };
 
   root = {
-    nixos = pkgs.buildEnv {
-      name = "root-user-packages-nixos";
+    linux = pkgs.buildEnv {
+      name = "root-user-packages";
       paths = map (a: getAttr a pkgs) (fromJSON (readFile ./root.json));
     };
   };

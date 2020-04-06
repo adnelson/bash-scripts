@@ -282,58 +282,6 @@ is_in_nixpkgs() {
 }
 
 # Install a new nix package into the user packages
-nixi () (
-    if [[ -n "$1" ]] && ! is_in_nixpkgs "$1" --silent; then
-      return 1
-    fi
-    set -x
-    update_nixpkgs
-    local nixpath=$HOME/.bash-scripts/nix/userPackages.nix
-    if [[ $(id -u) == 0 ]]; then
-      local user=root
-    else
-      local user=allen
-    fi
-    # TODO add a --shared flag to make the jsonpath the .shared version
-    if [[ -n "$IS_DARWIN" ]]; then
-      local attr="$user.darwin"
-      local jsonpath="$attr.json"
-    else
-      local attr="$user.nixos"
-      local jsonpath="$attr.json"
-    fi
-    if [[ -n "$1" ]]; then
-      python3 <<EOF
-import json
-with open("$HOME/.bash-scripts/nix/$jsonpath") as f:
-    j = json.load(f)
-if "$1" not in j:
-    print("New package $1")
-    j.append("$1")
-    with open("$HOME/.bash-scripts/nix/$jsonpath", "w") as f:
-        f.write(json.dumps(list(sorted(j)), indent=2))
-else:
-    print("Already have package $1")
-EOF
-    fi
-    nix-env -f $nixpath -iA $attr
-    rm -f ~/.cache/dmenu_run &>/dev/null
-)
-
-# Uninstall the user package. This will uninstall everything, so it's
-# not normally needed.
-# TODO: this should optionally take a package name argument and if so
-# should remove the given package from the given json file.
-unixi () {
-  if [[ $(id -u) == 0 ]]; then
-    local user=root
-  else
-    local user=allen
-  fi
-  if [[ -n "$IS_DARWIN" ]]; then
-    local pkg="$user-user-packages-darwin"
-  else
-    local pkg="$user-user-packages-nixos"
-  fi
-   nix-env -e $pkg
+nixi () {
+    nixi.py "$@"
 }

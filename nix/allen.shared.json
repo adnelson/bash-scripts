@@ -4,6 +4,7 @@
   "cacert",
   "cloc",
   "docker-compose",
+  "hello",
   "jq",
   "nix-prefetch-git",
   "nodejs-10_x",
