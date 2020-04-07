@@ -85,7 +85,7 @@ elif [[ "$CURRENT_SHELL" == "zsh" ]]; then
     if [[ -n "$IS_ROOT" ]]; then
       ZSH_THEME="agnoster"
     else
-      ZSH_THEME="pygmalion"
+      ZSH_THEME="flazz"
     fi
   fi
 
