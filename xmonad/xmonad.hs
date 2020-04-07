@@ -13,8 +13,8 @@ import XMonad.Layout.Dwindle (Dwindle(Spiral), Chirality(CCW))
 import XMonad.Layout.Grid (Grid(Grid))
 import XMonad.Layout.MultiToggle (mkToggle, (??), EOT(..), single)
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(..))
-import XMonad.Layout.NoBorders (noBorders, smartBorders)
-import XMonad.Layout.Tabbed (tabbed, defaultTheme, shrinkText)
+import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.Tabbed (tabbed, shrinkText)
 import XMonad.Layout.WindowNavigation (Direction2D(L))
 --------------------------------- </Layout imports> ------------------------------------
 
@@ -27,10 +27,9 @@ myLayoutHook = avoidStruts
   . smartBorders
   . mkToggle (NOBORDERS ?? FULL ?? EOT)
   . mkToggle (single MIRROR)
-  $ Grid
-  ||| Spiral L CCW (3/2) (11/10)
-  ||| noBorders Full
-  ||| tabbed shrinkText defaultTheme
+  $ Spiral L CCW (3/2) (11/10)
+  ||| Grid
+  ||| tabbed shrinkText def
 
 -- | Send a message to spotify with dbus-send
 spotifyCmd :: String -> String
@@ -63,7 +62,7 @@ main = do
                            <+> manageHook def
                            <+> ( title =? "ediff" --> doFloat)
     , layoutHook         = myLayoutHook
-    , logHook            = dynamicLogWithPP $ xmobarPP
+    , logHook            = dynamicLogWithPP xmobarPP
         { ppOutput       = hPutStrLn xmproc
         , ppTitle        = xmobarColor "#b5bd68" "" . shorten 80
         }
