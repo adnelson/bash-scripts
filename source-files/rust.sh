@@ -17,3 +17,4 @@ alias rs='cd ~/workspace/rust'
 
 # Run a command with the rustup stable build
 alias rrs='rustup run stable --'
+alias carg='rustup run stable -- cargo'

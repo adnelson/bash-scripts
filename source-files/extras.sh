@@ -205,3 +205,7 @@ function xml2json() {
 function pkgversion() {
   cat node_modules/$1/package.json | jq .version
 }
+
+edit_source_file() {
+    enw ~/.bash-scripts/source-files/${1}.sh
+}
