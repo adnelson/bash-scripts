@@ -1,68 +1,36 @@
 import System.IO
 import XMonad
-import XMonad.Hooks.DynamicLog
+--------------------------------- <Hook imports> -------------------------------------
+import XMonad.Hooks.DynamicLog (ppOutput, ppTitle, dynamicLogWithPP, xmobarPP, xmobarColor, shorten)
+import XMonad.Hooks.EwmhDesktops  (ewmh, fullscreenEventHook)
 import XMonad.Hooks.ManageDocks   (ToggleStruts(..), avoidStruts, docks, manageDocks)
 import XMonad.Hooks.ManageHelpers (doFullFloat, isFullscreen)
 import XMonad.Hooks.SetWMName     (setWMName)
-import XMonad.Layout.Reflect      (reflectHoriz)
-import XMonad.Layout.NoBorders
-import XMonad.Layout.TwoPane
-import XMonad.Layout.Tabbed
-import XMonad.Layout.Combo
+--------------------------------- </Hook imports> ------------------------------------
 
-import XMonad.Layout.Maximize
-import XMonad.Layout.MultiToggle
-import XMonad.Layout.MultiToggle.Instances
+--------------------------------- <Layout imports> -------------------------------------
+import XMonad.Layout.Dwindle (Dwindle(Spiral), Chirality(CCW))
+import XMonad.Layout.Grid (Grid(Grid))
+import XMonad.Layout.MultiToggle (mkToggle, (??), EOT(..), single)
+import XMonad.Layout.MultiToggle.Instances (StdTransformers(..))
+import XMonad.Layout.NoBorders (noBorders, smartBorders)
+import XMonad.Layout.Tabbed (tabbed, defaultTheme, shrinkText)
+import XMonad.Layout.WindowNavigation (Direction2D(L))
+--------------------------------- </Layout imports> ------------------------------------
 
-import XMonad.Layout.WindowNavigation
-import XMonad.Layout.Dwindle
 import XMonad.Util.EZConfig       (additionalKeys)
-import XMonad.Hooks.EwmhDesktops  (ewmh, fullscreenEventHook)
 import XMonad.Util.Run            (spawnPipe,unsafeSpawn)
-import qualified XMonad.StackSet as SS
--- import XMonad.Actions.CycleWindows
-import Graphics.X11.ExtraTypes.XF86
+import XMonad.StackSet (focusUp, focusDown)
 
 -- This lists all of the layouts we're using. ModMask + Spacebar cycles through them.
-myLayoutHook = id
-           . avoidStruts
-           . smartBorders
-           . mkToggle (NOBORDERS ?? FULL ?? EOT)
-           . mkToggle (single MIRROR)
-           $  Spiral L CCW (3/2) (11/10)
-           ||| tiled
-           ||| Mirror (TwoPane delta (1/2))
-           ||| noBorders Full
-           ||| tab
-           ||| latex
-    where
-      -- default tiling algorithm partitions the screen into two panes
-      tiled = maximize (Tall nmaster delta ratio)
-
-      tab = tabbed shrinkText myTabConfig
-
-      latex = windowNavigation (
-                                combineTwo
-                                (TwoPane delta 0.45)
-                                (Full)
-                                (combineTwo
-                                 (Mirror (TwoPane delta 0.85))
-                                 (Full)
-                                 (Full)
-                                )
-                               )
-
-      -- The default number of windows in the master pane
-      nmaster = 1
-
-      -- Default proportion of screen occupied by master pane
-      ratio   = 1/2
-
-      -- Percent of screen to increment by when resizing panes
-      delta   = 3/100
-
-      myTabConfig = defaultTheme { inactiveBorderColor = "#BFBFBF"
-                                 , activeTextColor = "#FFFFFF"}
+myLayoutHook = avoidStruts
+  . smartBorders
+  . mkToggle (NOBORDERS ?? FULL ?? EOT)
+  . mkToggle (single MIRROR)
+  $ Grid
+  ||| Spiral L CCW (3/2) (11/10)
+  ||| noBorders Full
+  ||| tabbed shrinkText defaultTheme
 
 -- | Send a message to spotify with dbus-send
 spotifyCmd :: String -> String
@@ -84,7 +52,7 @@ main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ docks $ ewmh def
     { modMask            = mod4Mask
-    , terminal           = "alacritty"
+    , terminal           = "terminator" -- TODO get "alacritty" working
     , focusedBorderColor = "#6666cc"
     , normalBorderColor  = "#373b41"
     , borderWidth        = 2
@@ -126,7 +94,7 @@ main = do
       -- Capture screenshot with mouse selection. `-u` hides the cursor
       , ((mod4Mask .|. shiftMask, xK_4), spawn $ "maim -s -u " ++ maimFilePathPattern)
       -- Go to previous window within current workspace
-      , ((mod4Mask .|. shiftMask, xK_Left), windows SS.focusDown)
+      , ((mod4Mask .|. shiftMask, xK_Left), windows focusDown)
       -- Go to next window within current workspace
-      , ((mod4Mask .|. shiftMask, xK_Right), windows SS.focusUp)
+      , ((mod4Mask .|. shiftMask, xK_Right), windows focusUp)
       ]
