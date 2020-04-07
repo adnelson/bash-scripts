@@ -1,4 +1,5 @@
 [
+  "_1password",
   "bind",
   "brave",
   "deluge",
@@ -17,6 +18,7 @@
   "reaper",
   "redshift",
   "ruby",
+  "rxvt_unicode",
   "slack",
   "spotify",
   "stalonetray",
@@ -31,7 +33,6 @@
   "vlc",
   "vscode",
   "wine",
-  "yarn",
   "zoom-us",
   "zsnes"
 ]

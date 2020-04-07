@@ -7,7 +7,7 @@
   "hello",
   "jq",
   "nix-prefetch-git",
-  "nodejs-10_x",
+  "nodejs-12_x",
   "postgresql_11",
   "python3",
   "ripgrep",
