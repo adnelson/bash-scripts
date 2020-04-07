@@ -19,6 +19,10 @@ print(m.group(1))
 EOF
 }
 
+nix_py_env() {
+  nix-shell -p "python3.withPackages (ps: with ps; [ ipython $1 ])"
+}
+
 if which nixos-version >/dev/null 2>&1 && [[ -z $USE_NIXPKGS ]]; then
   NIX_CHANNEL_FOLDER=$HOME/.nix-defexpr/channels/nixos
   NIXPKGS=$NIX_CHANNEL_FOLDER
