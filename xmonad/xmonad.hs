@@ -51,7 +51,7 @@ main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ docks $ ewmh def
     { modMask            = mod4Mask
-    , terminal           = "terminator" -- TODO get "alacritty" working
+    , terminal           = "alacritty" -- "terminator"
     , focusedBorderColor = "#6666cc"
     , normalBorderColor  = "#373b41"
     , borderWidth        = 2
