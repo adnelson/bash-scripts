@@ -72,13 +72,13 @@ main = do
         -- Start up brave browser in incognito mode
         , (modShift xK_o, spawn "brave --incognito")
         -- Capture shot of full screen
-        , (modShift xK_3, spawn $ "maim " ++ maimFilePathPattern)
+        , (modShift xK_s, spawn $ "maim " ++ maimFilePathPattern)
         -- Capture screenshot with mouse selection. `-u` hides the cursor
-        , (modShift xK_4, spawn $ "maim -s -u " ++ maimFilePathPattern)
+        , (modShift xK_d, spawn $ "maim -s -u " ++ maimFilePathPattern)
         -- Go to previous window within current workspace
         , (modShift xK_Left, windows focusDown)
         -- Go to next window within current workspace
-        , (modShift xK_Right, windows focusU)p
+        , (modShift xK_Right, windows focusUp)
         -- Toggle mirror mode
         , (modShift xK_x, sendMessage $ Toggle MIRROR)
         ]
