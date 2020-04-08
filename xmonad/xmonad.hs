@@ -11,10 +11,10 @@ import XMonad.Hooks.SetWMName     (setWMName)
 --------------------------------- <Layout imports> -------------------------------------
 import XMonad.Layout.Dwindle (Dwindle(Spiral), Chirality(CCW))
 import XMonad.Layout.Grid (Grid(Grid))
-import XMonad.Layout.MultiToggle (mkToggle, (??), EOT(..), single)
+import XMonad.Layout.MultiToggle (mkToggle, Toggle(..), (??), EOT(..), single)
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(..))
 import XMonad.Layout.NoBorders (smartBorders)
-import XMonad.Layout.Tabbed (tabbed, shrinkText)
+import XMonad.Layout.Tabbed (tabbed, shrinkText, simpleTabbed)
 import XMonad.Layout.WindowNavigation (Direction2D(L))
 --------------------------------- </Layout imports> ------------------------------------
 
@@ -49,6 +49,39 @@ main :: IO ()
 main = do
   spawn "trayer --height 28 --widthtype request --edge top --align right --transparent true --tint 0 --alpha 64 --monitor primary"
   xmproc <- spawnPipe "xmobar"
+  let modShift key = (mod4Mask .|. shiftMask, key)
+  let customKeys = [
+        -- ToggleStruts will hide the xmobar
+        ((mod4Mask, xK_b), sendMessage ToggleStruts)
+        -- Fire up dmenu (launches executables in PATH)
+        , ((mod4Mask, xK_p), spawn "dmenu_run -fn \"DejaVu Sans Mono:pixelsize=12:style=Book\"")
+        -- Lock the screen
+        , (modShift xK_l, unsafeSpawn "xscreensaver-command -lock")
+        -- Play/pause spotify
+        , (modShift xK_p, spawn (spotifyCmd "PlayPause"))
+        -- Skip spotify track
+        , (modShift xK_m, spawn (spotifyCmd "Next"))
+        -- Previous spotify track
+        , (modShift xK_n, spawn (spotifyCmd "Previous"))
+        -- Reduce volume 3%
+        , (modShift xK_comma, spawn "amixer sset Master 3%-")
+        -- Increase volume 3%
+        , (modShift xK_period, spawn "amixer sset Master 3%+")
+        -- Start up brave browser
+        , (modShift xK_y, spawn "brave")
+        -- Start up brave browser in incognito mode
+        , (modShift xK_o, spawn "brave --incognito")
+        -- Capture shot of full screen
+        , (modShift xK_3, spawn $ "maim " ++ maimFilePathPattern)
+        -- Capture screenshot with mouse selection. `-u` hides the cursor
+        , (modShift xK_4, spawn $ "maim -s -u " ++ maimFilePathPattern)
+        -- Go to previous window within current workspace
+        , (modShift xK_Left, windows focusDown)
+        -- Go to next window within current workspace
+        , (modShift xK_Right, windows focusU)p
+        -- Toggle mirror mode
+        , (modShift xK_x, sendMessage $ Toggle MIRROR)
+        ]
   xmonad $ docks $ ewmh def
     { modMask            = mod4Mask
     , terminal           = "alacritty" -- "terminator"
@@ -67,33 +100,4 @@ main = do
         , ppTitle        = xmobarColor "#b5bd68" "" . shorten 80
         }
     }
-    `additionalKeys` [
-      -- ToggleStruts will hide the xmobar
-        ((mod4Mask, xK_b), sendMessage ToggleStruts)
-      -- Fire up dmenu (launches executables in PATH)
-      , ((mod4Mask, xK_p), spawn "dmenu_run -fn \"DejaVu Sans Mono:pixelsize=12:style=Book\"")
-      -- Lock the screen
-      , ((mod4Mask .|. shiftMask, xK_l), unsafeSpawn "xscreensaver-command -lock")
-      -- Play/pause spotify
-      , ((mod4Mask .|. shiftMask, xK_p), spawn (spotifyCmd "PlayPause"))
-      -- Skip spotify track
-      , ((mod4Mask .|. shiftMask, xK_m), spawn (spotifyCmd "Next"))
-      -- Previous spotify track
-      , ((mod4Mask .|. shiftMask, xK_n), spawn (spotifyCmd "Previous"))
-      -- Reduce volume 3%
-      , ((mod4Mask .|. shiftMask, xK_comma), spawn "amixer sset Master 3%-")
-      -- Increase volume 3%
-      , ((mod4Mask .|. shiftMask, xK_period), spawn "amixer sset Master 3%+")
-      -- Start up brave browser
-      , ((mod4Mask .|. shiftMask, xK_y), spawn "brave")
-      -- Start up brave browser in incognito mode
-      , ((mod4Mask .|. shiftMask, xK_o), spawn "brave --incognito")
-      -- Capture shot of full screen
-      , ((mod4Mask .|. shiftMask, xK_3), spawn $ "maim " ++ maimFilePathPattern)
-      -- Capture screenshot with mouse selection. `-u` hides the cursor
-      , ((mod4Mask .|. shiftMask, xK_4), spawn $ "maim -s -u " ++ maimFilePathPattern)
-      -- Go to previous window within current workspace
-      , ((mod4Mask .|. shiftMask, xK_Left), windows focusDown)
-      -- Go to next window within current workspace
-      , ((mod4Mask .|. shiftMask, xK_Right), windows focusUp)
-      ]
+    `additionalKeys` customKeys
