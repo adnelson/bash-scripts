@@ -1,5 +1,10 @@
 let
-  pkgs = import <nixpkgs> {config.allowUnfree=true;};
+  pkgs = import <nixpkgs> {
+    config.allowUnfree = true;
+    config.packageOverrides = ps: {
+      tandem = ps.callPackage ./tandem { };
+    };
+  };
   emacsCustom = if
     builtins.pathExists "/etc/nixos"
   then null # Use the system emacs on nixos
