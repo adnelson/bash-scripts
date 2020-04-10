@@ -1,10 +1,5 @@
 let
-  pkgs = import <nixpkgs> {
-    config.allowUnfree = true;
-    config.packageOverrides = ps: {
-      tandem = ps.callPackage ./tandem { };
-    };
-  };
+  pkgs = import <nixpkgs> { config = import ./config.nix; };
   emacsCustom = if
     builtins.pathExists "/etc/nixos"
   then null # Use the system emacs on nixos
@@ -21,7 +16,6 @@ let
       yaml-mode
     ]
   );
-  bs-platform = (import ./bs-platform {inherit pkgs;}).bs-platform7;
 in
 with builtins;
 
@@ -31,7 +25,6 @@ with builtins;
       emacsCustom
       pkgs.python3Packages.ipython
       pkgs.python3Packages.virtualenv
-      bs-platform
       pkgs.cacert
     ];
 

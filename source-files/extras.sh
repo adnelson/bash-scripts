@@ -209,3 +209,6 @@ function pkgversion() {
 edit_source_file() {
     enw ~/.bash-scripts/source-files/${1}.sh
 }
+
+# Edit xmonad
+alias exm='e ~/.bash-scripts/xmonad/xmonad.hs'
