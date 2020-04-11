@@ -44,7 +44,7 @@ with builtins;
   root = {
     linux = pkgs.buildEnv {
       name = "root-user-packages";
-      paths = map (a: getAttr a pkgs) (fromJSON (readFile ./root.json));
+      paths = map (a: getAttr a pkgs) (fromJSON (readFile ./root.linux.json));
     };
   };
 }
