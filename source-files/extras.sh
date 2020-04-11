@@ -145,6 +145,7 @@ linesFrom() {
 }
 alias nfn='cd $HOME/workspace/haskell/nixfromnpm'
 alias bs='cd $SH_CONFIG'
+alias bss='cd $SH_CONFIG/scripts'
 # Cuz sometimes I type this
 alias reloadreload='reload'
 
@@ -212,3 +213,6 @@ edit_source_file() {
 
 # Edit xmonad
 alias exm='e ~/.bash-scripts/xmonad/xmonad.hs'
+
+# Use smart case by default for ripgrep
+alias rg='rg --smart-case'
