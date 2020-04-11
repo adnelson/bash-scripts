@@ -13,18 +13,14 @@ fi
 
 unalias grep >/dev/null 2>&1 || true
 
-# if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-#   SESSION_TYPE=ssh
-# else
-#   case $(ps -o comm= -p $PPID) in
-#     sshd|*/sshd) SESSION_TYPE=ssh;;
-#     *) SESSION_TYPE=terminal;;
-#   esac
-# fi
-
 _echo "Detected session type: $SESSION_TYPE"
 
-export EDITOR=emacsclient
+if [[ $(id -u) -eq 0 ]]; then
+  export EDITOR=emacs
+else
+  export EDITOR=emacsclient
+fi
+
 if [[ -n "$INSIDE_EMACS" ]]; then
   export EDITOR_FLAGS='-n'
 else

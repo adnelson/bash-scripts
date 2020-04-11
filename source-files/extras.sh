@@ -122,7 +122,9 @@ vdf() {
 }
 
 alias time='/usr/bin/env time'
-if grep -q emacs <<< $TERMINFO; then
+if [[ $(id -u) -eq 0 ]]; then
+  alias enw='emacs -nw'
+elif grep -q emacs <<< $TERMINFO; then
   alias enw='emacsclient'
 else
   alias enw='emacsclient -nw'
