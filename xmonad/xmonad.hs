@@ -9,13 +9,13 @@ import XMonad.Hooks.SetWMName     (setWMName)
 --------------------------------- </Hook imports> ------------------------------------
 
 --------------------------------- <Layout imports> -------------------------------------
-import XMonad.Layout.Dwindle (Dwindle(Spiral), Chirality(CCW))
+import XMonad.Layout.Dwindle (Dwindle(Spiral), Chirality(CW, CCW))
 import XMonad.Layout.Grid (Grid(Grid))
 import XMonad.Layout.MultiToggle (mkToggle, Toggle(..), (??), EOT(..), single)
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(..))
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.Tabbed (tabbed, shrinkText, simpleTabbed)
-import XMonad.Layout.WindowNavigation (Direction2D(L))
+import XMonad.Layout.WindowNavigation (Direction2D(L, R))
 --------------------------------- </Layout imports> ------------------------------------
 
 import XMonad.Util.EZConfig       (additionalKeys)
@@ -28,6 +28,7 @@ myLayoutHook = avoidStruts
   . mkToggle (NOBORDERS ?? FULL ?? EOT)
   . mkToggle (single MIRROR)
   $ Spiral L CCW (3/2) (11/10)
+  ||| Spiral R CW (3/2) (11/10)
   ||| Grid
   ||| tabbed shrinkText def
 
@@ -40,6 +41,15 @@ spotifyCmd cmd = unwords [
   , "/org/mpris/MediaPlayer2"
   , "org.mpris.MediaPlayer2.Player." ++ cmd
   ]
+
+-- | Default browser
+browser :: String
+browser = "brave"
+
+-- | Open browser in incognito
+incognito :: String
+incognito = browser ++ " " ++ arg where
+  arg = if browser == "firefox" then "--private-window" else "--incognito"
 
 -- | The file path pattern for saving screenshots taken with maim
 maimFilePathPattern :: String
@@ -67,10 +77,10 @@ main = do
         , (modShift xK_comma, spawn "amixer sset Master 3%-")
         -- Increase volume 3%
         , (modShift xK_period, spawn "amixer sset Master 3%+")
-        -- Start up brave browser
-        , (modShift xK_y, spawn "brave")
-        -- Start up brave browser in incognito mode
-        , (modShift xK_o, spawn "brave --incognito")
+        -- Start up browser
+        , (modShift xK_y, spawn browser)
+        -- Start up browser in incognito mode
+        , (modShift xK_o, spawn incognito)
         -- Capture shot of full screen
         , (modShift xK_s, spawn $ "maim " ++ maimFilePathPattern)
         -- Capture screenshot with mouse selection. `-u` hides the cursor
