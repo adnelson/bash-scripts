@@ -15,11 +15,13 @@
   "manticore",
   "mlton",
   "mplayer",
+  "neovim",
   "patchelf",
   "reaper",
   "redshift",
   "ruby",
   "rxvt_unicode",
+  "shellcheck",
   "slack",
   "spotify",
   "stalonetray",
@@ -38,3 +40,4 @@
   "zoom-us",
   "zsnes"
 ]
+

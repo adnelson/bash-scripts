@@ -54,7 +54,7 @@ def update_packages_json(path, name, uninstall):
             return False
 
     with open(path, "w") as f:
-        f.write(json.dumps(list(sorted(j)), indent=2))
+        f.write(json.dumps(list(sorted(j)), indent=2) + "\n")
     return True
 
 
