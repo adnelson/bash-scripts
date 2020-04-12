@@ -2,9 +2,11 @@
   "_1password",
   "bind",
   "brave",
+  "bvi",
   "deluge",
   "discord",
   "docker",
+  "dosbox",
   "frostwire",
   "futhark",
   "gcc",
@@ -25,6 +27,7 @@
   "slack",
   "spotify",
   "stalonetray",
+  "steam",
   "stylish-haskell",
   "subsonic",
   "syncthing",
@@ -32,12 +35,11 @@
   "tdesktop",
   "tmux",
   "trayer",
+  "unrar",
   "urweb",
-  "vagrant",
   "vlc",
   "vscode",
   "wine",
   "zoom-us",
   "zsnes"
 ]
-

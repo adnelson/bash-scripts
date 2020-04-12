@@ -58,7 +58,7 @@ def update_packages_json(path, name, uninstall):
     return True
 
 
-def main(directory, name, nixpkgs, uninstall, shared):
+def main(directory, name, nixpkgs, uninstall, shared, show_trace):
     user_packages = join(directory, 'userPackages.nix')
     user = 'root' if getuser() == 'root' else 'allen'
     attr = user + '.' + sys.platform
@@ -75,7 +75,10 @@ def main(directory, name, nixpkgs, uninstall, shared):
         print("Uninstalled everything")
         return
 
-    sp.check_call(['nix-env', '-f', join(directory, 'userPackages.nix'), '-i', '-A', attr])
+    cmd = ['nix-env', '-f', join(directory, 'userPackages.nix'), '-i', '-A', attr]
+    if show_trace:
+        cmd.append("--show-trace")
+    sp.check_call(cmd)
 
     if sys.platform == 'linux':
         sp.check_call(['rm', '-f', '~/.cache/dmenu_run'])
@@ -95,6 +98,8 @@ def get_args():
                         help="uninstall mode: remove package if it is installed")
     parser.add_argument('--shared', action="store_true", default=False,
                         help="add/remove from shared packages instead of platform-specific")
+    parser.add_argument('--show-trace', action="store_true", default=False,
+                        help="Add --show-trace to nix commands")
     args = parser.parse_args()
     if args.directory is None:
         args.directory = get_directory()

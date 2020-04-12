@@ -66,7 +66,7 @@ main = do
         -- Fire up dmenu (launches executables in PATH)
         , ((mod4Mask, xK_p), spawn "dmenu_run -fn \"DejaVu Sans Mono:pixelsize=12:style=Book\"")
         -- Lock the screen
-        , (modShift xK_l, unsafeSpawn "xscreensaver-command -lock")
+        , (modShift xK_Page_Down, unsafeSpawn "xscreensaver-command -lock")
         -- Play/pause spotify
         , (modShift xK_p, spawn (spotifyCmd "PlayPause"))
         -- Skip spotify track
@@ -91,6 +91,8 @@ main = do
         , (modShift xK_Right, windows focusUp)
         -- Toggle mirror mode
         , (modShift xK_x, sendMessage $ Toggle MIRROR)
+        -- Toggle fullscreen mode
+        , (modShift xK_f, sendMessage $ Toggle FULL)
         ]
   xmonad $ docks $ ewmh def
     { modMask            = mod4Mask
