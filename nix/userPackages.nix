@@ -25,7 +25,6 @@ with builtins;
       emacsCustom
       pkgs.python3Packages.ipython
       pkgs.python3Packages.virtualenv
-      pkgs.cacert
     ];
 
     linux = pkgs.buildEnv {
