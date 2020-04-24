@@ -57,3 +57,16 @@ function mli2rei() {
     return 1
   fi
 }
+
+function findre() {
+  local fname=$1
+  if [[ -z $fname ]]; then
+    echo "Need 1 argument"
+    return 1
+  fi
+  if [[ ! -d src ]]; then
+    echo "No 'src' directory"
+    return 1
+  fi
+  find src -iname "$fname.re"
+}

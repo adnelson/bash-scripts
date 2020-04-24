@@ -30,6 +30,7 @@ alias reqs='cd ~/workspace/reasonml/requery/packages/sqlite'
 alias reqse='cd ~/workspace/reasonml/requery/packages/sqlite/example'
 alias ydl='youtube-dl --audio-format mp3'
 alias subl='/Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text'
+alias scrots='cd ~/Screenshots'
 
 function agpstype() (
   psps && ag "(data|type) $1"
@@ -216,5 +217,5 @@ edit_source_file() {
 # Edit xmonad
 alias exm='e ~/.bash-scripts/xmonad/xmonad.hs'
 
-# Use smart case by default for ripgrep
-alias rg='rg --smart-case'
+# Tell ripgrep where to look for a config file
+export RIPGREP_CONFIG_PATH=$SH_CONFIG/ripgreprc

@@ -53,7 +53,7 @@ incognito = browser ++ " " ++ arg where
 
 -- | The file path pattern for saving screenshots taken with maim
 maimFilePathPattern :: String
-maimFilePathPattern = "~/Documents/Screenshots/\"Screenshot - $(date +'%Y-%m-%d %H:%M:%S').png\""
+maimFilePathPattern = "~/Screenshots/\"Screenshot - $(date +'%Y-%m-%d %H:%M:%S').png\""
 
 main :: IO ()
 main = do
@@ -66,7 +66,7 @@ main = do
         -- Fire up dmenu (launches executables in PATH)
         , ((mod4Mask, xK_p), spawn "dmenu_run -fn \"DejaVu Sans Mono:pixelsize=12:style=Book\"")
         -- Lock the screen
-        , (modShift xK_Page_Down, unsafeSpawn "xscreensaver-command -lock")
+        , (modShift xK_End, unsafeSpawn "xscreensaver-command -lock")
         -- Play/pause spotify
         , (modShift xK_p, spawn (spotifyCmd "PlayPause"))
         -- Skip spotify track
@@ -85,6 +85,8 @@ main = do
         , (modShift xK_s, spawn $ "maim " ++ maimFilePathPattern)
         -- Capture screenshot with mouse selection. `-u` hides the cursor
         , (modShift xK_d, spawn $ "maim -s -u " ++ maimFilePathPattern)
+        -- Capture screenshot with mouse selection, not hiding the cursor.
+        , (modShift xK_e, spawn $ "maim -s " ++ maimFilePathPattern)
         -- Go to previous window within current workspace
         , (modShift xK_Left, windows focusDown)
         -- Go to next window within current workspace

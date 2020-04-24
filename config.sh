@@ -21,6 +21,11 @@ else
   export EDITOR=emacsclient
 fi
 
+# Emacs doesn't like the kitty-term...
+if [[ $TERM == xterm-kitty ]] || [[ $TERM == eterm-color ]]; then
+  export TERM=xterm-256color
+fi
+
 if [[ -n "$INSIDE_EMACS" ]]; then
   export EDITOR_FLAGS='-n'
 else
