@@ -3,11 +3,14 @@ const exitWith = msg => {
   console.error(msg);
   process.exit(1);
 }
-
-if(process.stdin.isTTY) exitWith("you must pass a URL via stdin");
-const input = require('fs').readFileSync('/dev/stdin').toString();
+if (process.stdin.isTTY && !process.argv[2]) {
+  exitWith("you must pass a URL via stdin or as first argument");
+}
+const input = process.stdin.isTTY
+  ? process.argv[2]
+  : require('fs').readFileSync('/dev/stdin').toString();
 const { protocol, query } = require('url').parse(input);
-if (protocol !== 'zpl:') exitWith("Expected a URL starting with zpl://");
+if (protocol !== 'zpl:') exitWith(`Expected a URL starting with zpl://, got ${input}`);
 const queryDict = {};
 query.split('&').forEach(q => {
   const [k, v] = q.split("=");

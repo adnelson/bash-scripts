@@ -29,9 +29,7 @@ with builtins;
 
     linux = pkgs.buildEnv {
       name = "allen-user-packages";
-      paths = shared ++ (map (a: getAttr a pkgs) (fromJSON (readFile ./allen.linux.json))) ++ [
-        pkgs.llvmPackages.bintools
-      ];
+      paths = shared ++ (map (a: getAttr a pkgs) (fromJSON (readFile ./allen.linux.json)));
     };
 
     darwin = pkgs.buildEnv {

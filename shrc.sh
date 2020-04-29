@@ -17,12 +17,6 @@ fi
 export LANG=en_US.UTF-8
 # export LC_ALL=en_US.UTF-8
 
-if echo $TERMINFO | grep -q emacs; then
-  INSIDE_EMACS=1
-else
-  unset INSIDE_EMACS
-fi
-
 # if [[ ! -z $TERM ]]; then
 #   if echo $TERMINFO | grep -q emacs; then
 #     export TERM=xterm
@@ -44,6 +38,18 @@ fi
 
 if [[ -n $CURRENT_SHELL ]]; then
   echo "Detected shell: $CURRENT_SHELL"
+else
+  echo "Couldn't detect shell from '$0'"
+fi
+
+if echo $TERMINFO | grep -q emacs; then
+  INSIDE_EMACS=1
+  if [[ ! $IS_DARWIN ]]; then
+    # Hack: I always have to reset for some reason
+    reset
+  fi
+else
+  unset INSIDE_EMACS
 fi
 
 if [[ -z $IN_NIX_SHELL ]]; then
