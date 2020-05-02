@@ -26,15 +26,29 @@ alias gds='git diff --staged'
 alias gdss='git diff --shortstat'
 alias gdsss='git diff --staged --shortstat'
 alias grl='git reflog'
+alias gcp='git cherry-pick'
 # Detach from current branch, without changing the source state
 alias gcod='git checkout --detach'
 
 # See which files differ between branches
 alias gdn='git diff --name-only'
 
-
 # Creates a new branch.
 alias gcb='git checkout -b'
+
+# Save current branch (as @save/<branch>) and delete it
+function save() {
+  local cur=$(cur)
+  local savebranch="_save/$cur"
+  if cur | grep -q '^_save/'; then
+    echo "Already on a save branch -- use commit"
+    return 1
+  elif grp "$savebranch" &>/dev/null; then
+    echo "Save branch already $savebranch exists, you must delete it first"
+    return 1
+  fi
+  gcb $savebranch
+}
 
 # Create a new branch, or switch to it if it exists.
 # TODO this could be replaced by a native git command...
@@ -51,6 +65,9 @@ gbd() {
   local response
   if [[ -z "$1" ]]; then
     echo "Please enter a branch name." >&2
+    return 1
+  elif [[ "$1" == $(cur) ]]; then
+    echo "You can't delete the branch you're on"
     return 1
   fi
   echo -n "Enter to delete branch $1, anything else not to: "
@@ -318,5 +335,14 @@ function addMyRemote() {
     echo "single argument required"
   else
     git remote add adnelson ssh://git@github.com/adnelson/$1
+  fi
+}
+
+function git-to-patch-file () {
+  local path="$1"
+  if [[ -z $path ]]; then
+    git diff -s | tail -n +3
+  else
+    git diff -s | tail -n +3 > $path
   fi
 }

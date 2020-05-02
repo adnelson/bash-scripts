@@ -15,5 +15,6 @@
   "ripgrep",
   "rustup",
   "silver-searcher",
-  "weechat"
+  "weechat",
+  "youtube-dl"
 ]

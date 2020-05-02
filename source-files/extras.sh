@@ -215,7 +215,13 @@ edit_source_file() {
 }
 
 # Edit xmonad
-alias exm='e ~/.bash-scripts/xmonad/xmonad.hs'
+if [[ -e ~/.bash-scripts/xmonad/xmonad.hs ]]; then
+  alias exm='e ~/.bash-scripts/xmonad/xmonad.hs'
+fi
 
 # Tell ripgrep where to look for a config file
 export RIPGREP_CONFIG_PATH=$SH_CONFIG/ripgreprc
+
+if [[ -e ~/.config/systemd ]]; then
+  alias sysu='systemctl --user'
+fi
