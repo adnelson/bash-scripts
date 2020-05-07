@@ -96,7 +96,7 @@ for file in $(find $SH_CONFIG/source-files/ -name '*.sh' -a ! -name '.#*'); do
 done
 
 if [[ -e $SH_CONFIG/secrets ]]; then
-  for file in $(find $SH_CONFIG/secrets/ -name '*.sh' -a ! -name '.#*'); do
+  for file in $(find $SH_CONFIG/secrets/ -maxdepth 1 -type f -name '*.sh' -a ! -name '.#*'); do
     echo "Sourcing secret $(rlink $file)"
     source $file
   done

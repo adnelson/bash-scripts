@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-bs_platform_dir=$(./build-bs-platform.sh)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+bs_platform_dir=$($DIR/build-bs-platform.sh)
 
 if [[ ! -e $bs_platform_dir ]] || [[ ! -e $bs_platform_dir/package.json ]]; then
   echo "ERROR: Couldn't find a package.json in $bs_platform_dir" >&2

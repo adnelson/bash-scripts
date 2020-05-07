@@ -5,6 +5,7 @@
   "cacert",
   "cloc",
   "docker-compose",
+  "fd",
   "hello",
   "jq",
   "ncdu",
