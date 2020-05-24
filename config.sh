@@ -93,6 +93,14 @@ export RPROMPT=
     echo "## You have uncommitted changes in $SH_CONFIG"
     echo "##################################################################"
     echo -ne '\033[0m'
+  elif [ $(cur) = master ]; then
+    if [ "$(curcommit)" != "$(grp origin/master)" ]; then
+      echo -ne '\033[0;33m'
+      echo "##################################################################"
+      echo "## Local master is out of sync with origin/master in $SH_CONFIG"
+      echo "##################################################################"
+      echo -ne '\033[0m'
+    fi
   fi
 )
 
