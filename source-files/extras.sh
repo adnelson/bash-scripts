@@ -233,3 +233,21 @@ for f in ~/.bash-scripts/scripts/*; do
 done
 
 alias xbash='exec bash'
+
+# Creates a directory and enters it. If the directory already exists, then
+# enters it and lists the contents of the directory.
+function mkd () {
+   if ! [[ -e $1 ]] ; then
+      echo "Creating and entering folder $1"
+      mkdir -p $1
+      cd $1
+   else
+      echo "Folder $1 exists, entering. Contents:"
+      cd $1
+      ls
+   fi
+}
+
+# Commonly used directories.
+alias ws="mkdir -p ~/workspace && cd ~/workspace"
+alias dl="cd ~/Downloads"

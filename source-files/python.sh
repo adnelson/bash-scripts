@@ -32,3 +32,7 @@ if [[ -n $ENABLE_PYENV ]]; then
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
+
+
+# Activates a python virtualenv, assuming the path below is appropriate.
+alias act='source vendor/python/bin/activate'

@@ -49,37 +49,11 @@ alias eextras="e $SH_CONFIG/source-files/extras.sh && reload"
 # For editing SSH config.
 alias essh="e ~/.ssh/config"
 
-# Creates a directory and enters it. If the directory already exists, then
-# enters it and lists the contents of the directory.
-function mkd () {
-   if ! [[ -e $1 ]] ; then
-      echo "Creating and entering folder $1"
-      mkdir -p $1
-      cd $1
-   else
-      echo "Folder $1 exists, entering. Contents:"
-      cd $1
-      ls
-   fi
-}
-
-# Enters a directory and lists the contents.
-function cdl() {
-    cd $1 && ls
-}
-
-# Commonly used directories.
-alias ws="mkdir -p ~/workspace && cd ~/workspace"
-alias dl="cd ~/Downloads"
-
 # Lists sorted by date, latest last.
 alias lst='ls -tr'
 
 # Lists all of the files with lots of info, sorted by date.
 alias la='ls -lrtha'
-
-# Activates a python virtualenv, assuming the path below is appropriate.
-alias act='source vendor/python/bin/activate'
 
 # Make a shim for the `readlink -f` command because standard OSX doesn't have it
 if uname -a | grep -iq darwin; then
@@ -110,5 +84,17 @@ alias ls='ls --color=tty'
 
 # Remove a right prompt if there is one
 export RPROMPT=
+
+(
+  cd "$SH_CONFIG"
+  if ! git diff-index --quiet HEAD; then
+    echo -ne '\033[0;33m'
+    echo "##################################################################"
+    echo "## You have uncommitted changes in $SH_CONFIG"
+    echo "##################################################################"
+    echo -ne '\033[0m'
+  fi
+)
+
 
 _echo ok

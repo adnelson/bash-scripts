@@ -182,5 +182,3 @@ elif [[ "$CURRENT_SHELL" == "zsh" ]]; then
 else
   echo "Unknown shell: '$CURRENT_SHELL'"
 fi
-
-# export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.bash-scripts/scripts:/usr/bin:/usr/local/bin:$PATH"
