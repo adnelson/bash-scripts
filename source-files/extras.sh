@@ -251,3 +251,5 @@ function mkd () {
 # Commonly used directories.
 alias ws="mkdir -p ~/workspace && cd ~/workspace"
 alias dl="cd ~/Downloads"
+
+export BLIBBERBLOB_IP='192.168.68.100'

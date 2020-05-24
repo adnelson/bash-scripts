@@ -9,6 +9,7 @@ let
       markdown-mode
       monokai-theme
       nix-mode
+      projectile
       reason-mode
       rust-mode
       smex
