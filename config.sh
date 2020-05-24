@@ -1,3 +1,8 @@
+if [ -z "$SH_CONFIG" ] || [ ! -e "$SH_CONFIG" ]; then
+  echo "SH_CONFIG is not set or does not exist: $SH_CONFIG"
+  return
+fi
+
 _VERBOSE=
 
 _echo() {

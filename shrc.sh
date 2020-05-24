@@ -1,6 +1,3 @@
-# Path to folder containing this file.
-export SH_CONFIG="$(dirname $(readlink -f "${BASH_SOURCE[0]}"))"
-
 if [[ $(id -u) == 0 ]]; then
   IS_ROOT=1
 fi
@@ -40,6 +37,14 @@ if [[ -n $CURRENT_SHELL ]]; then
   echo "Detected shell: $CURRENT_SHELL"
 else
   echo "Couldn't detect shell from '$0'"
+fi
+
+# Path to folder containing this file.
+if [[ "$CURRENT_SHELL" == "bash" ]]; then
+  export SH_CONFIG="$(dirname $(readlink -f "${BASH_SOURCE[0]}"))"
+else
+  # TODO how to do this in zsh
+  export SH_CONFIG="$HOME/.bash-scripts"
 fi
 
 if echo $TERMINFO | grep -q emacs; then
