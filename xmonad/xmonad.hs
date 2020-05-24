@@ -1,4 +1,8 @@
+{-# LANGUAGE LambdaCase #-}
 import System.IO
+import System.Environment (lookupEnv, setEnv)
+import System.Directory (doesDirectoryExist)
+import System.FilePath ((</>))
 import XMonad
 --------------------------------- <Hook imports> -------------------------------------
 import XMonad.Hooks.DynamicLog (ppOutput, ppTitle, dynamicLogWithPP, xmobarPP, xmobarColor, shorten)
@@ -57,6 +61,15 @@ maimFilePathPattern = "~/Screenshots/\"Screenshot - $(date +'%Y-%m-%d %H:%M:%S')
 
 main :: IO ()
 main = do
+  lookupEnv "HOME" >>= \case
+    Nothing -> pure ()
+    Just home -> do
+      let scriptDir = (home </> ".bash-scripts/scripts")
+      ((,) <$> doesDirectoryExist scriptDir <*> lookupEnv "PATH")  >>= \case
+        (True, Just path) -> do
+          setEnv "PATH" (scriptDir <> ":" <> path)
+        _ -> pure ()
+
   spawn "trayer --height 28 --widthtype request --edge top --align right --transparent true --tint 0 --alpha 64 --monitor primary"
   xmproc <- spawnPipe "xmobar"
   let modShift key = (mod4Mask .|. shiftMask, key)

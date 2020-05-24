@@ -3,12 +3,9 @@
   allowUnfree = true;
   packageOverrides = ps: {
     tandem = ps.callPackage ./tandem { };
-    bs-platform = (import ./bs-platform { pkgs = ps; }).bs-platform7; /* .overrideAttrs(attrs: {
+    bs-platform = ps.bs-platform.overrideAttrs(attrs: {
       patchPhase = ''
         ${attrs.patchPhase or ""}
-        rm -f linux/ninja.exe
-        ln -s $(type -p ninja) linux/ninja.exe
-        patch -p1 < ${./install-script.patch}
         python3 <<EOF
         import json
         with open('package.json') as f:
@@ -18,6 +15,6 @@
             f.write(json.dumps(pkg_j, indent=2))
         EOF
       '';
-    });*/
+    });
   };
 }

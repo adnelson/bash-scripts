@@ -1,5 +1,5 @@
 # Path to folder containing this file.
-export SH_CONFIG=$HOME/.bash-scripts
+export SH_CONFIG="$(dirname $(readlink -f "${BASH_SOURCE[0]}"))"
 
 if [[ $(id -u) == 0 ]]; then
   IS_ROOT=1
@@ -44,9 +44,11 @@ fi
 
 if echo $TERMINFO | grep -q emacs; then
   INSIDE_EMACS=1
-  if [[ ! $IS_DARWIN ]]; then
+  if [[ ! $IS_DARWIN ]] && [[ -z $ALREADY_RESET ]]; then
     # Hack: I always have to reset for some reason
     reset
+    # Prevent reloads from resetting screen by setting this
+    export ALREADY_RESET=1
   fi
 else
   unset INSIDE_EMACS

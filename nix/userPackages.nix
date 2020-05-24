@@ -13,6 +13,7 @@ let
       rust-mode
       smex
       systemd
+      typescript-mode
       yaml-mode
     ]
   );

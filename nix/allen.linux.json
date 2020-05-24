@@ -1,6 +1,7 @@
 [
   "_1password",
   "bind",
+  "binutils",
   "brave",
   "bvi",
   "chromium",
@@ -45,6 +46,7 @@
   "vlc",
   "vscode",
   "wine",
+  "yarn2nix",
   "zoom-us",
   "zsnes"
 ]

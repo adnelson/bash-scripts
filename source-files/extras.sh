@@ -225,3 +225,11 @@ export RIPGREP_CONFIG_PATH=$SH_CONFIG/ripgreprc
 if [[ -e ~/.config/systemd ]]; then
   alias sysu='systemctl --user'
 fi
+
+for f in ~/.bash-scripts/scripts/*; do
+  if ! [[ -x $f ]]; then
+    echo "WARNING: $f is not executable"
+  fi
+done
+
+alias xbash='exec bash'
