@@ -1,5 +1,17 @@
-# Detect the default remote to use. Order of preference is
-# adnelson, narrsci and origin. This is useful for forks.
+# oh-my-zsh sets this up for us, not bash:
+if [ "$CURRENT_SHELL" = bash ]; then
+  _git_base_dir=$(dirname $(dirname $(readlink -f $(which git))))
+  _git_completion_path="$_git_base_dir/share/git/contrib/completion/git-completion.bash"
+  if [ -e $_git_completion_path ]; then
+    source $_git_completion_path
+  else
+    echo "WARNING: couldn't find git completion script at $_git_completion_path"
+  fi
+fi
+
+
+# Detect the default remote to use. First check if
+# adnelson exists, otherwise origin.
 default_remote() {
   local remotes=$(git remote)
   if [[ -n $REMOTE ]]; then

@@ -100,8 +100,6 @@ psa() {
   bash -c "$cmd" | grep -v "$cmd" | grep -v grep
 }
 
-alias vgr='cd ~/narr/vagrantboxes'
-alias sdev='cd ~/narr/ns_systems/on_prem/dev'
 function findit {
   readlink -f $(which $1)
 }
@@ -221,10 +219,6 @@ fi
 
 # Tell ripgrep where to look for a config file
 export RIPGREP_CONFIG_PATH=$SH_CONFIG/ripgreprc
-
-if [[ -e ~/.config/systemd ]]; then
-  alias sysu='systemctl --user'
-fi
 
 for f in ~/.bash-scripts/scripts/*; do
   if ! [[ -x $f ]]; then

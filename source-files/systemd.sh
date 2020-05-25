@@ -23,4 +23,7 @@ if [[ -z $IN_NIX_SHELL ]] && [[ -d ~/.config/systemd/user ]]; then
   fi
 )
 
+alias sysu='systemctl --user'
+alias jrnu='journalctl --user'
+
 fi # if in nix shell
