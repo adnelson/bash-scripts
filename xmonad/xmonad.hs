@@ -47,12 +47,16 @@ spotifyCmd cmd = unwords [
   ]
 
 -- | Default browser
-browser :: String
-browser = "brave"
+defaultBrowser :: String
+defaultBrowser = "firefox"
+
+-- | Backup browser
+backupBrowser :: String
+backupBrowser = "brave"
 
 -- | Open browser in incognito
-incognito :: String
-incognito = browser ++ " " ++ arg where
+incognito :: String -> String
+incognito browser = browser ++ " " ++ arg where
   arg = if browser == "firefox" then "--private-window" else "--incognito"
 
 -- | The file path pattern for saving screenshots taken with maim
@@ -91,15 +95,19 @@ main = do
         -- Increase volume 3%
         , (modShift xK_period, spawn "amixer sset Master 3%+")
         -- Start up browser
-        , (modShift xK_y, spawn browser)
+        , (modShift xK_y, spawn defaultBrowser)
         -- Start up browser in incognito mode
-        , (modShift xK_o, spawn incognito)
-        -- Capture shot of full screen
-        , (modShift xK_s, spawn $ "maim " ++ maimFilePathPattern)
-        -- Capture screenshot with mouse selection. `-u` hides the cursor
-        , (modShift xK_d, spawn $ "maim -s -u " ++ maimFilePathPattern)
+        , (modShift xK_u, spawn (incognito defaultBrowser))
+        -- Start up backup browser
+        , (modShift xK_i, spawn backupBrowser)
+        -- Start up backup browser in incognito mode
+        , (modShift xK_o, spawn (incognito backupBrowser))
+        -- Capture shot of full screen.
+        , (modShift xK_s, spawn $ "maim -m 10 " ++ maimFilePathPattern)
+        -- Capture screenshot with mouse selection. `-u` hides the cursor.
+        , (modShift xK_d, spawn $ "maim -m 10 -s -u " ++ maimFilePathPattern)
         -- Capture screenshot with mouse selection, not hiding the cursor.
-        , (modShift xK_e, spawn $ "maim -s " ++ maimFilePathPattern)
+        , (modShift xK_e, spawn $ "maim -m 10 -s " ++ maimFilePathPattern)
         -- Go to previous window within current workspace
         , (modShift xK_Left, windows focusDown)
         -- Go to next window within current workspace
