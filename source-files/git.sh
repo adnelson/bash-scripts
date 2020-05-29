@@ -358,3 +358,5 @@ function git-to-patch-file () {
     git diff -s | tail -n +3 > $path
   fi
 }
+
+alias rename-branch='git branch -m'
