@@ -2,5 +2,6 @@
   "coreutils",
   "elixir",
   "gnugrep",
+  "gnused",
   "nix"
 ]
