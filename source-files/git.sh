@@ -351,11 +351,11 @@ function addMyRemote() {
 }
 
 function git-to-patch-file () {
-  local path="$1"
-  if [[ -z $path ]]; then
+  local _path="$1"
+  if [[ -z $_path ]]; then
     git diff -s | tail -n +3
   else
-    git diff -s | tail -n +3 > $path
+    git diff -s | tail -n +3 > $_path
   fi
 }
 
