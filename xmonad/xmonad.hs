@@ -25,6 +25,8 @@ import XMonad.Layout.WindowNavigation (Direction2D(L, R))
 import XMonad.Util.EZConfig       (additionalKeys)
 import XMonad.Util.Run            (spawnPipe,unsafeSpawn)
 import XMonad.StackSet (focusUp, focusDown)
+import XMonad.Actions.FindEmptyWorkspace (viewEmptyWorkspace, tagToEmptyWorkspace)
+import XMonad.Actions.CycleWS (moveTo, WSType(NonEmptyWS), Direction1D(Next,Prev))
 
 -- This lists all of the layouts we're using. ModMask + Spacebar cycles through them.
 myLayoutHook = avoidStruts
@@ -76,12 +78,13 @@ main = do
 
   spawn "trayer --height 28 --widthtype request --edge top --align right --transparent true --tint 0 --alpha 64 --monitor primary"
   xmproc <- spawnPipe "xmobar"
+  let mod key = (mod4Mask, key)
   let modShift key = (mod4Mask .|. shiftMask, key)
   let customKeys = [
         -- ToggleStruts will hide the xmobar
-        ((mod4Mask, xK_b), sendMessage ToggleStruts)
+        (mod xK_b, sendMessage ToggleStruts)
         -- Fire up dmenu (launches executables in PATH)
-        , ((mod4Mask, xK_p), spawn "dmenu_run -fn \"DejaVu Sans Mono:pixelsize=12:style=Book\"")
+        , (mod xK_p, spawn "dmenu_run -fn \"DejaVu Sans Mono:pixelsize=12:style=Book\"")
         -- Lock the screen
         , (modShift xK_End, unsafeSpawn "xscreensaver-command -lock")
         -- Play/pause spotify
@@ -116,6 +119,14 @@ main = do
         , (modShift xK_x, sendMessage $ Toggle MIRROR)
         -- Toggle fullscreen mode
         , (modShift xK_f, sendMessage $ Toggle FULL)
+        -- Go to the first empty workspace (if there is one)
+        , (mod xK_bracketleft, viewEmptyWorkspace)
+        -- Send current window to the first empty workspace (if there is one)
+        , (modShift xK_bracketleft, tagToEmptyWorkspace)
+        -- Go to the next workspace (skipping empty ones)
+        , (mod xK_Right, moveTo Next NonEmptyWS)
+        -- Go to the previous workspace (skipping empty ones)
+        , (mod xK_Left, moveTo Prev NonEmptyWS)
         ]
   xmonad $ docks $ ewmh def
     { modMask            = mod4Mask
