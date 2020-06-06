@@ -1,5 +1,7 @@
 [
   "_1password",
+  "ardour",
+  "avldrums-lv2",
   "bind",
   "binutils",
   "brave",
@@ -10,6 +12,7 @@
   "discord",
   "docker",
   "dosbox",
+  "drumgizmo",
   "flyctl",
   "frostwire",
   "futhark",
@@ -17,6 +20,7 @@
   "ghc",
   "gimp",
   "gnumake",
+  "hydrogen",
   "keepass",
   "kitty",
   "lxappearance",
