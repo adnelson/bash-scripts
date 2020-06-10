@@ -84,7 +84,7 @@ main = do
         -- ToggleStruts will hide the xmobar
         (mod xK_b, sendMessage ToggleStruts)
         -- Fire up dmenu (launches executables in PATH)
-        , (mod xK_p, spawn "dmenu_run -fn \"DejaVu Sans Mono:pixelsize=12:style=Book\"")
+        , (mod xK_p, spawn "dmenu_run -i -fn \"DejaVu Sans Mono:pixelsize=12:style=Book\"")
         -- Lock the screen
         , (modShift xK_End, unsafeSpawn "xscreensaver-command -lock")
         -- Play/pause spotify

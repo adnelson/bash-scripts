@@ -11,6 +11,7 @@
   "ncdu",
   "nix-prefetch-git",
   "nodejs-12_x",
+  "pandoc",
   "postgresql_11",
   "python3",
   "ripgrep",
