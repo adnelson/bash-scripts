@@ -246,4 +246,5 @@ function mkd () {
 alias ws="mkdir -p ~/workspace && cd ~/workspace"
 alias dl="cd ~/Downloads"
 
+# TODO scrape this and keep it up to date
 export BLIBBERBLOB_IP='192.168.68.100'

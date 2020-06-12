@@ -60,14 +60,6 @@ alias lst='ls -tr'
 # Lists all of the files with lots of info, sorted by date.
 alias la='ls -lrtha'
 
-# Make a shim for the `readlink -f` command because standard OSX doesn't have it
-if uname -a | grep -iq darwin; then
-  function rlink() {
-    python -c "import os; print(os.path.realpath('$1'))"
-  }
-else
-  alias rlink='readlink -f'
-fi
 
 for file in $(find $SH_CONFIG/source-files/ -type f -name '*.sh' -a ! -name '.#*'); do
   echo "Sourcing $(rlink $file)"
@@ -81,6 +73,9 @@ if [[ -e $SH_CONFIG/secrets/source-files ]]; then
   done
 fi
 
+checkuncommitted $SH_CONFIG
+checkuncommitted $SH_CONFIG/secrets
+
 unset BROWSER
 
 # Use light colors for ls
@@ -89,25 +84,5 @@ alias ls='ls --color=tty'
 
 # Remove a right prompt if there is one
 export RPROMPT=
-
-(
-  cd "$SH_CONFIG"
-  if ! git diff-index --quiet HEAD; then
-    echo -ne '\033[0;33m'
-    echo "##################################################################"
-    echo "## You have uncommitted changes in $SH_CONFIG"
-    echo "##################################################################"
-    echo -ne '\033[0m'
-  elif [ $(cur) = master ]; then
-    if [ "$(curcommit)" != "$(grp origin/master)" ]; then
-      echo -ne '\033[0;33m'
-      echo "##################################################################"
-      echo "## Local master is out of sync with origin/master in $SH_CONFIG"
-      echo "##################################################################"
-      echo -ne '\033[0m'
-    fi
-  fi
-)
-
 
 _echo ok

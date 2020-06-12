@@ -22,8 +22,9 @@ import XMonad.Layout.Tabbed (tabbed, shrinkText, simpleTabbed)
 import XMonad.Layout.WindowNavigation (Direction2D(L, R))
 --------------------------------- </Layout imports> ------------------------------------
 
-import XMonad.Util.EZConfig       (additionalKeys)
-import XMonad.Util.Run            (spawnPipe,unsafeSpawn)
+import XMonad.Util.EZConfig (additionalKeys)
+import XMonad.Util.Paste (sendKey)
+import XMonad.Util.Run (spawnPipe,unsafeSpawn)
 import XMonad.StackSet (focusUp, focusDown)
 import XMonad.Actions.FindEmptyWorkspace (viewEmptyWorkspace, tagToEmptyWorkspace)
 import XMonad.Actions.CycleWS (moveTo, WSType(NonEmptyWS), Direction1D(Next,Prev))
@@ -80,6 +81,7 @@ main = do
   xmproc <- spawnPipe "xmobar"
   let mod key = (mod4Mask, key)
   let modShift key = (mod4Mask .|. shiftMask, key)
+  let modAlt key = (mod4Mask .|. mod1Mask, key)
   let customKeys = [
         -- ToggleStruts will hide the xmobar
         (mod xK_b, sendMessage ToggleStruts)
@@ -120,13 +122,19 @@ main = do
         -- Toggle fullscreen mode
         , (modShift xK_f, sendMessage $ Toggle FULL)
         -- Go to the first empty workspace (if there is one)
-        , (mod xK_bracketleft, viewEmptyWorkspace)
+        , (mod xK_N, viewEmptyWorkspace)
         -- Send current window to the first empty workspace (if there is one)
-        , (modShift xK_bracketleft, tagToEmptyWorkspace)
+        , (modAlt xK_N, tagToEmptyWorkspace)
         -- Go to the next workspace (skipping empty ones)
         , (mod xK_Right, moveTo Next NonEmptyWS)
         -- Go to the previous workspace (skipping empty ones)
         , (mod xK_Left, moveTo Prev NonEmptyWS)
+        -- Play/pause spotify
+        , (modAlt xK_N, spawn (spotifyCmd "PlayPause"))
+        -- Unify with OSX (todo: only in firefox?)
+        , (modAlt xK_Left, sendKey controlMask xK_Page_Up)
+        -- Unify with OSX
+        , (modAlt xK_Right, sendKey controlMask xK_Page_Down)
         ]
   xmonad $ docks $ ewmh def
     { modMask            = mod4Mask
