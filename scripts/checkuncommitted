@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 dir=$(rlink "${1:-.}")
 cd "$dir"
+pwd
 if ! git diff-index HEAD --exit-code >/dev/null; then
   echo -ne '\033[0;33m'
   echo "##################################################################"

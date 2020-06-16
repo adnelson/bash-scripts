@@ -74,7 +74,7 @@ if [[ -e $SH_CONFIG/secrets/source-files ]]; then
 fi
 
 checkuncommitted $SH_CONFIG
-checkuncommitted ~/.secrets
+bash -x checkuncommitted ~/.secrets
 
 unset BROWSER
 
