@@ -342,7 +342,7 @@ function cleanbranches() (
   done
 )
 
-function addMyRemote() {
+function add-my-remote() {
   if [[ -z $1 ]]; then
     echo "single argument required"
   else
@@ -360,3 +360,21 @@ function git-to-patch-file () {
 }
 
 alias rename-branch='git branch -m'
+
+alias is-clean='git diff-index HEAD --quiet --exit-code'
+
+function reset-master() {
+  if [ $(cur) != master ]; then
+    echo "Not on master branch"
+    return 1
+  elif ! is-clean; then
+    echo "Not a clean git state"
+    return 1
+  fi
+
+  gcod
+  gbd master
+  gf
+  master
+  curcommit
+}
