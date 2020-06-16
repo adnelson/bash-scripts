@@ -255,27 +255,6 @@ if [[ $(id -u) == 0 ]]; then
   )
 fi
 
-commit_bash_scripts() (
-  if [[ -z "$1" ]]; then
-    echo "Need a commit message"
-    exit 1
-  fi
-  cd ~/.bash-scripts
-  git add .
-  git commit -m "$1"
-)
-
-push_bash_scripts() (
-  cd ~/.bash-scripts
-  if ! git diff-index --quiet HEAD; then
-    git status
-    echo "Stopping due to uncommitted changes in $PWD."
-    exit 1
-  fi
-
-  git push origin "${1:-master}"
-)
-
 alias edit_packages='enw ~/.bash-scripts/nix/userPackages.nix'
 alias install_packages='nix-env -f ~/.bash-scripts/nix/userPackages.nix -i'
 

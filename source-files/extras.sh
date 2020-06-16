@@ -247,4 +247,25 @@ alias ws="mkdir -p ~/workspace && cd ~/workspace"
 alias dl="cd ~/Downloads"
 
 # TODO scrape this and keep it up to date
-export BLIBBERBLOB_IP='192.168.68.100'
+export BLIBBERBLOB_IP='192.168.68.101'
+
+commit_bash_scripts() (
+  if [[ -z "$1" ]]; then
+    echo "Need a commit message"
+    exit 1
+  fi
+  cd ~/.bash-scripts
+  git add .
+  git commit -m "$1"
+)
+
+push_bash_scripts() (
+  cd ~/.bash-scripts
+  if ! git diff-index --quiet HEAD; then
+    git status
+    echo "Stopping due to uncommitted changes in $PWD."
+    exit 1
+  fi
+
+  git push origin "${1:-master}"
+)
