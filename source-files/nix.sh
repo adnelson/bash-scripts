@@ -84,8 +84,12 @@ update_nixpkgs() (
     exit 1
   fi
 
+  before_commit=$(cur)
   remote=$(git remote -v | grep nixpkgs-channels | awk '{print $1}' | sort | uniq)
   git pull $remote nixpkgs-unstable
+  if [ $(cur) != $before_commit ]; then
+    git tag $(date +"checkout-%Y-%m-%d")
+  fi
 )
 
 update_nixos() {

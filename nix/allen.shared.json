@@ -10,7 +10,7 @@
   "jq",
   "ncdu",
   "nix-prefetch-git",
-  "nodejs-12_x",
+  "nodejs-14_x",
   "pandoc",
   "postgresql_11",
   "python3",

@@ -14,6 +14,7 @@ let
       rust-mode
       smex
       systemd
+      tuareg
       typescript-mode
       yaml-mode
     ]
