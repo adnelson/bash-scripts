@@ -74,7 +74,11 @@ if [[ -e $SH_CONFIG/secrets/source-files ]]; then
 fi
 
 checkuncommitted $SH_CONFIG
-bash -x checkuncommitted ~/.secrets
+checkuncommitted ~/.secrets
+
+if [ -e $SH_CONFIG/secrets ]; then
+  print-warning "secrets symlink found"
+fi
 
 unset BROWSER
 

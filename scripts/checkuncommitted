@@ -1,19 +1,10 @@
 #!/usr/bin/env bash
 dir=$(rlink "${1:-.}")
 cd "$dir"
-pwd
 if ! git diff-index HEAD --exit-code >/dev/null; then
-  echo -ne '\033[0;33m'
-  echo "##################################################################"
-  echo "## You have uncommitted changes in $dir"
-  echo "##################################################################"
-  echo -ne '\033[0m'
+  print-big-warning "You have uncommitted changes in $dir"
 elif [ $(git rev-parse --abbrev-ref HEAD) = master ]; then
   if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/master)" ]; then
-    echo -ne '\033[0;33m'
-    echo "##################################################################"
-    echo "## Local master is out of sync with origin/master in $dir"
-    echo "##################################################################"
-    echo -ne '\033[0m'
+    print-big-warning "Local master is out of sync with origin/master in $dir"
   fi
 fi

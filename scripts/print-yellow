@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+echo -ne '\033[0;33m'
+echo "$@"
+echo -ne '\033[0m'
