@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 dir=$(rlink "${1:-.}")
 cd "$dir"
+. ~/.bash-scripts/source-files/git.sh
 if ! git diff-index --quiet HEAD; then
   echo -ne '\033[0;33m'
   echo "##################################################################"
