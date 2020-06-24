@@ -3,13 +3,7 @@ if [ -z "$SH_CONFIG" ] || [ ! -e "$SH_CONFIG" ]; then
   return
 fi
 
-_VERBOSE=
-
-_echo() {
-  [ -z $_VERBOSE ] || echo $1
-}
-
-_echo 'Loading custom config...'
+if-verbose echo 'Loading custom config...'
 
 # Need to load these up first
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
@@ -18,7 +12,7 @@ fi
 
 unalias grep >/dev/null 2>&1 || true
 
-_echo "Detected session type: $SESSION_TYPE"
+if-verbose echo "Detected session type: $SESSION_TYPE"
 
 if [[ $(id -u) -eq 0 ]]; then
   export EDITOR=emacs
@@ -74,7 +68,11 @@ if [[ -e ~/.secrets/source-files ]]; then
 fi
 
 checkuncommitted $SH_CONFIG
-checkuncommitted ~/.secrets
+(
+  pwd
+  cd ~/.secrets
+  checkuncommitted .
+)
 
 if [ -e $SH_CONFIG/secrets ]; then
   print-warning "secrets symlink found"
@@ -89,4 +87,4 @@ alias ls='ls --color=tty'
 # Remove a right prompt if there is one
 export RPROMPT=
 
-_echo ok
+if-verbose echo ok

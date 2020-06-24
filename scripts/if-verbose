@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+if [ "$#" = 0 ]; then
+  echo "No command to run" >&2
+  exit 1
+fi
+
+if [ -n "$VERBOSE" ]; then
+  eval $@
+fi
