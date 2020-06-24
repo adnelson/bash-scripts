@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 dir=$(rlink "${1:-.}")
 cd "$dir"
-echo "Checking git state in $(pwd)"
-if ! git status | grep -q 'working tree clean'; then
-  git diff-index HEAD --exit-code
+eval "$(if-verbose echo 'set -x')"
+if-verbose echo "Checking git state in $(pwd)"
+
+if git status | grep -iq 'changes not staged'; then
+  if-verbose git diff-index HEAD --exit-code
   print-big-warning "You have uncommitted changes in $dir"
-elif [ $(git rev-parse --abbrev-ref HEAD) = master ] &&
-     [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/master)" ]; then
+elif [ "$(git rev-parse master)" != "$(git rev-parse origin/master)" ]; then
   print-big-warning "Local master is out of sync with origin/master in $dir"
 else
   if-verbose echo "$(basename $(pwd)) has a clean status"
