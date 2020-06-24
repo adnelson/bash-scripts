@@ -9,7 +9,7 @@ if [[ -e $HOME/.cargo/bin ]]; then
 fi
 
 if type -p rustup >/dev/null; then
-  echo "Adding rustup cargo executable directory to PATH"
+  if-verbose echo "Adding rustup cargo executable directory to PATH"
   export PATH=$(dirname $(rustup which cargo)):$PATH
 fi
 

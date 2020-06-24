@@ -9,10 +9,10 @@ if [[ -z $IN_NIX_SHELL ]] && [[ -d ~/.config/systemd/user ]]; then
   services=()
   for service in *.service; do
     if systemctl --user is-enabled $service >/dev/null; then
-      echo "Found enabled service file $service"
+      if-verbose echo "Found enabled service file $service"
       services+=("$service")
     else
-      echo "Found disabled service file $service"
+      if-verbose echo "Found disabled service file $service"
     fi
   done
   if [[ -n $services ]]; then

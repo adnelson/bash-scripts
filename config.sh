@@ -56,23 +56,19 @@ alias la='ls -lrtha'
 
 
 for file in $(find $SH_CONFIG/source-files/ -type f -name '*.sh' -a ! -name '.#*'); do
-  echo "Sourcing $(rlink $file)"
+  if-verbose echo "Sourcing $(rlink $file)"
   source $file
 done
 
 if [[ -e ~/.secrets/source-files ]]; then
   for file in $(find ~/.secrets/source-files/ -type f -name '*.sh' -a ! -name '.#*'); do
-    echo "Sourcing secret $(rlink $file)"
+    if-verbose echo "Sourcing secret $(rlink $file)"
     source $file
   done
 fi
 
 checkuncommitted $SH_CONFIG
-(
-  pwd
-  cd ~/.secrets
-  checkuncommitted .
-)
+checkuncommitted ~/.secrets
 
 if [ -e $SH_CONFIG/secrets ]; then
   print-warning "secrets symlink found"
