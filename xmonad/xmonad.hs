@@ -122,9 +122,9 @@ main = do
         -- Toggle fullscreen mode
         , (modShift xK_f, sendMessage $ Toggle FULL)
         -- Go to the first empty workspace (if there is one)
-        , (mod xK_N, viewEmptyWorkspace)
+        , (mod xK_n, viewEmptyWorkspace)
         -- Send current window to the first empty workspace (if there is one)
-        , (modAlt xK_N, tagToEmptyWorkspace)
+        , (modAlt xK_n, tagToEmptyWorkspace)
         -- Go to the next workspace (skipping empty ones)
         , (mod xK_Right, moveTo Next NonEmptyWS)
         -- Go to the previous workspace (skipping empty ones)
