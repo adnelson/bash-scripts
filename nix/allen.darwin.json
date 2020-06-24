@@ -2,6 +2,7 @@
   "_1password",
   "coreutils",
   "elixir",
+  "fswatch",
   "gnugrep",
   "gnused",
   "nix"

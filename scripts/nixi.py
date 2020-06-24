@@ -7,6 +7,8 @@ import json
 import subprocess as sp
 import sys
 
+# TODO add a check that the path is defined for the current operating system (broken)
+
 def existing_path(path):
     '''Check that a path exists'''
     if path.startswith('<') and path.endswith('>'):
