@@ -378,3 +378,8 @@ function reset-master() {
   master
   curcommit
 }
+
+function add-github-fork() {
+  local repo=$(basename $(git remote get-url origin));
+  git remote add adnelson "ssh://git@github.com/adnelson/$repo"
+}
