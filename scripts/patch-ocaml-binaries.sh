@@ -16,10 +16,10 @@ function patch_file () {
   local path="$1"
   local strict="${2:-$STRICT_MODE}"
   if [ ! -e $path ]; then
-    if [ -n $strict ]; then
+    if [ -n "$strict" ]; then
       echo "$path doesn't exist" >&2
+      exit 1
     fi
-    exit 1
   else
     patchelf --set-interpreter $interpreter "$path"
   fi

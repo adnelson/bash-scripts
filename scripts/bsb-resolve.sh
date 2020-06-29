@@ -16,15 +16,12 @@ python3 <<EOF
 import json
 pkg_j = json.load(open('package.json'))
 if 'bs-platform' in pkg_j['dependencies']:
-    pkg_j['dependencies']['bs-platform'] = "$bs_platform_dir"
+    pkg_j['dependencies']['bs-platform'] = "file://$bs_platform_dir"
 elif 'bs-platform' in pkg_j['devDependencies']:
-    pkg_j['devDependencies']['bs-platform'] = "$bs_platform_dir"
+    pkg_j['devDependencies']['bs-platform'] = "file://$bs_platform_dir"
 
-if 'resolutions' in pkg_j:
-   if list(pkg_j['resolutions'].keys()) == ['bs-platform']:
-       del pkg_j['resolutions']
-   elif 'bs-platform' in pkg_j['resolutions']:
-       del pkg_j['resolutions']['bs-platform']
+# resolutions = pkg_j.setdefault('resolutions', {})
+# resolutions['bs-platform'] = "$bs_platform_dir"
 
 open('package.json', 'w').write(json.dumps(pkg_j, indent=2))
 EOF
