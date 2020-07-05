@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -eo pipefail
+set -x
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -14,10 +15,12 @@ echo "Setting version of bs-platform to $bs_platform_dir"
 
 python3 <<EOF
 import json
+import os
+print("PWD:", os.getcwd())
 pkg_j = json.load(open('package.json'))
-if 'bs-platform' in pkg_j['dependencies']:
+if 'bs-platform' in pkg_j.setdefault('dependencies', {}):
     pkg_j['dependencies']['bs-platform'] = "file://$bs_platform_dir"
-elif 'bs-platform' in pkg_j['devDependencies']:
+elif 'bs-platform' in pkg_j.setdefault('devDependencies', {}):
     pkg_j['devDependencies']['bs-platform'] = "file://$bs_platform_dir"
 
 # resolutions = pkg_j.setdefault('resolutions', {})
