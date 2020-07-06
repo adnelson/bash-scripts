@@ -251,12 +251,15 @@ export BLIBBERBLOB_IP='192.168.68.101'
 
 commit_bash_scripts() (
   if [[ -z "$1" ]]; then
-    echo "Need a commit message"
+    echo "Commit message:"
+    read message
+  else
+    message="$@"
     exit 1
   fi
   cd ~/.bash-scripts
   git add .
-  git commit -m "$1"
+  git commit -m "$message"
 )
 
 push_bash_scripts() (

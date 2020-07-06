@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
 echo -ne '\033[0;33m'
-echo "$@"
+if [ -t 0 ]; then
+  echo "$@"
+else
+  while read -r line ; do
+    echo $line
+  done
+fi
 echo -ne '\033[0m'
+
+# read message
+# args_message="${message:-@}"
+# echo "ARGS MESSAGE $args_message"
+# echo "$@"

@@ -70,8 +70,18 @@ fi
 checkuncommitted $SH_CONFIG
 checkuncommitted ~/.secrets
 
+# Check for non-executable files in the scripts directory
+function findnonexecutables() {
+  comm -3 <(fd '.*' "$1") <(fd '.*' "$1" -t x)
+}
+
+non_execs=$(findnonexecutables $SH_CONFIG/scripts)
+if [ -n "$non_execs" ]; then
+  print-big-warning "Non-executable file(s) in scripts directory:\n$non_execs"
+fi
+
 if [ -e $SH_CONFIG/secrets ]; then
-  print-warning "secrets symlink found"
+  print-big-warning "secrets symlink found"
 fi
 
 unset BROWSER
