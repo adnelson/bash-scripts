@@ -22,14 +22,16 @@ export LANG=en_US.UTF-8
 #   fi
 # fi
 
-CURRENT_SHELL="$(echo $0 | tr / '\n' | tr -d '-' | tail -n1)"
 if [[ -z "$CURRENT_SHELL" ]]; then
-  if [[ -n "$BASH_VERSION" ]]; then
-    CURRENT_SHELL=bash
-  elif [[ -n "$ZSH_VERSION" ]]; then
-    CURRENT_SHELL=zsh
-  else
-    CURRENT_SHELL=$SHELL
+  CURRENT_SHELL="$(echo $0 | tr / '\n' | tr -d '-' | tail -n1)"
+  if [[ -z "$CURRENT_SHELL" ]]; then
+    if [[ -n "$BASH_VERSION" ]]; then
+      CURRENT_SHELL=bash
+    elif [[ -n "$ZSH_VERSION" ]]; then
+      CURRENT_SHELL=zsh
+    else
+      CURRENT_SHELL=$SHELL
+    fi
   fi
 fi
 
