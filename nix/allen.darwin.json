@@ -3,6 +3,7 @@
   "coreutils",
   "elixir",
   "fswatch",
+  "ghc",
   "gnugrep",
   "gnused",
   "nix"
