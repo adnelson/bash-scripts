@@ -12,31 +12,38 @@ def norm_package_json_path(p):
         return p_j
     raise OSError("No such file " + p + " or " + p_j)
 
-def main(source, dest, ignore, only, regex, noconfirm, verbose):
+def main(source, dest, ignore, only, regex, noconfirm, verbose, append_existing):
     regex = regex and re.compile(regex)
     with open(source) as source_f:
         with open(dest) as dest_f:
             source_pj = json.load(source_f)
             dest_pj = json.load(dest_f)
 
-    source_scripts = source_pj['scripts']
-    dest_scripts = dest_pj['scripts']
+    source_scripts = source_pj.setdefault('scripts', {})
+    dest_scripts = dest_pj.setdefault('scripts', {})
     keys_to_copy = [k
                     for k in source_scripts
                     if (regex and regex.match(k))
-                    or (only and k not in only)
+                    or (only and k in only)
                     and not (ignore and k in ignore)]
 
     new_scripts = {k: source_scripts[k] for k in keys_to_copy if k not in dest_scripts}
     updated_scripts = {k: source_scripts[k]
                        for k in keys_to_copy
                        if k in dest_scripts and source_scripts[k] != dest_scripts[k]}
-    new_dest_scripts = dict(dest_scripts, **updated_scripts, **new_scripts)
+    new_dest_scripts = dict(dest_scripts, **new_scripts)
+    for k, new_script in updated_scripts.items():
+        old_script = dest_script[k]
+        if old_script and append_existing == 'before':
+            new_script = ' '.join(s for s in [new_script, "&&", old_script] if s)
+        elif old_script and append_existing == 'after':
+            new_script = ' '.join(s for s in [old_script, "&&", new_script] if s)
+        new_dest_scripts[k] = new_script
 
     if not new_scripts and not updated_scripts:
         print("No new or modified scripts")
         return
-    print("Modified scripts:", list(updated_scripts.keys()))
+    print("Modified scripts:", json.dumps(updated_scripts, indent=2))
     print("Scripts to be added:", json.dumps(new_scripts, indent=2))
     if verbose:
         print("New scripts (all):", json.dumps(new_dest_scripts, indent=2))
@@ -57,5 +64,7 @@ parser.add_argument('-o', '--only', nargs='*', default=[])
 parser.add_argument('-r', '--regex', help="Regex filter string on script names")
 parser.add_argument('-y', '--noconfirm', action='store_true', default=False)
 parser.add_argument('-v', '--verbose', action='store_true', default=False)
+parser.add_argument('-A', '--append-after', action='store_const', const='after', dest='append_existing')
+parser.add_argument('-B', '--append-before', action='store_const', const='before', dest='append_existing')
 args = parser.parse_args()
 main(**vars(args))

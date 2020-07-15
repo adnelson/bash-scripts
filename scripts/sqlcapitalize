@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = process.argv[2];
+if (!path) throw new Error("Require a path argument");
+const contents = fs.readFileSync(process.argv[2]).toString();
+console.log(contents)
+const keywords = [
+  "SELECT", "FROM", "AS", "INNER JOIN", "ON", "WHERE", "LEFT JOIN"
+].map(s => `(${s})`).join("|");
+const reg = `[^\w]${keywords}[^\w]`;
+console.log(reg)
+const keywordRegex = new RegExp(reg, 'ig');
+const newText = contents.replace(keywordRegex, (kw) => kw.toUpperCase());
+console.log(newText);

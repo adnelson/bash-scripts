@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+var name = process.argv[2]
+var script = process.argv[3]
+if (!name) throw new Error("No name");
+if (!script) throw new Error("No script");
+var fs=require("fs")
+var j = JSON.parse(fs.readFileSync("package.json"))
+j.scripts[name] = script
+fs.writeFileSync("package.json", JSON.stringify(j, null, indent=2))

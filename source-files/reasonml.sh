@@ -1,4 +1,5 @@
 alias rml='cd ~/workspace/reasonml'
+alias rejs='cd ~/workspace/reasonml/re-js'
 
 
 function fix_bsb_and_patch() {
