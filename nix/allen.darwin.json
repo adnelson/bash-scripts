@@ -6,5 +6,6 @@
   "ghc",
   "gnugrep",
   "gnused",
-  "nix"
+  "nix",
+  "pspg"
 ]
