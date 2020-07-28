@@ -1,0 +1,102 @@
+--- a/scripts/install.js
++++ b/scripts/install.js
+@@ -25,8 +25,8 @@ if (supported_os.indexOf(process.platform) < 0) {
+ var is_windows = process.platform === "win32";
+ 
+ 
+-
+-var ninja_bin_output = path.join(root_dir, process.platform, "ninja.exe");
++// var ninja_bin_output = path.join(
++var ninja_bin_output = path.join(root_dir, 'linux', 'ninja.exe') // cp.execSync('type -p ninja').toString().trim();
+ 
+ /**
+  * Make sure `ninja_bin_output` exists
+@@ -35,57 +35,45 @@ var ninja_bin_output = path.join(root_dir, process.platform, "ninja.exe");
+  */
+ function provideNinja() {
+   var vendor_ninja_version = "1.9.0.git";
+-  var ninja_source_dir = path.join(root_dir, "vendor", "ninja");
+-  function build_ninja() {
+-    console.log(`building ninja`);
+-    ensureExists(ninja_source_dir);
+-    cp.execSync(`tar xzvf ../ninja.tar.gz`, {
+-      cwd: ninja_source_dir,
+-      stdio: [0, 1, 2]
+-    });
+-    console.log("No prebuilt Ninja, building Ninja now");
+-    var build_ninja_command = "python3 ./configure.py --bootstrap";
+-    cp.execSync(build_ninja_command, {
+-      cwd: ninja_source_dir,
+-      stdio: [0, 1, 2]
+-    });
+-    fs.copyFileSync(path.join(ninja_source_dir, "ninja"), ninja_bin_output);
+-    console.log("ninja binary is ready: ", ninja_bin_output);
+-  }
+ 
+   // sanity check to make sure the binary actually runs. Used for Linux. Too many variants
+   /**
+    *
+    * @param {string} binary_path
+    */
+-  function test_ninja_compatible(binary_path) {
++  function test_ninja_compatible() {
++    console.error(`Checking ninja binary at path ${ninja_bin_output}`);
+     var version;
+     try {
+       version = cp
+-        .execSync(JSON.stringify(binary_path) + " --version", {
++        .execSync(JSON.stringify(ninja_bin_output) + " --version", {
+           encoding: "utf8",
+           stdio: ["pipe", "pipe", "ignore"] // execSync outputs to stdout even if we catch the error. Silent it here
+         })
+         .trim();
+     } catch (e) {
+-      console.log("ninja not compatible?", String(e));
++      console.error("ninja not compatible:", String(e));
+       return false;
+     }
++    console.error(
++      'Checking found version', version,
++      'against vendor version', vendor_ninja_version
++    );
+     return version === vendor_ninja_version;
+   }
+ 
+   if (
+     fs.existsSync(ninja_bin_output) &&
+-    test_ninja_compatible(ninja_bin_output)
++    test_ninja_compatible()
+   ) {
+     console.log(
+       "ninja binary is already cached and installed: ",
+       ninja_bin_output
+     );
+-    return;
+-  }
+-
+-  build_ninja();
++  } else {
++    console.error("No prebuilt ninja");
++    process.exit(1)
++  };
+ }
+ 
+ /**
+@@ -177,6 +165,7 @@ function provideCompiler() {
+     return myVersion;
+   } else {
+     myVersion = require("./buildocaml.js").getVersionPrefix();
++    console.log("Using ocaml version", myVersion);
+     var ocamlopt =
+       process.env.ESY === "true"
+         ? "ocamlopt.opt"
+@@ -222,6 +211,9 @@ var ocamlVersion = provideCompiler();
+ 
+ var stdlib = ocamlVersion.includes("4.02") ? "stdlib-402" : "stdlib-406";
+ 
++console.log("Ocaml version", ocamlVersion);
++console.log("Builting stdlib version", stdlib);
++
+ if (process.env.BS_TRAVIS_CI) {
+   buildLibs(stdlib);
+ }
