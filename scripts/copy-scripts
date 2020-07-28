@@ -33,7 +33,7 @@ def main(source, dest, ignore, only, regex, noconfirm, verbose, append_existing)
                        if k in dest_scripts and source_scripts[k] != dest_scripts[k]}
     new_dest_scripts = dict(dest_scripts, **new_scripts)
     for k, new_script in updated_scripts.items():
-        old_script = dest_script[k]
+        old_script = dest_scripts[k]
         if old_script and append_existing == 'before':
             new_script = ' '.join(s for s in [new_script, "&&", old_script] if s)
         elif old_script and append_existing == 'after':
