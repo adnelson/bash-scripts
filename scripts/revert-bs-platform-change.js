@@ -13,6 +13,7 @@ if (match && match[0] && match[0] !== bsPlatform) {
   console.log(`Setting bs-platform version to ${version}`);
   packageJson[depKey]['bs-platform'] = version;
   fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, indent=2));
+  require('child_process').spawnSync('git', ['add', './package.json']);
 } else {
   console.log(`No change needed to bs-platform version ${bsPlatform}`);
 }
