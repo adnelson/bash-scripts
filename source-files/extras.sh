@@ -272,3 +272,5 @@ push_bash_scripts() (
 
   git push origin "${1:-master}"
 )
+
+export FZF_DEFAULT_COMMAND='fd --type f'

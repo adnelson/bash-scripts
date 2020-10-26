@@ -42,6 +42,8 @@ alias gcp='git cherry-pick'
 # Detach from current branch, without changing the source state
 alias gcod='git checkout --detach'
 
+alias gcne='git commit --no-edit'
+
 # See which files differ between branches
 alias gdn='git diff --name-only'
 

@@ -1,11 +1,16 @@
 [
   "_1password",
   "coreutils",
+  "ctop",
   "elixir",
+  "fd",
   "fswatch",
+  "fzf",
   "ghc",
   "gnugrep",
   "gnused",
   "nix",
-  "pspg"
+  "pspg",
+  "sd",
+  "yarn"
 ]
