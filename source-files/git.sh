@@ -287,6 +287,15 @@ aclone() {
     done
 }
 
+addremote() {
+  local name="origin";
+  if [ -n "$2" ]; then
+    name=$1
+    shift
+  fi
+  git remote add origin ssh://git@github.com/adnelson/$1
+}
+
 ghclone() {
   local repo=$1
   if [[ -z "$repo" ]]; then

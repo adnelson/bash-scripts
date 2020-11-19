@@ -1,6 +1,8 @@
 --smart-case
 --type-add
 re:*.re
+--type-add
+ejs:*.ejs
 --max-columns
 200
 --max-columns-preview
