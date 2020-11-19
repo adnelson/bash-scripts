@@ -204,6 +204,8 @@ function xml2json() {
     NODE_PATH=$HOME/.npm/lib/node_modules node -e "var fs=require('fs');var xml=fs.readFileSync('$1');var j=require('xml2json').toJson(xml,{object:true});console.log(JSON.stringify(j, null, 2))"
 }
 
+alias pjq='paste | jq'
+
 function pkgversion() {
   cat node_modules/$1/package.json | jq .version
 }

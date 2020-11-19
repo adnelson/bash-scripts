@@ -10,3 +10,4 @@ function nls () {
 alias ganls='ga && nls'
 
 alias yrw='yarn re:watch'
+alias yw='yarn watch'

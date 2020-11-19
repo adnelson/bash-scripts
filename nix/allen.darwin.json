@@ -9,8 +9,10 @@
   "ghc",
   "gnugrep",
   "gnused",
+  "heroku",
   "nix",
   "pspg",
   "sd",
+  "snes9x-gtk",
   "yarn"
 ]
