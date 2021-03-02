@@ -259,6 +259,7 @@ alias gl='git pull'
 # Push to $(default_remote), current branch.
 alias gloc='git pull $(default_remote) $(cur) && git submodule update --init'
 alias groc='git pull --rebase $(default_remote) $(cur) && git submodule update --init'
+alias glom='git pull origin master'
 
 # Stashes currently staged files.
 alias stash='git stash'
@@ -395,3 +396,5 @@ function add-adnelson-remote() {
   local name="${1:-origin}"
   git remote add "$name" "ssh://git@github.com/adnelson/$repo"
 }
+
+git config --global merge.tool opendiff

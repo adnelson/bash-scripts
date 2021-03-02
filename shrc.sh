@@ -189,3 +189,4 @@ elif [[ "$CURRENT_SHELL" == "zsh" ]]; then
 else
   echo "Unknown shell: '$CURRENT_SHELL'"
 fi
+if [ -e /Users/allennelson/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/allennelson/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

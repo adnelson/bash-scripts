@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+
+const home = process.env.HOME;
+if (!home) {
+  throw new Error("HOME must be set");
+}
+
+
+const symlinkDirPath = path.join(path.dirname(__dirname), "home-symlinks");
+
+const symlinkFiles = fs.readdirSync(symlinkDirPath);
+
+symlinkFiles.forEach(fileName => {
+  const target = path.join(symlinkDirPath, fileName);
+  const linkPath = path.join(home, `.${fileName}`);
+  if (fs.existsSync(linkPath)) {
+    const stat = fs.lstatSync(linkPath);
+    if (stat && stat.isSymbolicLink()) {
+      throw new Error(`${linkPath} exists and is not a symlink`);
+    }
+  }
+
+  console.log(linkPath, "->", target);
+  fs.symlinkSync(target, linkPath);
+});

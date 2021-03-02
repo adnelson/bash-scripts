@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+scriptname="rg-replace"
+old=$1
+new=$2
+
+if [[ $# -ne 2 ]]; then
+  echo "Usage: $scriptname <old string> <new string>"
+  exit 1
+fi
+
+rg -l "$old" | xargs sd "$old" "$new"
