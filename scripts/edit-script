@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+name="$1"
+spath="$HOME/.bash-scripts/scripts/$name"
+
+if ! [[ -e "$spath" ]]; then
+  echo "$spath doesn't exist, use \`make-script $name\`"
+  exit 1
+fi
+
+"$EDITOR" "$EDITOR_FLAGS" "$spath"

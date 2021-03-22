@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+NAME="$1"
+
+sh -c "rg $NAME node_modules/@draftbit/re-font-awesome/src/Regular.re"

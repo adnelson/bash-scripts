@@ -7,9 +7,15 @@ if (!home) {
   throw new Error("HOME must be set");
 }
 
+const resolveLink = path => {
+  const stat = fs.statSync(path);
+  if (stat.isSymbolicLink()) {
+    const target = fs.readlink(path);
+
+  }
+};
 
 const symlinkDirPath = path.join(path.dirname(__dirname), "home-symlinks");
-
 const symlinkFiles = fs.readdirSync(symlinkDirPath);
 
 symlinkFiles.forEach(fileName => {

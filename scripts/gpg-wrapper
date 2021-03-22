@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo "gpg-wrapper ${@}" > ~/turd
+
+exec gpg2 "${@}"

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -e
+
+name="$1"
+spath="$HOME/.bash-scripts/scripts/$name"
+if [[ -e "$spath" ]]; then
+  echo "$name script already exists"
+  exit 1
+fi
+
+if [[ "$2" = "--sh" ]]; then
+  cmd='bash'
+elif [[ "$2" = "--node" ]]; then
+  cmd='node'
+else
+  echo 'make-script <name> [--node|--sh]' >&2
+  exit 1
+fi
+
+touch "$spath"
+if [[ -n "$cmd" ]]; then
+  echo "#!/usr/bin/env $cmd" >> "$spath"
+fi
+
+chmod +x "$spath"
+
+echo "Created $spath"

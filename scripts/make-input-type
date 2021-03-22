@@ -1,0 +1,81 @@
+#!/usr/bin/env node
+
+const usage = (note) => {
+  const progName = require("path").basename(process.argv[1]);
+  const basicUsage = `${progName} <typeName> [<fieldName>:<fieldType>[:required]]+`;
+  console.error(`${basicUsage}\n\n${note}`);
+  process.exit(1);
+};
+
+const identifierRegex = /^[a-zA-Z$_][a-zA-Z0-9$_]*$/;
+const startsWithLower = (str) => str && Boolean(str.match(/^[a-z]/));
+const isValidIdentifier = (str) => str && Boolean(str.match(identifierRegex));
+const isPrimitive = (typeName) =>
+  Boolean(typeName.match(/^(string|int|json|boolean)$/));
+
+const renderField = ({ name, type, required, description }) => {
+  const renderedDescription = description
+    ? `description: ${JSON.stringify(description)}`
+    : "";
+  if (isPrimitive(type)) {
+    return `t.${type}(${JSON.stringify(
+      name
+    )}, { required: ${required.toString()}, ${renderedDescription} })`;
+  } else {
+    return `t.field(${JSON.stringify(
+      name
+    )}, { type: ${type}, required: ${required.toString()}, ${renderedDescription} })`;
+  }
+};
+
+const renderInputObject = (name, fields) => {
+  const renderedFields = fields.map(renderField).join("; ");
+  return `export const ${name}InputType = inputObjectType({
+    name: "${name}Input", definition(t) { ${renderedFields} }
+  });`;
+};
+
+const main = () => {
+  const inputTypeName = process.argv[2];
+  const fieldStrings = process.argv.slice(3);
+
+  if (!fieldStrings.length) {
+    usage(`Must have at least one field, in name:type:required format`);
+  }
+
+  if (!isValidIdentifier(inputTypeName)) {
+    usage(`Input type ${inputTypeName} is not a valid JS identifier`);
+  }
+
+  if (startsWithLower(inputTypeName)) {
+    usage(`Input type ${inputTypeName} must be capitalized`);
+  }
+
+  const fields = fieldStrings.map((fieldString) => {
+    const [name, type, requiredStr, description] = fieldString.split(":");
+    if (!name || !type) {
+      usage(`Express fields in name:type:required format`);
+    }
+    if (!startsWithLower(name)) {
+      usage(`field names must start with lower case letter (got '${name}')`);
+    }
+    if (!isValidIdentifier(name)) {
+      usage(`field name ${name} is not a valid JS identifier`);
+    }
+    if (!isValidIdentifier(type)) {
+      usage(`type ${type} of field ${name} is not a valid JS identifier`);
+    }
+    const required = !requiredStr
+      ? true
+      : requiredStr === "false"
+      ? false
+      : requiredStr === "true"
+      ? true
+      : usage();
+    return { name, type, required, description };
+  });
+
+  console.log(renderInputObject(inputTypeName, fields));
+};
+
+main();

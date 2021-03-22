@@ -22,7 +22,6 @@
 [core]
     excludesfile = ~/.gitignore
     attributesfile = ~/.gitattributes
-    editor = nvim
 
     # Treat spaces before tabs and all kinds of trailing whitespace as an error
     # [default] trailing-space: looks for spaces at the end of a line
@@ -46,8 +45,8 @@
 
 [pager]
     # https://github.com/dandavison/delta
-    diff = delta | less --tabs=4 -RFX
-    show = delta | less --tabs=4 -RFX
+    # diff = delta
+    show = delta
 
 [delta]
     side-by-side = true
@@ -76,14 +75,9 @@
     local = yellow
     remote = green
 
-[color "status"]
-    added = yellow
-    changed = green
-    untracked = cyan
-
 # git mergetool
 [merge]
-  tool = vimdiff
+	tool = opendiff
   conflictstyle = diff3
 
 [mergetool]
