@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -ex
+
+START="$1"
+INPUT="$2"
+LENGTH="$3"
+OUTPUT="$4"
+
+if [[ -z $START ]] || [[ -z $INPUT ]] || [[ -z $LENGTH ]] || [[ -z $OUTPUT ]]; then
+  echo "Check args"
+  exit 1
+fi
+
+
+ffmpeg -ss "$START" -i "$INPUT" -t "$LENGTH" "$OUTPUT"

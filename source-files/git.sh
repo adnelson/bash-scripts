@@ -1,7 +1,6 @@
-# oh-my-zsh sets this up for us, not bash:
+# # oh-my-zsh sets this up for us, not bash:
 if [ "$CURRENT_SHELL" = bash ]; then
-  _git_base_dir=$(dirname $(dirname $(readlink -f $(which git))))
-  _git_completion_path="$_git_base_dir/share/git/contrib/completion/git-completion.bash"
+  _git_completion_path="$HOME/.nix-profile/share/git/contrib/completion/git-completion.bash"
   if [ -e $_git_completion_path ]; then
     source $_git_completion_path
   else

@@ -31,6 +31,7 @@ alias reqse='cd ~/workspace/reasonml/requery/packages/sqlite/example'
 alias youtube-mp3='youtube-dl --extract-audio --audio-format mp3'
 alias subl='/Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text'
 alias scrots='cd ~/Screenshots'
+alias pol='cd ~/workspace/politics'
 
 function agpstype() (
   psps && ag "(data|type) $1"

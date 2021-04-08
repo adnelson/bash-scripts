@@ -1,5 +1,9 @@
 # OPAM configuration
-. $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+if [ "$CURRENT_SHELL" = bash ]; then
+  . $HOME/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+elif [ "$CURRENT_SHELL" = zsh ]; then
+  . $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+fi
 
 alias rml='cd ~/workspace/reasonml'
 

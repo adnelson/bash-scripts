@@ -2,4 +2,8 @@
 
 NAME="$1"
 
-sh -c "rg $NAME node_modules/@draftbit/re-font-awesome/src/Regular.re"
+echo "Regular:"
+rg "$NAME" "node_modules/@draftbit/re-font-awesome/src/Regular.re" || echo "(none)"
+
+echo "Brands:"
+rg "$NAME" "node_modules/@draftbit/re-font-awesome/src/Brands.re" || echo "(none)"
