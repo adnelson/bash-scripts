@@ -2,8 +2,10 @@
 
 NAME="$1"
 
+FA_DIR=~/workspace/draftbit/draftbit/builder/node_modules/@draftbit/re-font-awesome/src
+
 echo "Regular:"
-rg "$NAME" "node_modules/@draftbit/re-font-awesome/src/Regular.re" || echo "(none)"
+rg "$NAME" "$FA_DIR/Regular.re" || echo "(none)"
 
 echo "Brands:"
-rg "$NAME" "node_modules/@draftbit/re-font-awesome/src/Brands.re" || echo "(none)"
+rg "$NAME" "$FA_DIR/Brands.re" || echo "(none)"

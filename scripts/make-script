@@ -19,7 +19,7 @@ fi
 
 touch "$spath"
 if [[ -n "$cmd" ]]; then
-  echo "#!/usr/bin/env $cmd" >> "$spath"
+  echo "#!/usr/bin/env $cmd\n" >> "$spath"
 fi
 
 chmod +x "$spath"

@@ -1,0 +1,1 @@
+alias ydl='youtube-dl'

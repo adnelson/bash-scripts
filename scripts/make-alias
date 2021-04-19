@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -x
+NAME="$1"
+COMMAND="$2"
+if [[ -z "$NAME" ]] || [[ -z "$COMMAND" ]]; then
+  exit 1
+fi
+echo "alias $NAME='$COMMAND'" >> ~/.bash-scripts/source-files/aliases.sh
+source ~/.bash-scripts/source-files/aliases.sh
