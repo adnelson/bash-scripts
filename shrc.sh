@@ -62,7 +62,7 @@ else
 fi
 
 if [[ -z $IN_NIX_SHELL ]]; then
-  export PATH="$HOME/bin:/run/wrappers/bin:$HOME/.bash-scripts/scripts:$HOME/.nix-profile/bin:/etc/profiles/per-user/$(whoami)/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
+  export PATH="$HOME/bin:/run/wrappers/bin:$HOME/.secrets/scripts:$HOME/.bash-scripts/scripts:$HOME/.nix-profile/bin:/etc/profiles/per-user/$(whoami)/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
   if [[ -z "$IS_NIXOS" ]]; then
     export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
   fi

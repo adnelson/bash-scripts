@@ -20,7 +20,7 @@
     whitespace = fix
 
 [core]
-    excludesfile = ~/.gitignore
+	excludesfile = /Users/allennelson/.bash-scripts/gitignore.global
     attributesfile = ~/.gitattributes
 
     # Treat spaces before tabs and all kinds of trailing whitespace as an error
@@ -133,3 +133,5 @@
 
 [log]
     date = relative
+[init]
+	defaultBranch = master

@@ -1,5 +1,8 @@
 alias killz='$HOME/workspace/python/killproc.py'
 alias dri='docker run -it --rm'
+alias vlc='open -a vlc'
+
+alias jt='cd ~/workspace/reasonml/jazz-trainer'
 
 # misc configuration items
 alias llama='cd ~/workspace/languages/llama/language-llama'
@@ -28,7 +31,7 @@ alias reqp='cd ~/workspace/reasonml/requery/packages/postgres'
 alias reqpe='cd ~/workspace/reasonml/requery/packages/postgres/example'
 alias reqs='cd ~/workspace/reasonml/requery/packages/sqlite'
 alias reqse='cd ~/workspace/reasonml/requery/packages/sqlite/example'
-alias youtube-mp3='youtube-dl --extract-audio --audio-format mp3'
+alias youtube-mp3='ydl --extract-audio --audio-format mp3'
 alias subl='/Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text'
 alias scrots='cd ~/Screenshots'
 alias pol='cd ~/workspace/politics'

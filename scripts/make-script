@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 set -e
 
+function usage() {
+  echo 'make-script <name> [--node|--sh]' >&2
+  exit 1
+}
+
 name="$1"
+if [[ -z "$name" ]]; then
+  usage
+fi
+
 spath="$HOME/.bash-scripts/scripts/$name"
 if [[ -e "$spath" ]]; then
   echo "$name script already exists"
@@ -13,13 +22,12 @@ if [[ "$2" = "--sh" ]]; then
 elif [[ "$2" = "--node" ]]; then
   cmd='node'
 else
-  echo 'make-script <name> [--node|--sh]' >&2
-  exit 1
+  usage
 fi
 
 touch "$spath"
 if [[ -n "$cmd" ]]; then
-  echo "#!/usr/bin/env $cmd\n" >> "$spath"
+  echo "#!/usr/bin/env $cmd" >> "$spath"
 fi
 
 chmod +x "$spath"

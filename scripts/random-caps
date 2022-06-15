@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+const str = fs.readFileSync('/dev/stdin').toString().trim();
+let res = '';
+for (var idx in str) {
+  var char = str[idx]
+  if (Math.random() > 0.5) {
+    res += char.toUpperCase();
+  } else {
+    res += char.toLowerCase();
+  }
+}
+
+console.log(res);

@@ -2,6 +2,10 @@
 --type-add
 re:*.re
 --type-add
+res:*.res
+--type-add
+r:*.res?
+--type-add
 ejs:*.ejs
 --max-columns
 200

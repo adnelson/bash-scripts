@@ -3,7 +3,7 @@
   allowUnfree = true;
   packageOverrides = ps: {
     tandem = ps.callPackage ./tandem { };
-    nodejs = ps.nodejs-14_x;
+    nodejs = ps.nodejs-16_x;
     bs-platform = ps.bs-platform.overrideAttrs(attrs: {
       patchPhase = ''
         ${attrs.patchPhase or ""}

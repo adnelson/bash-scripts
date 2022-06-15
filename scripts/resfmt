@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+git status | rg 'modified:' | rg '\.res$' | sd 'modified:' '' | xargs node ~/workspace/draftbit/draftbit/builder/scripts/format-rescript.js

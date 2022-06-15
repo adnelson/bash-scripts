@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+git status | rg 'modified:' | rg '\.(t|j)sx?$' | sd 'modified:' '' | xargs yarn prettier --write

@@ -1,0 +1,16 @@
+{
+  "name": "my-scripts-reason",
+  "version": "1.0.0",
+  "description": "Miscellaneous scripts implemented in reason",
+  "main": "index.js",
+  "author": "Allen Nelson",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bs-platform": "^9.0.2",
+    "gentype": "^4.2.0"
+  },
+  "devDependencies": {
+    "onchange": "^7.1.0"
+  }
+}

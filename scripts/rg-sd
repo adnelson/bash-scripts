@@ -3,11 +3,12 @@
 scriptname="rg-replace"
 old=$1
 new=$2
-flags="$3"
+rgflags="$3"
+sdflags="$4"
 
 if [[ $# -lt 2 ]]; then
-  echo "Usage: $scriptname <old string> <new string>"
+  echo "Usage: $scriptname <old string> <new string> [rg-flags] [sd-flags]"
   exit 1
 fi
 
-rg -l $flags "$old" | xargs sd "$old" "$new"
+rg -l $rgflags "$old" | xargs sd $sdflags "$old" "$new"

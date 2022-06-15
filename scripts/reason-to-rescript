@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+const { basename } = require("path");
+const { existsSync, writeFileSync, unlinkSync } = require("fs");
+const { execFile } = require("child_process");
+
+const fileNames = process.argv.slice(2);
+const HOME = process.env.HOME;
+
+if (!fileNames.length) {
+  throw new Error(`Usage: ${basename(__filename)} <fileName>`);
+}
+
+console.log({fileNames})
+
+fileNames.forEach((fileName) => {
+  if (!fileName.endsWith(".re") && !fileName.endsWith(".rei")) {
+    throw new Error(`Not a reason file: ${fileName}`);
+  }
+
+  const outFileName = fileName.replace(/.re(i?)$/, ".res$1");
+
+  if (existsSync(outFileName)) {
+    throw new Error(`${outFileName} already exists`);
+  }
+
+  execFile(
+    `${HOME}/workspace/draftbit/draftbit/builder/node_modules/.bin/bsc`,
+    ["-format", fileName],
+    (error, rescriptSyntax, stderr) => {
+      if (error) {
+        console.error(stderr);
+        process.exit(1);
+      }
+
+      writeFileSync(outFileName, rescriptSyntax);
+      unlinkSync(fileName);
+      console.log(
+        `Renamed ${fileName} to ${outFileName}. Remember to \`git add\` the new file.`
+      );
+    }
+  );
+});

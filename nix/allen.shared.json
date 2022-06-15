@@ -10,7 +10,7 @@
   "nix-prefetch-git",
   "nodejs",
   "pandoc",
-  "postgresql_13",
+  "postgresql_14",
   "python3",
   "ripgrep",
   "rustup",

@@ -12,12 +12,19 @@
   "ghc",
   "git",
   "git-lfs",
+  "github-cli",
   "gnugrep",
   "gnupg",
   "gnused",
   "heroku",
+  "llvm",
   "opam",
   "pspg",
+  "redis",
   "sd",
-  "yarn"
+  "watch",
+  "watchman",
+  "wget",
+  "yarn",
+  "yt-dlp"
 ]

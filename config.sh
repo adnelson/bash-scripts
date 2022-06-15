@@ -80,6 +80,11 @@ if [ -n "$non_execs" ]; then
   print-big-warning "Non-executable file(s) in scripts directory:\n$non_execs"
 fi
 
+non_execs=$(findnonexecutables ~/.secrets/scripts)
+if [ -n "$non_execs" ]; then
+  print-big-warning "Non-executable file(s) in .secrets/scripts directory:\n$non_execs"
+fi
+
 if [ -e $SH_CONFIG/secrets ]; then
   print-big-warning "secrets symlink found"
 fi
@@ -94,3 +99,5 @@ alias ls='ls --color=tty'
 export RPROMPT=
 
 if-verbose echo ok
+
+HISTCONTROL=ignoreboth

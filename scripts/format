@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+
+prettier-changed
+refmt-changed

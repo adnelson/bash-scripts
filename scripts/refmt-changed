@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+git status | rg 'modified:|new file:' | rg '\.res$' | sd 'modified:' '' | sd 'new file:' '' | xargs node scripts/format-rescript.js

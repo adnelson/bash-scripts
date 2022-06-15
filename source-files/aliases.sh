@@ -1,1 +1,1 @@
-alias ydl='youtube-dl'
+alias ydl='yt-dlp'

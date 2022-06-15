@@ -1,6 +1,5 @@
 [
   "ripgrep",
-  "nodejs-10_x",
   "reaper",
   "docker",
   "docker-compose",

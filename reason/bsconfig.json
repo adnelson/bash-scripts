@@ -1,0 +1,27 @@
+{
+  "name": "reason",
+  "version": "0.1.0",
+  "sources": {
+    "dir" : "src",
+    "subdirs" : true
+  },
+  "package-specs": [
+    {
+      "module": "commonjs",
+      "in-source": true
+    }
+  ],
+  "suffix": ".bs.js",
+  "gentypeconfig": {
+    "language": "typescript",
+    "module": "commonjs",
+    "shims": {
+      "Js": "./shims/Js"
+    },
+    "generatedFileExtension": ".gen.ts",
+    "debug": {
+      "all": false,
+      "basic": false
+    }
+  }
+}
