@@ -8,7 +8,6 @@
   "jq",
   "ncdu",
   "nix-prefetch-git",
-  "nodejs",
   "pandoc",
   "postgresql_14",
   "python3",

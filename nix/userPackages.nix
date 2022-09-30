@@ -3,7 +3,7 @@ let
   emacsCustom = if
     builtins.pathExists "/etc/nixos"
   then null # Use the system emacs on nixos
-  else pkgs.emacsWithPackages (
+  else pkgs.emacs.pkgs.withPackages (
     epkgs: with epkgs; [
       haskell-mode
       markdown-mode
