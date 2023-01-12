@@ -1,5 +1,6 @@
 [
   "_1password",
+  "awscli",
   "coreutils",
   "ctop",
   "delta",
@@ -7,6 +8,7 @@
   "exiftool",
   "fd",
   "ffmpeg",
+  "flyctl",
   "fnm",
   "fswatch",
   "fzf",

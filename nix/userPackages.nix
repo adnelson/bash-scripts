@@ -17,6 +17,8 @@ let
       tuareg
       typescript-mode
       yaml-mode
+      fzf
+      graphql-mode
     ]
   );
 in

@@ -32,7 +32,7 @@ alias reqpe='cd ~/workspace/reasonml/requery/packages/postgres/example'
 alias reqs='cd ~/workspace/reasonml/requery/packages/sqlite'
 alias reqse='cd ~/workspace/reasonml/requery/packages/sqlite/example'
 alias youtube-mp3='ydl --extract-audio --audio-format mp3'
-alias subl='/Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text'
+# alias subl='/Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text'
 alias scrots='cd ~/Screenshots'
 alias pol='cd ~/workspace/politics'
 
