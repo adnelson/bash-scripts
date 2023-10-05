@@ -7,5 +7,5 @@ function showscripts() {
 
 if which fnm > /dev/null; then
   echo "Initializing fnm..."
-  eval "$(fnm env)"
+  eval "$(fnm env --use-on-cd)"
 fi
