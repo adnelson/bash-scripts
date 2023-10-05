@@ -1,6 +1,4 @@
 [
-  "alacritty",
-  "cabal-install",
   "cloc",
   "docker-compose",
   "fd",
@@ -8,13 +6,9 @@
   "jq",
   "ncdu",
   "nix-prefetch-git",
-  "pandoc",
-  "postgresql_14",
+  "postgresql_15",
   "python3",
   "ripgrep",
   "rustup",
-  "silver-searcher",
-  "tree",
-  "weechat",
-  "youtube-dl"
+  "tree"
 ]
