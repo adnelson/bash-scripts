@@ -190,3 +190,9 @@ else
   echo "Unknown shell: '$CURRENT_SHELL'"
 fi
 if [ -e /Users/allennelson/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/allennelson/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/allennelson/workspace/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/allennelson/workspace/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/allennelson/workspace/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/allennelson/workspace/google-cloud-sdk/completion.zsh.inc'; fi

@@ -12,6 +12,7 @@ alias llama_='llama && subl .. && pwd && ls && ghcio -isrc Language.Llama.Types.
 alias ghcio='ghci -XOverloadedStrings'
 alias cbe='cabal exec'
 alias hs='ws && cd haskell'
+alias js='cd ~/workspace/javascript'
 alias s3s='hs && cd s3-streams'
 alias cbi='cabal sandbox init'
 alias fed='cd ~/workspace/haskell/fedallah'
