@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Check if correct number of arguments are provided
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 <script_path> <number_of_runs>"
+    exit 1
+fi
+
+# Store arguments in variables
+script_path=$1
+number_of_runs=$2
+
+# Check if script exists
+if [ ! -f "$script_path" ]; then
+    echo "Script not found: $script_path"
+    exit 1
+fi
+
+total_time=0
+
+# Function to run the script and calculate its execution time
+run_script() {
+    local start_time=$(date +%s.%N)  # Start time in seconds with nanoseconds
+    bash "$script_path" > /dev/null 2>&1  # Execute the script and suppress both stdout and stderr
+    local end_time=$(date +%s.%N)  # End time in seconds with nanoseconds
+    local execution_time=$(echo "$end_time - $start_time" | bc)  # Calculate execution time
+    echo "Run $1: $execution_time seconds"
+    echo "Run $1: $execution_time seconds" >> /tmp/run_script_time.log
+}
+
+# Loop to run the script N times in parallel
+for (( i=1; i<=$number_of_runs; i++ )); do
+    run_script "$i" &  # Run the script in background
+done
+
+# Wait for all background processes to finish
+wait
+
+# Calculate total and average time
+while read -r line; do
+    execution_time=$(echo "$line" | awk '{print $3}')
+    total_time=$(echo "$total_time + $execution_time" | bc)  # Add to total time
+done < /tmp/run_script_time.log
+
+average_time=$(echo "scale=3; $total_time / $number_of_runs" | bc)
+
+echo "Total time taken for $number_of_runs runs: $total_time seconds"
+echo "Average time taken for each run: $average_time seconds"
+
+# Clean up temporary file
+rm /tmp/run_script_time.log
