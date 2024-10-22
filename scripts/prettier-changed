@@ -2,4 +2,4 @@
 
 git status | rg 'modified:|new file:' | rg '\.(t|j)sx?$' | sd '(both )?modified:|new file:' '' | xargs yarn prettier --write
 
-git status | rg 'renamed:' | rg '\.(t|j)sx?$' | sd 'renamed:.* \->(.*)' '$1' | xargs yarn prettier --write
+git status | rg 'renamed:' | rg '\.(ts|tsx||js|json)?$' | sd 'renamed:.* \->(.*)' '$1' | xargs yarn prettier --write

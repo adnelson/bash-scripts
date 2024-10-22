@@ -24,6 +24,9 @@ export LANG=en_US.UTF-8
 
 if [[ -z "$CURRENT_SHELL" ]]; then
   CURRENT_SHELL="$(echo $0 | tr / '\n' | tr -d '-' | tail -n1)"
+  if [[ "$CURRENT_SHELL" == '.zshrc' ]]; then
+    CURRENT_SHELL=zsh
+  fi
   if [[ -z "$CURRENT_SHELL" ]]; then
     if [[ -n "$BASH_VERSION" ]]; then
       CURRENT_SHELL=bash
@@ -64,7 +67,7 @@ fi
 if [[ -z $IN_NIX_SHELL ]]; then
   export PATH="$HOME/bin:/run/wrappers/bin:$HOME/.secrets/scripts:$HOME/.bash-scripts/scripts:$HOME/.nix-profile/bin:/etc/profiles/per-user/$(whoami)/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
   if [[ -z "$IS_NIXOS" ]]; then
-    export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin"
   fi
 fi
 

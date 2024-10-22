@@ -12,19 +12,21 @@ if (!fileNames.length) {
 
 console.log({fileNames})
 
+const suffixes = [".re", ".rei", ".ml", ".mli"];
+
 fileNames.forEach((fileName) => {
-  if (!fileName.endsWith(".re") && !fileName.endsWith(".rei")) {
-    throw new Error(`Not a reason file: ${fileName}`);
+  if (!suffixes.some(s => fileName.endsWith(s))) {
+    throw new Error(`Not a convertible file: ${fileName}`);
   }
 
-  const outFileName = fileName.replace(/.re(i?)$/, ".res$1");
+  const outFileName = fileName.replace(/.(re|ml)(i?)$/, ".res$2");
 
   if (existsSync(outFileName)) {
     throw new Error(`${outFileName} already exists`);
   }
 
   execFile(
-    `${HOME}/workspace/draftbit/draftbit/builder/node_modules/.bin/bsc`,
+    `${HOME}/.yarn/bin/bsc`,
     ["-format", fileName],
     (error, rescriptSyntax, stderr) => {
       if (error) {

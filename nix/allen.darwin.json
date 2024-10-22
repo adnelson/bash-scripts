@@ -19,6 +19,7 @@
   "gnused",
   "llvm",
   "opam",
+  "pandoc",
   "pspg",
   "redis",
   "sd",
