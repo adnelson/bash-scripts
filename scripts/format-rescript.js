@@ -44,7 +44,8 @@ if (existsSync("package.json")) {
 }
 
 if (!formatter) {
-  throw "Couldn't find formatter based on package.json"
+  console.error("Couldn't find formatter based on package.json")
+  process.exit(0);
 }
 
 fileNames.forEach(fileName => {

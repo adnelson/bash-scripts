@@ -10,8 +10,6 @@ if (!fileNames.length) {
   throw new Error(`Usage: ${basename(__filename)} <fileName>`);
 }
 
-console.log({fileNames})
-
 const suffixes = [".re", ".rei", ".ml", ".mli"];
 
 fileNames.forEach((fileName) => {
