@@ -38,6 +38,7 @@ alias gdss='PAGER= git diff --shortstat'
 alias gdsss='gdss --staged'
 alias grl='git reflog'
 alias gcp='git cherry-pick'
+
 # Detach from current branch, without changing the source state
 alias gcod='git checkout --detach'
 
@@ -108,6 +109,7 @@ alias gco='git checkout'
 alias master='git checkout master'
 alias develop='git checkout develop'
 alias gsui='git submodule update --init'
+alias rmaster='git fetch && git branch -D master && git checkout master'
 
 ###### Committing ########
 
@@ -256,9 +258,9 @@ curcommit() {
 alias gl='git pull'
 
 # Push to $(default_remote), current branch.
-alias gloc='git pull $(default_remote) $(cur) && git submodule update --init'
+alias gloc='git pull $(default_remote) $(cur) --no-edit && git submodule update --init'
 alias groc='git pull --rebase $(default_remote) $(cur) && git submodule update --init'
-alias glom='git pull origin master'
+alias glom='git pull origin master --no-edit'
 
 # Stashes currently staged files.
 alias stash='git stash'

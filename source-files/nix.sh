@@ -1,3 +1,4 @@
+export NIX_BUILD_GROUP_ID=30000
 if [[ -n "$IN_NIX_SHELL" ]]; then
   return
 fi

@@ -1,6 +1,7 @@
 [
   "_1password",
   "awscli",
+  "cabal-install",
   "coreutils",
   "ctop",
   "delta",
@@ -11,6 +12,7 @@
   "fnm",
   "fswatch",
   "fzf",
+  "ghc",
   "git",
   "git-lfs",
   "github-cli",
@@ -23,6 +25,7 @@
   "pspg",
   "redis",
   "sd",
+  "stack",
   "watch",
   "watchman",
   "wget",
