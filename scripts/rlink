@@ -2,7 +2,7 @@
 
 # Make a shim for the `readlink -f` command because standard OSX doesn't have it
 if uname -a | grep -iq darwin; then
-  python -c "import os; print(os.path.realpath('$1'))"
+  python3 -c "import os; print(os.path.realpath('$1'))"
 else
   readlink -f $1
 fi

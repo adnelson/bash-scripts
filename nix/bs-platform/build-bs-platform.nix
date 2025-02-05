@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     ln -s $out/lib/bsrefmt $out/bin/bsrefmt
 
     # Remove this postinstall script from the package.json
-    python <<EOF
+    python3 <<EOF
     import json
     pkg_j = json.load(open('$out/package.json'))
     del pkg_j['scripts']['postinstall']

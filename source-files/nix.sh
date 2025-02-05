@@ -13,7 +13,7 @@ alias nsp="nix-shell --pure"
 
 get_nixos_version() {
     local version=$(nixos-version)
-    python <<EOF
+    python3 <<EOF
 import re, sys
 m = re.match("^(\d+\.\d+).*", "$version")
 print(m.group(1))
@@ -152,7 +152,7 @@ latest_nixpkgs() {
   [[ -n $url ]] || { echo "Invalid channel '$channel'" >&2; return; }
   local res=$(curl -Ls -o /dev/null -w %{url_effective} $url)
   echo $res >&2
-  python -c "import re; print(re.match(r'.*?(\w+)/?$', '$res').group(1))"
+  python3 -c "import re; print(re.match(r'.*?(\w+)/?$', '$res').group(1))"
 }
 
 nix-channel-update() {

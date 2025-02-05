@@ -109,7 +109,7 @@ alias gco='git checkout'
 alias master='git checkout master'
 alias develop='git checkout develop'
 alias gsui='git submodule update --init'
-alias rmaster='git fetch && git branch -D master && git checkout master'
+alias rmaster='git fetch && git checkout --detach && git branch -D master && git checkout master'
 
 ###### Committing ########
 
@@ -236,7 +236,7 @@ function ignore() {
 function exclude() {
     local toplevel=$(git rev-parse --show-toplevel)
     local pycmd="import os; print(os.path.relpath('$PWD', '$toplevel'))"
-    local rel=$(python -c "$pycmd")
+    local rel=$(python3 -c "$pycmd")
     for pth in "$@"; do
         echo $rel/$pth >> $toplevel/.git/info/excludes
         git rm -rf --cached $pth >/dev/null 2>&1 || true

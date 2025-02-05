@@ -48,7 +48,7 @@ function agps() (
 shttp() {
   local _PORT=${1:-8000}
   curl -s icanhazip.com
-  python -m http.server $_PORT
+  python3 -m http.server $_PORT
 }
 
 alias ei3='e ~/.i3/config'
@@ -164,7 +164,7 @@ clean_emacs() {
 
 alias secrets='cd ~/.secrets'
 
-alias j='python -m json.tool --sort-keys'
+alias j='python3 -m json.tool --sort-keys'
 
 # Run a process and check its memory usage
 mem() {

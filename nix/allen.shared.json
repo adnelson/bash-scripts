@@ -7,7 +7,6 @@
   "ncdu",
   "nix-prefetch-git",
   "postgresql_15",
-  "python3",
   "ripgrep",
   "rustup",
   "tree"

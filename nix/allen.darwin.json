@@ -20,6 +20,7 @@
   "gnupg",
   "gnused",
   "llvm",
+  "ollama",
   "opam",
   "pandoc",
   "pspg",

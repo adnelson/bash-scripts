@@ -2,7 +2,7 @@ if [[ $(id -u) == 0 ]]; then
   IS_ROOT=1
 fi
 
-if [[ $(python -c 'import sys;print(sys.platform)') == darwin ]]; then
+if [[ $(python3 -c 'import sys;print(sys.platform)') == darwin ]]; then
   IS_DARWIN=1
 fi
 

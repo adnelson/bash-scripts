@@ -19,7 +19,7 @@ fi
 
 echo "Setting resolution of bs-platform to $bs_platform_dir"
 
-python <<EOF
+python3 <<EOF
 import json
 pkg_j = json.load(open('package.json'))
 resolutions = pkg_j.setdefault('resolutions', {})

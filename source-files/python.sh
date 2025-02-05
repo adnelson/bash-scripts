@@ -9,7 +9,7 @@ fi
 alias ipy='ipython'
 
 # because it's a common misspelling
-alias pyton='python'
+alias pyton='python3'
 
 # python work folder
 alias py='cd ~/workspace/python'
