@@ -6,7 +6,7 @@
   "jq",
   "ncdu",
   "nix-prefetch-git",
-  "postgresql_15",
+  "postgresql_16",
   "ripgrep",
   "rustup",
   "tree"

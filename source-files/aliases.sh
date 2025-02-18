@@ -24,3 +24,4 @@ function add-js() {
 }
 alias ydlt='ydl-twitter'
 alias mus='cd ~/Music'
+alias tf='cd ~/workspace/javascript/tellphone'
