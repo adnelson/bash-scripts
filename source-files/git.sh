@@ -109,7 +109,15 @@ alias gco='git checkout'
 alias master='git checkout master'
 alias develop='git checkout develop'
 alias gsui='git submodule update --init'
-alias rmaster='git fetch && git checkout --detach && git branch -D master && git checkout master'
+rmaster() {
+  if [[ "$(cur)" = 'master' ]]; then
+    git pull origin master
+  else
+    git fetch
+    git branch -D master
+    git checkout master
+  fi
+}
 
 ###### Committing ########
 
