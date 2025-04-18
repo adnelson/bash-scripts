@@ -29,8 +29,10 @@
   "sd",
   "sox",
   "stack",
+  "uv",
   "watch",
   "watchman",
   "wget",
-  "yt-dlp"
+  "yt-dlp",
+  "zlib"
 ]
