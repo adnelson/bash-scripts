@@ -9,7 +9,7 @@
   "brave",
   "gcc",
   "bind",
-  "postgresql_11",
+  "postgresql_17",
   "cloc",
   "rustup",
   "spotify",

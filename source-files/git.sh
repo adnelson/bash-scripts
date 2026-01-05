@@ -119,6 +119,16 @@ rmaster() {
   fi
 }
 
+rprod() {
+  if [[ "$(cur)" = 'production' ]]; then
+    git pull origin production
+  else
+    git fetch
+    git branch -D production
+    git checkout production
+  fi
+}
+
 ###### Committing ########
 
 # Commits with a message
@@ -269,6 +279,8 @@ alias gl='git pull'
 alias gloc='git pull $(default_remote) $(cur) --no-edit && git submodule update --init'
 alias groc='git pull --rebase $(default_remote) $(cur) && git submodule update --init'
 alias glom='git pull origin master --no-edit'
+alias glocm='gloc && glom'
+alias gploc='gloc && glom && gpoc'
 
 # Stashes currently staged files.
 alias stash='git stash'
