@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+const fs = require('fs');
+
+// Function to adjust timestamps in the .srt file
+function adjustSrtTimestamps(filePath, timeAdjustment, outputPath) {
+  try {
+    const data = fs.readFileSync(filePath, 'utf8');
+    const lines = data.split('\n');
+    const adjustedLines = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+
+      if (/^\d+$/.test(line)) {
+        adjustedLines.push(line); // Keep subtitle index
+      } else if (/(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> (\d{2}):(\d{2}):(\d{2}),(\d{3})/.test(line)) {
+        // Parse timestamps
+        const timestampRegex = /(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> (\d{2}):(\d{2}):(\d{2}),(\d{3})/;
+        const matches = line.match(timestampRegex);
+
+        // Extract timestamp components
+        const hoursStart = parseInt(matches[1], 10);
+        const minutesStart = parseInt(matches[2], 10);
+        const secondsStart = parseInt(matches[3], 10);
+        const millisecondsStart = parseInt(matches[4], 10);
+
+        const hoursEnd = parseInt(matches[5], 10);
+        const minutesEnd = parseInt(matches[6], 10);
+        const secondsEnd = parseInt(matches[7], 10);
+        const millisecondsEnd = parseInt(matches[8], 10);
+
+        // Calculate new timestamps with adjustment
+        const startTime = (hoursStart * 3600000 + minutesStart * 60000 + secondsStart * 1000 + millisecondsStart) + timeAdjustment;
+        const endTime = (hoursEnd * 3600000 + minutesEnd * 60000 + secondsEnd * 1000 + millisecondsEnd) + timeAdjustment;
+
+        // Format adjusted timestamps
+        const formatTimestamp = (timestamp) => {
+          const date = new Date(timestamp);
+          return `${('0' + date.getUTCHours()).slice(-2)}:${('0' + date.getUTCMinutes()).slice(-2)}:${('0' + date.getUTCSeconds()).slice(-2)},${('00' + date.getUTCMilliseconds()).slice(-3)}`;
+        };
+
+        const adjustedLine = `${formatTimestamp(startTime)} --> ${formatTimestamp(endTime)}`;
+        adjustedLines.push(adjustedLine);
+      } else {
+        adjustedLines.push(line);
+      }
+    }
+
+    const adjustedContent = adjustedLines.join('\n');
+    fs.writeFileSync(outputPath, adjustedContent, 'utf8');
+    console.log(`Adjusted file saved to: ${outputPath}`);
+  } catch (err) {
+    console.error('Error:', err);
+  }
+}
+
+// Get command line arguments
+const args = process.argv.slice(2);
+
+// Check if arguments are provided correctly
+if (args.length !== 3) {
+  console.error('Usage: node script.js <inputFilePath> <timeOffsetInMilliseconds> <outputFilePath>');
+  process.exit(1);
+}
+
+// Example usage: node script.js input.srt 5000 output_adjusted.srt
+const inputFilePath = args[0];
+const timeOffset = parseInt(args[1], 10);
+const outputFilePath = args[2];
+
+adjustSrtTimestamps(inputFilePath, timeOffset, outputFilePath);
