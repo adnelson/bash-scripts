@@ -72,8 +72,7 @@ checkuncommitted ~/.secrets
 
 # Check for non-executable files in the scripts directory
 function findnonexecutables() {
-  if ! which fd; then return; fi
-  comm -3 <(fd '.*' "$1") <(fd '.*' "$1" -t x)
+  find "$1" -type f ! \( -perm -100 -o -perm -010 -o -perm -001 \)
 }
 
 non_execs=$(findnonexecutables $SH_CONFIG/scripts)
