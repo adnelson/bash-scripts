@@ -24,7 +24,7 @@ export LANG=en_US.UTF-8
 
 if [[ -z "$CURRENT_SHELL" ]]; then
   CURRENT_SHELL="$(echo $0 | tr / '\n' | tr -d '-' | tail -n1)"
-  if [[ "$CURRENT_SHELL" == '.zshrc' ]]; then
+  if [[ "$CURRENT_SHELL" == '.zshrc' ]] || [[ "$CURRENT_SHELL" == 'shrc.sh' ]]; then
     CURRENT_SHELL=zsh
   fi
   if [[ -z "$CURRENT_SHELL" ]]; then
