@@ -115,11 +115,11 @@ if [[ -d ~/.nix-profile ]]; then
   export PATH="$HOME/.nix-profile/bin:$PATH"
 fi
 
-if [[ -e ~/.nix-profile/etc/ssl/certs/ca-bundle.crt ]]; then
-  export NIX_SSL_CERT_FILE=$(readlink -f ~/.nix-profile/etc/ssl/certs/ca-bundle.crt)
-else
-  echo "Warning: no ca-bundle installed in nix profile"
-fi
+# if [[ -e ~/.nix-profile/etc/ssl/certs/ca-bundle.crt ]]; then
+#   export NIX_SSL_CERT_FILE=$(readlink -f ~/.nix-profile/etc/ssl/certs/ca-bundle.crt)
+# else
+#   echo "Warning: no ca-bundle installed in nix profile"
+# fi
 
 if [[ -d ~/nixpkgs ]]; then
   export NIX_PATH=$HOME:nixpkgs=$HOME/nixpkgs
