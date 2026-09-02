@@ -1,3 +1,5 @@
+alias fp='cd ~/workspace/alphahuntr/alphahuntr'
+alias al='cd ~/workspace/alphahuntr/alphahuntr'
 alias killz='$HOME/workspace/python/killproc.py'
 alias dri='docker run -it --rm'
 alias vlc='open -a vlc'

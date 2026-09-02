@@ -107,6 +107,7 @@ delete_current_branch() {
 # Checkouts
 alias gco='git checkout'
 alias master='git checkout master'
+alias prod='git checkout production'
 alias develop='git checkout develop'
 alias gsui='git submodule update --init'
 rmaster() {
@@ -162,6 +163,9 @@ gpoc() {
   if [[ $(cur) == "master" ]]; then
     echo "Current branch is master; use gpom" >&2
     return 1
+  elif [[ $(cur) == "production" ]]; then
+    echo "Current branch is production; use gpop" >&2
+    return 1
   else
     git push $(default_remote) $(git rev-parse --abbrev-ref HEAD) $@
   fi
@@ -174,6 +178,16 @@ gpom() {
     return 1
   else
     git push $(default_remote) master $@
+  fi
+}
+
+# Push to $(default_remote) production. Use with caution! :)
+gpop() {
+  if [[ $(cur) != "production" ]]; then
+    echo "Not on production branch" >&2
+    return 1
+  else
+    git push $(default_remote) production $@
   fi
 }
 
@@ -281,6 +295,7 @@ alias groc='git pull --rebase $(default_remote) $(cur) && git submodule update -
 alias glom='git pull origin master --no-edit'
 alias glocm='gloc && glom'
 alias gploc='gloc && glom && gpoc'
+alias gmm='git merge master --no-edit'
 
 # Stashes currently staged files.
 alias stash='git stash'
