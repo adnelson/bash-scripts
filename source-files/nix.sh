@@ -12,8 +12,8 @@ export MANPATH=/run/current-system/sw/share/man:$MANPATH
 alias nsp="nix-shell --pure"
 
 get_nixos_version() {
-    local version=$(nixos-version)
-    python3 <<EOF
+  local version=$(nixos-version)
+  python3 <<EOF
 import re, sys
 m = re.match("^(\d+\.\d+).*", "$version")
 print(m.group(1))
@@ -44,32 +44,32 @@ elif [[ -d $HOME/nixpkgs ]]; then
   NIXPKGS=$HOME/nixpkgs
 fi
 
-pixi () {
-    nixi "pythonPackages.$1"
+pixi() {
+  nixi "pythonPackages.$1"
 }
-hixi () {
-    nixi "haskellPackages.$1"
+hixi() {
+  nixi "haskellPackages.$1"
 }
 
 ncg() {
   nix-collect-garbage -d || ncg
 }
-pyrm () {
+pyrm() {
   nix-env -e "python2.7-$1"
 }
 alias nb='nix-build'
 alias lsp='PAGER= nix-env -q'
 
 tmpnix() {
-    local chan="$1"
-    if [ ! -e ~/.nix-defexpr/channels_root/$chan ]; then
-	echo "No such channel: $chan" >&2
-        return 1
-    fi
-    local dir=$(tempdir make)
-    cp -r ~/.nix-defexpr/channels_root/$chan/* $dir
-    chmod -R +w $dir
-    echo $dir
+  local chan="$1"
+  if [ ! -e ~/.nix-defexpr/channels_root/$chan ]; then
+    echo "No such channel: $chan" >&2
+    return 1
+  fi
+  local dir=$(tempdir make)
+  cp -r ~/.nix-defexpr/channels_root/$chan/* $dir
+  chmod -R +w $dir
+  echo $dir
 }
 
 update_nixpkgs() (
@@ -103,12 +103,12 @@ update_nixos() {
 
 push_nixos_config() (
   cd /etc/nixos
-  sudo git push origin master
+  sudo git push origin "$(default_branch origin)"
 )
 
 update_channels() {
-    nix-channel --update
-    nixlist -r >/dev/null
+  nix-channel --update
+  nixlist -r >/dev/null
 }
 
 if [[ -d ~/.nix-profile ]]; then
@@ -149,7 +149,10 @@ latest_nixpkgs() {
   else
     local url=$(nix-channel --list | grep "^$channel " | awk '{print $2}')
   fi
-  [[ -n $url ]] || { echo "Invalid channel '$channel'" >&2; return; }
+  [[ -n $url ]] || {
+    echo "Invalid channel '$channel'" >&2
+    return
+  }
   local res=$(curl -Ls -o /dev/null -w %{url_effective} $url)
   echo $res >&2
   python3 -c "import re; print(re.match(r'.*?(\w+)/?$', '$res').group(1))"
@@ -173,7 +176,7 @@ nix-channel-update() {
 
 alias lsp='PAGER= nix-env -q'
 nixrm() {
-    lsp | egrep $1 | xargs nix-env -e
+  lsp | egrep $1 | xargs nix-env -e
 }
 alias nse='nix-shell --pure -A env'
 
@@ -191,24 +194,24 @@ rm_nix_result_links() {
   fi
 }
 
-findnix () {
-    if [[ $# < 1 ]]; then
-        echo "Need at least one argument." >&2
-        return 1
-    fi
-    command="grep -r '$1' $NIXPKGS"
-    shift
-    for arg in $@; do
-        command+=" | grep '$arg'"
-    done
-    eval "$command"
+findnix() {
+  if [[ $# < 1 ]]; then
+    echo "Need at least one argument." >&2
+    return 1
+  fi
+  command="grep -r '$1' $NIXPKGS"
+  shift
+  for arg in $@; do
+    command+=" | grep '$arg'"
+  done
+  eval "$command"
 }
 
 build_random() {
   contents=$(uuidgen)
   echo "Building random text $contents"
   nix_file=$(mktemp --suffix=.nix)
-  cat <<EOF > $nix_file
+  cat <<EOF >$nix_file
 with import <nixpkgs> {}; writeText "random" "$contents"
 EOF
   cat $nix_file
@@ -252,7 +255,7 @@ if [[ $(id -u) == 0 ]]; then
       exit 1
     fi
 
-    git push origin "${1:-master}"
+    git push origin "${1:-$(default_branch origin)}"
   )
 fi
 
@@ -270,6 +273,6 @@ is_in_nixpkgs() {
 }
 
 # Install a new nix package into the user packages
-nixi () {
-    nixi.py "$@"
+nixi() {
+  nixi.py "$@"
 }

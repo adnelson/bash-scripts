@@ -8,7 +8,6 @@ if [ "$CURRENT_SHELL" = bash ]; then
   fi
 fi
 
-
 # Detect the default remote to use. First check if
 # adnelson exists, otherwise origin.
 default_remote() {
@@ -21,6 +20,34 @@ default_remote() {
   else
     echo "Using remote origin" 1>&2
     echo origin
+  fi
+}
+
+# Return the default branch for a remote. This normally uses the locally
+# cached remote HEAD. If it is missing, ask the remote to set it once, then
+# fall back to a locally fetched main or master branch when offline.
+default_branch() {
+  local remote="${1:-$(default_remote)}"
+  local ref
+
+  ref=$(git symbolic-ref --quiet --short \
+    "refs/remotes/$remote/HEAD" 2>/dev/null)
+
+  if [[ -z "$ref" ]]; then
+    git remote set-head "$remote" --auto >/dev/null 2>&1
+    ref=$(git symbolic-ref --quiet --short \
+      "refs/remotes/$remote/HEAD" 2>/dev/null)
+  fi
+
+  if [[ -n "$ref" ]]; then
+    printf '%s\n' "${ref#"$remote"/}"
+  elif git show-ref --verify --quiet "refs/remotes/$remote/main"; then
+    printf '%s\n' main
+  elif git show-ref --verify --quiet "refs/remotes/$remote/master"; then
+    printf '%s\n' master
+  else
+    echo "Unable to determine the default branch for '$remote'" >&2
+    return 1
   fi
 }
 
@@ -95,28 +122,38 @@ gbd() {
 
 # Delete the current branch
 delete_current_branch() {
-  local branch_name=$(cur)
+  local branch_name target
+  branch_name=$(cur)
   if [[ -z "$1" ]]; then
-    git checkout master
+    target=$(default_branch) || return
   else
-    git checkout $1
+    target=$1
   fi
-  gbd $branch_name || git checkout $branch_name
+  git checkout "$target" || return
+  gbd "$branch_name" || git checkout "$branch_name"
 }
 
 # Checkouts
 alias gco='git checkout'
-alias master='git checkout master'
+master() {
+  local branch
+  branch=$(default_branch) || return
+  git checkout "$branch"
+}
 alias prod='git checkout production'
 alias develop='git checkout develop'
 alias gsui='git submodule update --init'
 rmaster() {
-  if [[ "$(cur)" = 'master' ]]; then
-    git pull origin master
+  local remote branch
+  remote=$(default_remote) || return
+  branch=$(default_branch "$remote") || return
+
+  if [[ "$(cur)" = "$branch" ]]; then
+    git pull "$remote" "$branch"
   else
-    git fetch
-    git branch -D master
-    git checkout master
+    git fetch "$remote"
+    git branch -D "$branch"
+    git checkout "$branch"
   fi
 }
 
@@ -145,7 +182,7 @@ alias gcan='git commit --amend --no-edit'
 
 # Adds a file to the previous commit (as if you had commited it then).
 function gam() {
-    git add --all $1 && git commit --amend --no-edit
+  git add --all $1 && git commit --amend --no-edit
 }
 
 # Reperforms the last commit, letting you modify the commit message, and
@@ -160,24 +197,32 @@ alias gpo='git push $(default_remote)'
 
 # Push to $(default_remote), current branch.
 gpoc() {
-  if [[ $(cur) == "master" ]]; then
-    echo "Current branch is master; use gpom" >&2
+  local remote branch
+  remote=$(default_remote) || return
+  branch=$(default_branch "$remote") || return
+
+  if [[ $(cur) == "$branch" ]]; then
+    echo "Current branch is the default branch ($branch); use gpom" >&2
     return 1
   elif [[ $(cur) == "production" ]]; then
     echo "Current branch is production; use gpop" >&2
     return 1
   else
-    git push $(default_remote) $(git rev-parse --abbrev-ref HEAD) $@
+    git push "$remote" "$(git rev-parse --abbrev-ref HEAD)" "$@"
   fi
 }
 
-# Push to $(default_remote) master. Use with caution! :)
+# Push the default branch to $(default_remote). Use with caution! :)
 gpom() {
-  if [[ $(cur) != "master" ]]; then
-    echo "Not on master branch" >&2
+  local remote branch
+  remote=$(default_remote) || return
+  branch=$(default_branch "$remote") || return
+
+  if [[ $(cur) != "$branch" ]]; then
+    echo "Not on default branch ($branch)" >&2
     return 1
   else
-    git push $(default_remote) master $@
+    git push "$remote" "$branch" "$@"
   fi
 }
 
@@ -208,8 +253,13 @@ alias gpfom='gpom --force'
 # on top of those.
 alias rebo='git pull --rebase $(default_remote)'
 
-# Same as above, but for the `master` branch.
-alias reb='git pull --rebase $(default_remote) master'
+# Same as above, but for the default branch.
+reb() {
+  local remote branch
+  remote=$(default_remote) || return
+  branch=$(default_branch "$remote") || return
+  git pull --rebase "$remote" "$branch" "$@"
+}
 
 # Same as above, but uses `develop` branch.
 alias rebd='git pull --rebase $(default_remote) develop'
@@ -226,7 +276,7 @@ alias grs='git rebase --skip'
 # Interactive rebase of the last `n` files, to collapse multiple commits
 # into a single commit.
 rebi() {
-    git rebase -i "HEAD~$1"
+  git rebase -i "HEAD~$1"
 }
 
 ########## Staging files and reverting changes ###########
@@ -257,24 +307,23 @@ alias gundo='git reset --soft HEAD~1'
 
 # Adds a file to your gitignore.
 function ignore() {
-    for pth in "$@"; do
-        echo $pth >> .gitignore
-        git add .gitignore
-        git rm -rf --cached $pth >/dev/null 2>&1 || true
-    done
+  for pth in "$@"; do
+    echo $pth >>.gitignore
+    git add .gitignore
+    git rm -rf --cached $pth >/dev/null 2>&1 || true
+  done
 }
 
 # Adds a file to your git excludes file.
 function exclude() {
-    local toplevel=$(git rev-parse --show-toplevel)
-    local pycmd="import os; print(os.path.relpath('$PWD', '$toplevel'))"
-    local rel=$(python3 -c "$pycmd")
-    for pth in "$@"; do
-        echo $rel/$pth >> $toplevel/.git/info/excludes
-        git rm -rf --cached $pth >/dev/null 2>&1 || true
-    done
+  local toplevel=$(git rev-parse --show-toplevel)
+  local pycmd="import os; print(os.path.relpath('$PWD', '$toplevel'))"
+  local rel=$(python3 -c "$pycmd")
+  for pth in "$@"; do
+    echo $rel/$pth >>$toplevel/.git/info/excludes
+    git rm -rf --cached $pth >/dev/null 2>&1 || true
+  done
 }
-
 
 # Return the name of the current branch.
 cur() {
@@ -292,10 +341,19 @@ alias gl='git pull'
 # Push to $(default_remote), current branch.
 alias gloc='git pull $(default_remote) $(cur) --no-edit && git submodule update --init'
 alias groc='git pull --rebase $(default_remote) $(cur) && git submodule update --init'
-alias glom='git pull origin master --no-edit'
+glom() {
+  local remote branch
+  remote=$(default_remote) || return
+  branch=$(default_branch "$remote") || return
+  git pull "$remote" "$branch" --no-edit "$@"
+}
 alias glocm='gloc && glom'
 alias gploc='gloc && glom && gpoc'
-alias gmm='git merge master --no-edit'
+gmm() {
+  local branch
+  branch=$(default_branch) || return
+  git merge "$branch" --no-edit "$@"
+}
 
 # Stashes currently staged files.
 alias stash='git stash'
@@ -305,12 +363,14 @@ alias unstash='git stash apply'
 
 # Adds a file to the current commit.
 function ninja() {
-    ga $1; gcan
+  ga $1
+  gcan
 }
 
 # Ninjas a file and pushes.
 function ninjap() {
-    ninja $1; gpfoc
+  ninja $1
+  gpfoc
 }
 
 function setgituser() {
@@ -318,14 +378,14 @@ function setgituser() {
 }
 
 aclone() {
-    for repo in "$@"; do
-        git clone ssh://git@github.com/adnelson/$repo || return 1
-        (cd $repo && setgituser)
-    done
+  for repo in "$@"; do
+    git clone ssh://git@github.com/adnelson/$repo || return 1
+    (cd $repo && setgituser)
+  done
 }
 
 addremote() {
-  local name="origin";
+  local name="origin"
   if [ -n "$2" ]; then
     name=$1
     shift
@@ -348,11 +408,10 @@ ghclone() {
 addgit() {
   local aname=$1
   local acmd=$2
-  echo "alias $aname='$acmd'" >> $SH_CONFIG/git.sh
+  echo "alias $aname='$acmd'" >>$SH_CONFIG/git.sh
   reload
 }
 alias grv='git remote -v'
-
 
 # Remove a tag
 rmtag() {
@@ -368,25 +427,37 @@ fi
 
 alias lura="git log --graph --all --format='%C(auto)%h [%Cblue%an %Creset⧗ %Cgreen%ar%C(reset)%C(auto)] → %s%d' --color"
 
-# Delete local branches which have already been merged to master.
+# Delete local branches which have already been merged to the default branch.
 function rm_merged_branches() {
-  for branch in $(git branch --merged master | grep -v '\bmaster\b'); do
-    gbd $branch
+  local default branch
+  default=$(default_branch) || return
+  for branch in $(git branch --format='%(refname:short)' --merged "$default"); do
+    [[ "$branch" == "$default" ]] && continue
+    gbd "$branch"
   done
 }
 
 alias gsu='git status --untracked-files=no'
 
-
 function cleanremotebranches() {
-  git fetch origin
-  git branch --remote --merged | grep -v HEAD | grep -v master | grep origin | awk -F/ '{print $2}' | awk '{print $1}' | xargs -I{} git push origin :{}
+  local remote branch
+  remote=$(default_remote) || return
+  branch=$(default_branch "$remote") || return
+  git fetch "$remote"
+  git branch --format='%(refname:short)' --remote --merged | while read remote_branch; do
+    [[ "$remote_branch" == "$remote/HEAD" ]] && continue
+    [[ "$remote_branch" == "$remote/$branch" ]] && continue
+    [[ "$remote_branch" != "$remote/"* ]] && continue
+    git push "$remote" --delete "${remote_branch#"$remote"/}"
+  done
 }
 
 function cleanbranches() (
-  git branch --merged master | grep -v master | grep -v "\*" | while read branch; do
+  default=$(default_branch) || return
+  git branch --format='%(refname:short)' --merged "$default" | while read branch; do
+    [[ "$branch" == "$default" ]] && continue
     echo "Dangling branch: $branch"
-    git branch -D $branch
+    git branch -D "$branch"
   done
 )
 
@@ -398,12 +469,12 @@ function add-my-remote() {
   fi
 }
 
-function git-to-patch-file () {
+function git-to-patch-file() {
   local _path="$1"
   if [[ -z $_path ]]; then
     git diff -s | tail -n +3
   else
-    git diff -s | tail -n +3 > $_path
+    git diff -s | tail -n +3 >$_path
   fi
 }
 
@@ -412,8 +483,10 @@ alias rename-branch='git branch -m'
 alias is-clean='git diff-index HEAD --quiet --exit-code'
 
 function reset-master() {
-  if [ $(cur) != master ]; then
-    echo "Not on master branch"
+  local branch
+  branch=$(default_branch) || return
+  if [[ $(cur) != "$branch" ]]; then
+    echo "Not on default branch ($branch)"
     return 1
   elif ! is-clean; then
     echo "Not a clean git state"
@@ -421,7 +494,7 @@ function reset-master() {
   fi
 
   gcod
-  gbd master
+  gbd "$branch"
   gf
   master
   curcommit

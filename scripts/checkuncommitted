@@ -1,15 +1,33 @@
 #!/usr/bin/env bash
 dir=$(rlink "${1:-.}")
-if [[ ! -d "$dir" ]]; then echo "No directory $dir, skipping"; exit 0; fi
+if [[ ! -d "$dir" ]]; then
+  echo "No directory $dir, skipping"
+  exit 0
+fi
 cd "$dir"
 eval "$(if-verbose echo 'set -x')"
 if-verbose echo "Checking git state in $(pwd)"
 
+remote=origin
+default_ref=$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null)
+if [[ -z "$default_ref" ]]; then
+  git remote set-head "$remote" --auto >/dev/null 2>&1
+  default_ref=$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null)
+fi
+
+if [[ -n "$default_ref" ]]; then
+  default_branch=${default_ref#"$remote"/}
+elif git show-ref --verify --quiet "refs/remotes/$remote/main"; then
+  default_branch=main
+elif git show-ref --verify --quiet "refs/remotes/$remote/master"; then
+  default_branch=master
+fi
+
 if git status | grep -iq 'changes not staged'; then
   if-verbose git diff-index HEAD --exit-code
   print-big-warning "You have uncommitted changes in $dir"
-elif [ "$(git rev-parse master)" != "$(git rev-parse origin/master)" ]; then
-  print-big-warning "Local master is out of sync with origin/master in $dir"
+elif [[ -n "$default_branch" ]] && [[ "$(git rev-parse "$default_branch")" != "$(git rev-parse "$remote/$default_branch")" ]]; then
+  print-big-warning "Local $default_branch is out of sync with $remote/$default_branch in $dir"
 else
   if-verbose echo "$(basename $(pwd)) has a clean status"
 fi

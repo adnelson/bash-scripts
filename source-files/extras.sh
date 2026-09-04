@@ -86,7 +86,7 @@ function findhere() {
 
 # Appends another alias to the `extras` file.
 function add() {
-   echo "alias $1='$2'" >> $SH_CONFIG/scripts/extras.sh && reload
+  echo "alias $1='$2'" >>$SH_CONFIG/scripts/extras.sh && reload
 }
 
 alias showpath='echo $PATH | tr ":" "\n"'
@@ -130,7 +130,7 @@ vdf() {
 alias time='/usr/bin/env time'
 if [[ $(id -u) -eq 0 ]]; then
   alias enw='emacs -nw'
-elif grep -q emacs <<< $TERMINFO; then
+elif grep -q emacs <<<$TERMINFO; then
   alias enw='emacsclient'
 else
   alias enw='emacsclient -nw'
@@ -181,34 +181,34 @@ fi
 alias psppshell='cd ~/workspace/other/pspp/pspp-source/pspp-1.0.1 && nix-shell ~/nixpkgs -A pspp'
 
 function encuric() {
-    node -p "encodeURIComponent('$1')"
+  node -p "encodeURIComponent('$1')"
 }
 
 function encuri() {
-    node -p "encodeURI('$1')"
+  node -p "encodeURI('$1')"
 }
 
 function bag() {
-    local needle=$1
-    shift
-    ag "\b$needle\b" "${@}"
+  local needle=$1
+  shift
+  ag "\b$needle\b" "${@}"
 }
 
 function bagl() {
-    local needle=$1
-    shift
-    ag "\b$needle" "${@}"
+  local needle=$1
+  shift
+  ag "\b$needle" "${@}"
 }
 
 function bagr() {
-    local needle=$1
-    shift
-    ag "$needle\b" "${@}"
+  local needle=$1
+  shift
+  ag "$needle\b" "${@}"
 }
 
 # Install xml2json with PYTHON=/usr/bin/python npm install -g xml2json
 function xml2json() {
-    NODE_PATH=$HOME/.npm/lib/node_modules node -e "var fs=require('fs');var xml=fs.readFileSync('$1');var j=require('xml2json').toJson(xml,{object:true});console.log(JSON.stringify(j, null, 2))"
+  NODE_PATH=$HOME/.npm/lib/node_modules node -e "var fs=require('fs');var xml=fs.readFileSync('$1');var j=require('xml2json').toJson(xml,{object:true});console.log(JSON.stringify(j, null, 2))"
 }
 
 alias pjq='paste | jq'
@@ -218,7 +218,7 @@ function pkgversion() {
 }
 
 edit_source_file() {
-    enw ~/.bash-scripts/source-files/${1}.sh
+  enw ~/.bash-scripts/source-files/${1}.sh
 }
 
 # Edit xmonad
@@ -239,16 +239,16 @@ alias xbash='exec bash'
 
 # Creates a directory and enters it. If the directory already exists, then
 # enters it and lists the contents of the directory.
-function mkd () {
-   if ! [[ -e $1 ]] ; then
-      echo "Creating and entering folder $1"
-      mkdir -p $1
-      cd $1
-   else
-      echo "Folder $1 exists, entering. Contents:"
-      cd $1
-      ls
-   fi
+function mkd() {
+  if ! [[ -e $1 ]]; then
+    echo "Creating and entering folder $1"
+    mkdir -p $1
+    cd $1
+  else
+    echo "Folder $1 exists, entering. Contents:"
+    cd $1
+    ls
+  fi
 }
 
 # Commonly used directories.
@@ -279,7 +279,7 @@ push_bash_scripts() (
     exit 1
   fi
 
-  git push origin "${1:-master}"
+  git push origin "${1:-$(default_branch origin)}"
 )
 
 export FZF_DEFAULT_COMMAND='fd --type f'
