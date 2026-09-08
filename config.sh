@@ -101,3 +101,22 @@ export RPROMPT=
 if-verbose echo ok
 
 HISTCONTROL=ignoreboth
+
+if [[ -n ${ZSH_VERSION:-} ]]; then
+  cloud_prompt_info() {
+    local context
+    [[ -n ${AWS_PROFILE:-} ]] || return 0
+    printf '%%F{205}[aws:%s]%%f' "${AWS_PROFILE//\%/%%}"
+
+    context=$(kubectl config current-context 2>/dev/null) || context=''
+    context=${context##*/}
+    [[ -n $context ]] && printf ' %%F{cyan}[kube:%s]%%f' "${context//\%/%%}"
+    printf ' '
+    return 0
+  }
+
+  setopt prompt_subst
+  if [[ $PROMPT != '$(cloud_prompt_info)'* ]]; then
+    PROMPT='$(cloud_prompt_info)'"$PROMPT"
+  fi
+fi

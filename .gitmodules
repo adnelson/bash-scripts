@@ -1,4 +1,4 @@
 [submodule "oh-my-zsh"]
 	path = oh-my-zsh
-	url = https://github.com/robbyrussell/oh-my-zsh.git
-	branch = master
+	url = ssh://git@github.com/adnelson/oh-my-zsh
+	branch = feature/prompt-cloud-context
