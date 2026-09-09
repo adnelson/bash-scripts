@@ -17,13 +17,33 @@ if (Object.prototype.hasOwnProperty.call(process.env, "AWS_PROFILE")) {
 const args = process.argv.slice(2);
 const profile = args[0];
 
-if (args.length !== 1 || !profile || (profile.startsWith("-") && profile !== "--list")) {
-  fail(`usage: ${path.basename(process.argv[1])} PROFILE | --list`);
+if (args.length !== 1 || !profile || (profile.startsWith("-") && !["--list", "--unset"].includes(profile))) {
+  fail(`usage: ${path.basename(process.argv[1])} PROFILE | --list | --unset`);
 }
 
 const configPath =
   process.env.AWS_CONFIG_FILE ||
   path.join(os.homedir(), ".aws", "config");
+
+function clearKubernetesContext() {
+  const result = spawnSync("kubectl", ["config", "unset", "current-context"], {
+    stdio: "inherit",
+  });
+  if (result.error || result.status !== 0) {
+    fail(`Could not clear Kubernetes context; AWS profile was not changed.${result.error ? ` ${result.error.message}` : ""}`);
+  }
+}
+
+function writeConfig(contents) {
+  // Write to a temporary file and rename it into place.
+  const tempPath = `${configPath}.tmp`;
+  try {
+    fs.writeFileSync(tempPath, contents, { mode: 0o600 });
+    fs.renameSync(tempPath, configPath);
+  } catch (error) {
+    fail(`Could not update ${configPath}: ${error.message}`);
+  }
+}
 
 let text;
 try {
@@ -66,6 +86,17 @@ if (profile === "--list") {
   process.exit(0);
 }
 
+if (profile === "--unset") {
+  if (!defaultSection) {
+    console.log("No default profile is configured.");
+    process.exit(0);
+  }
+  clearKubernetesContext();
+  writeConfig(text.slice(0, defaultSection.start) + text.slice(defaultSection.end));
+  console.log("Default profile unset.");
+  process.exit(0);
+}
+
 const source = findSection(text, `profile ${profile}`);
 
 if (!source) {
@@ -74,12 +105,7 @@ if (!source) {
 }
 
 if (profile !== currentProfile) {
-  const result = spawnSync("kubectl", ["config", "unset", "current-context"], {
-    stdio: "inherit",
-  });
-  if (result.error || result.status !== 0) {
-    fail(`Could not clear Kubernetes context; AWS profile was not changed.${result.error ? ` ${result.error.message}` : ""}`);
-  }
+  clearKubernetesContext();
 }
 
 const sourceBody = source.body.replace(
@@ -100,14 +126,7 @@ if (defaultSection) {
   text = newDefault + "\n" + text;
 }
 
-// Write to a temporary file and rename it into place.
-const tempPath = `${configPath}.tmp`;
-try {
-  fs.writeFileSync(tempPath, text, { mode: 0o600 });
-  fs.renameSync(tempPath, configPath);
-} catch (error) {
-  fail(`Could not update ${configPath}: ${error.message}`);
-}
+writeConfig(text);
 
 console.log(`default -> ${profile}`);
 const login = spawnSync("aws", ["sso", "login", "--profile", profile], {
