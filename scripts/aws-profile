@@ -3,48 +3,67 @@
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
+const { spawnSync } = require("child_process");
 
-const profile = process.argv[2];
-
-if (!profile) {
-  console.error(`usage: ${path.basename(process.argv[1])} PROFILE`);
+function fail(message) {
+  console.error(message);
   process.exit(1);
+}
+
+if (Object.prototype.hasOwnProperty.call(process.env, "AWS_PROFILE")) {
+  fail("AWS_PROFILE is set. Run `unset AWS_PROFILE` before using this script.");
+}
+
+const args = process.argv.slice(2);
+const profile = args[0];
+
+if (args.length !== 1 || !profile || (profile.startsWith("-") && profile !== "--list")) {
+  fail(`usage: ${path.basename(process.argv[1])} PROFILE | --list`);
 }
 
 const configPath =
   process.env.AWS_CONFIG_FILE ||
   path.join(os.homedir(), ".aws", "config");
 
-let text = fs.readFileSync(configPath, "utf8");
+let text;
+try {
+  text = fs.readFileSync(configPath, "utf8");
+} catch (error) {
+  fail(`Cannot read ${configPath}: ${error.message}`);
+}
+
+const sections = [...text.matchAll(/^[\t ]*\[([^\]\r\n]+)\][\t ]*\r?$/gm)];
 
 function findSection(text, sectionName) {
-  const header = `[${sectionName}]`;
-  const start = text.indexOf(header);
-
-  if (start === -1) {
+  const index = sections.findIndex((section) => section[1] === sectionName);
+  if (index === -1) {
     return null;
   }
-
-  const bodyStart = text.indexOf("\n", start);
-  if (bodyStart === -1) {
-    return {
-      start,
-      end: text.length,
-      body: "",
-    };
-  }
-
-  const nextHeader = text.slice(bodyStart + 1).search(/^\[[^\]]+\]/m);
-  const end =
-    nextHeader === -1
-      ? text.length
-      : bodyStart + 1 + nextHeader;
-
+  const section = sections[index];
+  const start = section.index;
+  const bodyStart = start + section[0].length + 1;
+  const end = sections[index + 1]?.index ?? text.length;
   return {
     start,
     end,
-    body: text.slice(bodyStart + 1, end),
+    body: text.slice(bodyStart, end),
   };
+}
+
+const defaultSection = findSection(text, "default");
+const currentProfile = defaultSection?.body.match(
+  /^[\t ]*#[\t ]*active-profile[\t ]*=[\t ]*([^\r\n]*)/m,
+)?.[1].trim();
+
+if (profile === "--list") {
+  const profiles = [...new Set(sections
+    .map((section) => section[1])
+    .filter((name) => name.startsWith("profile "))
+    .map((name) => name.slice("profile ".length)))].sort();
+  for (const name of profiles) {
+    console.log(`${name === currentProfile ? "*" : " "} ${name}`);
+  }
+  process.exit(0);
 }
 
 const source = findSection(text, `profile ${profile}`);
@@ -54,12 +73,23 @@ if (!source) {
   process.exit(1);
 }
 
-const defaultSection = findSection(text, "default");
+if (profile !== currentProfile) {
+  const result = spawnSync("kubectl", ["config", "unset", "current-context"], {
+    stdio: "inherit",
+  });
+  if (result.error || result.status !== 0) {
+    fail(`Could not clear Kubernetes context; AWS profile was not changed.${result.error ? ` ${result.error.message}` : ""}`);
+  }
+}
 
+const sourceBody = source.body.replace(
+  /^[\t ]*#[\t ]*active-profile[\t ]*=[^\r\n]*(?:\r?\n|$)/gm,
+  "",
+);
 const newDefault =
   `[default]\n` +
   `# active-profile = ${profile}\n` +
-  source.body;
+  sourceBody + (sourceBody.endsWith("\n") ? "" : "\n");
 
 if (defaultSection) {
   text =
@@ -72,7 +102,18 @@ if (defaultSection) {
 
 // Write to a temporary file and rename it into place.
 const tempPath = `${configPath}.tmp`;
-fs.writeFileSync(tempPath, text, { mode: 0o600 });
-fs.renameSync(tempPath, configPath);
+try {
+  fs.writeFileSync(tempPath, text, { mode: 0o600 });
+  fs.renameSync(tempPath, configPath);
+} catch (error) {
+  fail(`Could not update ${configPath}: ${error.message}`);
+}
 
 console.log(`default -> ${profile}`);
+const login = spawnSync("aws", ["sso", "login", "--profile", profile], {
+  stdio: "inherit",
+});
+if (login.error || login.status !== 0) {
+  console.error(`Default profile is now "${profile}", but SSO login failed.${login.error ? ` ${login.error.message}` : ""}`);
+  process.exit(login.status || 1);
+}

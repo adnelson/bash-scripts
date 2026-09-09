@@ -103,10 +103,32 @@ if-verbose echo ok
 HISTCONTROL=ignoreboth
 
 if [[ -n ${ZSH_VERSION:-} ]]; then
+  aws_prompt_profile() {
+    if [[ -n ${AWS_PROFILE:-} ]]; then
+      print -r -- "$AWS_PROFILE"
+      return 0
+    fi
+
+    local config_file=${AWS_CONFIG_FILE:-$HOME/.aws/config}
+    [[ -r $config_file ]] || return 0
+    awk '
+      /^[[:space:]]*\[/ {
+        in_default = ($0 ~ /^[[:space:]]*\[default\][[:space:]]*$/)
+      }
+      in_default && /^[[:space:]]*#[[:space:]]*active-profile[[:space:]]*=/ {
+        sub(/^[[:space:]]*#[[:space:]]*active-profile[[:space:]]*=[[:space:]]*/, "")
+        sub(/[[:space:]]*$/, "")
+        print
+        exit
+      }
+    ' "$config_file" 2>/dev/null
+  }
+
   cloud_prompt_info() {
-    local context
-    [[ -n ${AWS_PROFILE:-} ]] || return 0
-    printf '%%F{205}[aws:%s]%%f' "${AWS_PROFILE//\%/%%}"
+    local context profile
+    profile=$(aws_prompt_profile)
+    [[ -n $profile ]] || return 0
+    printf '%%F{205}[aws:%s]%%f' "${profile//\%/%%}"
 
     context=$(kubectl config current-context 2>/dev/null) || context=''
     context=${context##*/}
