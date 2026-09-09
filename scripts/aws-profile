@@ -1,0 +1,78 @@
+#!/usr/bin/env node
+
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
+
+const profile = process.argv[2];
+
+if (!profile) {
+  console.error(`usage: ${path.basename(process.argv[1])} PROFILE`);
+  process.exit(1);
+}
+
+const configPath =
+  process.env.AWS_CONFIG_FILE ||
+  path.join(os.homedir(), ".aws", "config");
+
+let text = fs.readFileSync(configPath, "utf8");
+
+function findSection(text, sectionName) {
+  const header = `[${sectionName}]`;
+  const start = text.indexOf(header);
+
+  if (start === -1) {
+    return null;
+  }
+
+  const bodyStart = text.indexOf("\n", start);
+  if (bodyStart === -1) {
+    return {
+      start,
+      end: text.length,
+      body: "",
+    };
+  }
+
+  const nextHeader = text.slice(bodyStart + 1).search(/^\[[^\]]+\]/m);
+  const end =
+    nextHeader === -1
+      ? text.length
+      : bodyStart + 1 + nextHeader;
+
+  return {
+    start,
+    end,
+    body: text.slice(bodyStart + 1, end),
+  };
+}
+
+const source = findSection(text, `profile ${profile}`);
+
+if (!source) {
+  console.error(`Profile "${profile}" not found in ${configPath}`);
+  process.exit(1);
+}
+
+const defaultSection = findSection(text, "default");
+
+const newDefault =
+  `[default]\n` +
+  `# active-profile = ${profile}\n` +
+  source.body;
+
+if (defaultSection) {
+  text =
+    text.slice(0, defaultSection.start) +
+    newDefault +
+    text.slice(defaultSection.end);
+} else {
+  text = newDefault + "\n" + text;
+}
+
+// Write to a temporary file and rename it into place.
+const tempPath = `${configPath}.tmp`;
+fs.writeFileSync(tempPath, text, { mode: 0o600 });
+fs.renameSync(tempPath, configPath);
+
+console.log(`default -> ${profile}`);
