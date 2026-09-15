@@ -103,6 +103,28 @@ if-verbose echo ok
 HISTCONTROL=ignoreboth
 
 if [[ -n ${ZSH_VERSION:-} ]]; then
+  zmodload zsh/parameter
+  autoload -Uz add-zsh-hook
+
+  update_jobs_prompt() {
+    local job job_state pid
+    local -a pids=()
+    # Read the parent shell's job table; command substitutions have no jobs.
+    for job in ${(onk)jobstates}; do
+      job_state=${jobstates[$job]}
+      [[ $job_state == running:* || $job_state == suspended:* ]] || continue
+      # One PID per job (the first process for a pipeline).
+      pid=${job_state#*:*:}
+      pids+=("${pid%%=*}")
+    done
+    jobs_prompt_segment=''
+    if (( ${#pids} )); then
+      jobs_prompt_segment="%F{208}[jobs:${(j:,:)pids}]%f "
+    fi
+  }
+
+  add-zsh-hook precmd update_jobs_prompt
+
   aws_prompt_profile() {
     if [[ -n ${AWS_PROFILE:-} ]]; then
       print -r -- "$AWS_PROFILE"
@@ -138,7 +160,10 @@ if [[ -n ${ZSH_VERSION:-} ]]; then
   }
 
   setopt prompt_subst
-  if [[ $PROMPT != '$(cloud_prompt_info)'* ]]; then
+  if [[ $PROMPT != *'$(cloud_prompt_info)'* ]]; then
     PROMPT='$(cloud_prompt_info)'"$PROMPT"
+  fi
+  if [[ $PROMPT != *'${jobs_prompt_segment}'* ]]; then
+    PROMPT='${jobs_prompt_segment}'"$PROMPT"
   fi
 fi
