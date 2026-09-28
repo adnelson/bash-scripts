@@ -374,7 +374,9 @@ function ninjap() {
 }
 
 function setgituser() {
-  git config user.name 'Allen Nelson' && git config user.email 'ithinkican@gmail.com'
+  git config user.name 'Allen Nelson' \
+  && git config user.email 'ithinkican@gmail.com' \
+  && git config core.sshCommand 'ssh -F /dev/null -i ~/.secrets/id_rsa.pem -o IdentitiesOnly=yes'
 }
 
 aclone() {
