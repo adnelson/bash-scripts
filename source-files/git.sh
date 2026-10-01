@@ -167,6 +167,13 @@ rprod() {
   fi
 }
 
+# Useful when a branch is cut off of a base branch which has been merged and rebasing
+# makes a lot of conflicts
+rebase-merge() {
+  git fetch origin \
+  && git rebase --onto "${2:-$(default_branch)}" "$(git merge-base HEAD "$1")"
+}
+
 ###### Committing ########
 
 # Commits with a message
