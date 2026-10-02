@@ -143,28 +143,37 @@ master() {
 alias prod='git checkout production'
 alias develop='git checkout develop'
 alias gsui='git submodule update --init'
-rmaster() {
-  local remote branch
-  remote=$(default_remote) || return
-  branch=$(default_branch "$remote") || return
+# Update a local branch to match the remote, fast-forwarding when possible and
+# recreating it only if it has diverged
+_refresh_branch() {
+  local remote=$1 branch=$2
 
   if [[ "$(cur)" = "$branch" ]]; then
     git pull "$remote" "$branch"
   else
-    git fetch "$remote"
-    git branch -D "$branch"
-    git checkout "$branch"
+    git fetch "$remote" || return
+    if ! git show-ref --verify --quiet "refs/heads/$branch"; then
+      git checkout "$branch"
+    elif git merge-base --is-ancestor "$branch" "$remote/$branch"; then
+      # Local branch hasn't diverged, so fast-forward it instead of recreating it
+      git checkout "$branch" && git merge --ff-only "$remote/$branch"
+    else
+      echo "Local $branch has diverged from $remote/$branch; recreating it" >&2
+      git branch -D "$branch"
+      git checkout "$branch"
+    fi
   fi
 }
 
+rmaster() {
+  local remote branch
+  remote=$(default_remote) || return
+  branch=$(default_branch "$remote") || return
+  _refresh_branch "$remote" "$branch"
+}
+
 rprod() {
-  if [[ "$(cur)" = 'production' ]]; then
-    git pull origin production
-  else
-    git fetch
-    git branch -D production
-    git checkout production
-  fi
+  _refresh_branch origin production
 }
 
 # Useful when a branch is cut off of a base branch which has been merged and rebasing
